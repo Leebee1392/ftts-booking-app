@@ -1,3 +1,5 @@
+/* eslint-disable testcafe-community/noSkip */
+
 import { SessionData } from "../data/session-data";
 import { Language, Target, TestType } from "../../../src/domain/enums";
 import { testPaymentCpms } from "../data/constants";

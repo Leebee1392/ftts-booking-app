@@ -1,3 +1,5 @@
+/* eslint-disable testcafe-community/noSkip */
+
 import { NavigationHelper } from "../utils/navigation-helper";
 import { SessionData } from "../data/session-data";
 import {

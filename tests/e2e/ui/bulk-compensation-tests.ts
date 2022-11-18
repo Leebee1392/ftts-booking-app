@@ -1,3 +1,5 @@
+/* eslint-disable testcafe-community/noSkip */
+
 import * as Constants from "../data/constants";
 import { SessionData } from "../data/session-data";
 import { LoginPage } from "../pages/login-page";

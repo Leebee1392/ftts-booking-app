@@ -1,3 +1,5 @@
+/* eslint-disable security/detect-non-literal-regexp */
+
 import { RequestLogger, t } from "testcafe";
 import {
   generalTitle,
@@ -25,7 +27,6 @@ const paymentsPage = new PaymentsPage();
 const bookingCancelledPage = new BookingCancelledPage();
 const chooseSupportPage = new ChooseSupportPage();
 
-// eslint-disable-next-line security/detect-non-literal-regexp
 const headerLogger = RequestLogger(
   [new RegExp(`${process.env.BOOKING_APP_URL}`)],
   {

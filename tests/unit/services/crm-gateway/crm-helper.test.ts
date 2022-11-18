@@ -991,6 +991,7 @@ describe("crm-helper.ts", () => {
           name: mockCRMBookingDetails.ftts_productid?.name,
           // eslint-disable-next-line no-underscore-dangle
           _parentproductid_value:
+            // eslint-disable-next-line no-underscore-dangle
             mockCRMBookingDetails.ftts_productid?._parentproductid_value,
           productnumber: mockCRMBookingDetails.ftts_productid?.productnumber,
         },

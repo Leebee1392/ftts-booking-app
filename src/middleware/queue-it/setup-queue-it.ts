@@ -1,3 +1,5 @@
+/* eslint-disable security/detect-non-literal-regexp */
+
 import { Request, Response, NextFunction } from "express";
 import {
   KnownUser,
@@ -61,7 +63,6 @@ const setupQueueItKnownUser = (
     const token = req.query[KnownUser.QueueITTokenKey];
     // Defining Response Url to use when QueueIt has been confirmed
     const requestUrl = httpContextProvider.getHttpRequest().getAbsoluteUri();
-    // eslint-disable-next-line security/detect-non-literal-regexp
     const requestUrlWithoutToken = requestUrl.replace(
       new RegExp(`([?&])(${KnownUser.QueueITTokenKey}=[^&]*)`, "i"),
       ""

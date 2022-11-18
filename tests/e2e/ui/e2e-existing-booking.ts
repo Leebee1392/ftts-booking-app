@@ -1,3 +1,5 @@
+/* eslint-disable security/detect-non-literal-regexp */
+
 import { RequestLogger, t } from "testcafe";
 import dayjs from "dayjs";
 import * as Constants from "../data/constants";
@@ -36,7 +38,6 @@ const bookingExistsPage = new BookingExistsPage();
 const paymentsPage = new PaymentsPage();
 const loginPage = new LoginPage();
 
-// eslint-disable-next-line security/detect-non-literal-regexp
 const headerLogger = RequestLogger(
   [new RegExp(`${process.env.BOOKING_APP_URL}`)],
   {

@@ -1,4 +1,6 @@
 /* eslint-disable import/no-cycle */
+/* eslint-disable security/detect-non-literal-fs-filename */
+
 import dayjs, { Dayjs } from "dayjs";
 import { ClientFunction, Selector, t } from "testcafe";
 import { Voiceover } from "../../../src/domain/enums";
@@ -101,7 +103,6 @@ export async function verifyTitleContainsText(
   const title = Selector("title")
     .withText(expectedText)
     .with({ visibilityCheck: true });
-  // eslint-disable-next-line security/detect-non-literal-fs-filename
   await t
     .expect(title.exists)
     .ok(

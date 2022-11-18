@@ -15,8 +15,7 @@ export function pageNotFound(req: Request, res: Response): void {
 export function internalServerError(
   err: Error,
   req: Request,
-  res: Response,
-  next: NextFunction
+  res: Response
 ): void {
   res.status(500);
   if (err instanceof InternalAccessDeniedError) {

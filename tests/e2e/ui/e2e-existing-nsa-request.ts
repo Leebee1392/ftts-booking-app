@@ -1,3 +1,5 @@
+/* eslint-disable security/detect-non-literal-regexp */
+
 import { RequestLogger, t } from "testcafe";
 import * as Constants from "../data/constants";
 import { SessionData } from "../data/session-data";
@@ -35,7 +37,6 @@ const leavingNsaPage = new LeavingNsaPage();
 const receivedSupportRequestPage = new ReceivedSupportRequestPage();
 const duplicateSupportRequestPage = new DuplicateSupportRequestPage();
 
-// eslint-disable-next-line security/detect-non-literal-regexp
 const headerLogger = RequestLogger(
   [new RegExp(`${process.env.BOOKING_APP_URL}`)],
   {

@@ -1,27 +1,27 @@
-import { convertNullUndefinedToEmptyString } from '../../../src/helpers/sanitisation';
+import { convertNullUndefinedToEmptyString } from "../../../src/helpers/sanitisation";
 
-describe('Sanitisation', () => {
-  test('convert nulls to string', () => {
+describe("Sanitisation", () => {
+  test("convert nulls to string", () => {
     const result = convertNullUndefinedToEmptyString(null);
 
-    expect(result).toBe('');
+    expect(result).toBe("");
   });
 
-  test('convert undefined to string', () => {
+  test("convert undefined to string", () => {
     const result = convertNullUndefinedToEmptyString(undefined);
 
-    expect(result).toBe('');
+    expect(result).toBe("");
   });
 
-  test('text is not manipulated', () => {
-    const result = convertNullUndefinedToEmptyString('test');
+  test("text is not manipulated", () => {
+    const result = convertNullUndefinedToEmptyString("test");
 
-    expect(result).toBe('test');
+    expect(result).toBe("test");
   });
 
-  test('empty string with spaces is not manipulated', () => {
-    const result = convertNullUndefinedToEmptyString('  ');
+  test("empty string with spaces is not manipulated", () => {
+    const result = convertNullUndefinedToEmptyString("  ");
 
-    expect(result).toBe('  ');
+    expect(result).toBe("  ");
   });
 });

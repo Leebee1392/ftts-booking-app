@@ -1,23 +1,25 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { ValidatorSchema } from '../../middleware/request-validator';
-import { translate } from '../../helpers/language';
-import { DateInput } from '../../domain/date-input';
-import { Eligibility } from '../../domain/types';
+import { ValidatorSchema } from "../../middleware/request-validator";
+import { translate } from "../../helpers/language";
+import { DateInput } from "../../domain/date-input";
+import { Eligibility } from "../../domain/types";
 
 class SelectDateController {
   public get = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('SelectDateController::get: No journey set');
+      throw Error("SelectDateController::get: No journey set");
     }
     if (!req.session.currentBooking) {
-      throw Error('SelectDateController::get: No currentBooking set');
+      throw Error("SelectDateController::get: No currentBooking set");
     }
     if (!req.session.candidate && !req.session.manageBooking?.candidate) {
-      throw Error('SelectDateController::get: No candidate set');
+      throw Error("SelectDateController::get: No candidate set");
     }
     let selectedDate;
-    const dateString = !this.isManagedBookingSession(req) ? req.session.testCentreSearch?.selectedDate : '';
+    const dateString = !this.isManagedBookingSession(req)
+      ? req.session.testCentreSearch?.selectedDate
+      : "";
     const { inEditMode } = req.session.journey;
 
     if (dateString && !inEditMode) {
@@ -25,14 +27,19 @@ class SelectDateController {
     }
 
     const selectTestCentreLink = this.getBackLink(req);
-    const candidateEligibilities = req.session.candidate?.eligibilities || req.session.manageBooking?.candidate?.eligibilities;
-    const test = candidateEligibilities?.find((eligibility: Eligibility) => eligibility.testType === req.session.currentBooking?.testType);
+    const candidateEligibilities =
+      req.session.candidate?.eligibilities ||
+      req.session.manageBooking?.candidate?.eligibilities;
+    const test = candidateEligibilities?.find(
+      (eligibility: Eligibility) =>
+        eligibility.testType === req.session.currentBooking?.testType
+    );
 
     if (!test) {
-      throw new Error('SelectDateController::get: Test type mismatch');
+      throw new Error("SelectDateController::get: Test type mismatch");
     }
 
-    return res.render('select-date', {
+    return res.render("select-date", {
       ...selectedDate,
       minDate: DateInput.min,
       maxDate: DateInput.max,
@@ -43,28 +50,33 @@ class SelectDateController {
 
   public post = (req: Request, res: Response): void => {
     if (!req.session.candidate && !req.session.manageBooking?.candidate) {
-      throw Error('SelectDateController::post: No candidate set');
+      throw Error("SelectDateController::post: No candidate set");
     }
     if (req.hasErrors) {
       // Only want to show one error at a time
       // If multiple fields are empty, show a single invalid date error
       const error = req.errors[0];
       if (req.errors.length > 2) {
-        error.param = 'date';
-        error.msg = 'dateNotValid';
+        error.param = "date";
+        error.msg = "dateNotValid";
       }
 
       error.msg = translate(`selectDate.errorMessages.${error.msg}`);
 
       const selectTestCentreLink = this.getBackLink(req);
-      const candidateEligibilities = req.session.candidate?.eligibilities || req.session.manageBooking?.candidate?.eligibilities;
-      const test = candidateEligibilities?.find((eligibility: Eligibility) => eligibility.testType === req.session.currentBooking?.testType);
+      const candidateEligibilities =
+        req.session.candidate?.eligibilities ||
+        req.session.manageBooking?.candidate?.eligibilities;
+      const test = candidateEligibilities?.find(
+        (eligibility: Eligibility) =>
+          eligibility.testType === req.session.currentBooking?.testType
+      );
 
       if (!test) {
-        throw new Error('SelectDateController::post: Test type mismatch');
+        throw new Error("SelectDateController::post: Test type mismatch");
       }
 
-      return res.render('select-date', {
+      return res.render("select-date", {
         ...req.body,
         errors: [error],
         minDate: DateInput.min,
@@ -74,7 +86,7 @@ class SelectDateController {
       });
     }
     if (!req.session.currentBooking) {
-      throw Error('SelectDateController::post: No currentBooking set');
+      throw Error("SelectDateController::post: No currentBooking set");
     }
 
     const { firstSelectedDate } = req.session.currentBooking;
@@ -94,7 +106,9 @@ class SelectDateController {
         };
       }
 
-      return res.redirect(`/manage-booking/choose-appointment?selectedDate=${dateString}`);
+      return res.redirect(
+        `/manage-booking/choose-appointment?selectedDate=${dateString}`
+      );
     }
 
     if (!firstSelectedDate) {
@@ -109,7 +123,7 @@ class SelectDateController {
       selectedDate: dateString,
     };
 
-    return res.redirect('/choose-appointment');
+    return res.redirect("/choose-appointment");
   };
 
   private isManagedBookingSession(req: Request): boolean {
@@ -118,32 +132,36 @@ class SelectDateController {
 
   private getBackLink(req: Request): string {
     if (!this.isManagedBookingSession(req)) {
-      return '/select-test-centre';
+      return "/select-test-centre";
     }
 
     // go back a page or go back to manage booking rescheduling choices
     const bookingReference = req.session.currentBooking?.bookingRef;
-    return req.url.startsWith(req.session.journey?.managedBookingRescheduleChoice || '') ? `manage-change-location-time/${bookingReference}` : 'select-test-centre';
+    return req.url.startsWith(
+      req.session.journey?.managedBookingRescheduleChoice || ""
+    )
+      ? `manage-change-location-time/${bookingReference}`
+      : "select-test-centre";
   }
 
   /* istanbul ignore next */
   public postSchemaValidation: ValidatorSchema = {
     day: {
-      in: ['body'],
+      in: ["body"],
       notEmpty: true,
-      errorMessage: 'dayEmpty',
+      errorMessage: "dayEmpty",
     },
     month: {
-      in: ['body'],
+      in: ["body"],
       isEmpty: {
-        errorMessage: 'monthEmpty',
+        errorMessage: "monthEmpty",
         negated: true,
       },
     },
     year: {
-      in: ['body'],
+      in: ["body"],
       isEmpty: {
-        errorMessage: 'yearEmpty',
+        errorMessage: "yearEmpty",
         negated: true,
       },
     },

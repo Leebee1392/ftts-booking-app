@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import { existsInEnum, PreferredDay } from '../../domain/enums';
-import { translate } from '../../helpers/language';
-import { ValidatorSchema } from '../../middleware/request-validator';
+import { Request, Response } from "express";
+import { existsInEnum, PreferredDay } from "../../domain/enums";
+import { translate } from "../../helpers/language";
+import { ValidatorSchema } from "../../middleware/request-validator";
 
 interface PreferredDayBody {
   dayInput: string;
@@ -13,7 +13,7 @@ export class PreferredDayController {
 
   public post = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('PreferredDayController::post: No journey set');
+      throw Error("PreferredDayController::post: No journey set");
     }
     const { dayInput, preferredDayOption } = req.body as PreferredDayBody;
     const { inEditMode } = req.session.journey;
@@ -28,20 +28,23 @@ export class PreferredDayController {
       preferredDayOption,
     };
 
-    return inEditMode ? res.redirect('check-your-details') : res.redirect('preferred-location');
+    return inEditMode
+      ? res.redirect("check-your-details")
+      : res.redirect("preferred-location");
   };
 
   private render = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('PreferredDayController::render: No journey set');
+      throw Error("PreferredDayController::render: No journey set");
     }
     const { dayInput, preferredDayOption } = req.body as PreferredDayBody;
     const { inEditMode } = req.session.journey;
-    res.render('supported/preferred-day', {
+    res.render("supported/preferred-day", {
       errors: req.errors,
       savedPreferredDay: dayInput || req.session.currentBooking?.preferredDay,
-      preferredDayOption: preferredDayOption || req.session.currentBooking?.preferredDayOption,
-      backLink: inEditMode ? 'check-your-details' : 'staying-nsa',
+      preferredDayOption:
+        preferredDayOption || req.session.currentBooking?.preferredDayOption,
+      backLink: inEditMode ? "check-your-details" : "staying-nsa",
     });
   };
 
@@ -51,18 +54,18 @@ export class PreferredDayController {
     if (preferredDayOption === PreferredDay.ParticularDay) {
       return {
         dayInput: {
-          in: ['body'],
+          in: ["body"],
           isLength: {
             options: { max: 4000 },
-            errorMessage: (): string => translate('preferredDay.errorMessage'),
+            errorMessage: (): string => translate("preferredDay.errorMessage"),
           },
         },
       };
     }
     return {
       preferredDayOption: {
-        in: ['body'],
-        errorMessage: (): string => translate('preferredDay.validationError'),
+        in: ["body"],
+        errorMessage: (): string => translate("preferredDay.validationError"),
         custom: {
           options: existsInEnum(PreferredDay),
         },

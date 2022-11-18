@@ -1,5 +1,5 @@
-import { Selector } from 'testcafe';
+import { Selector } from "testcafe";
 
 export class Footer {
-  footerSection: Selector = Selector('.govuk-footer');
+  footerSection: Selector = Selector(".govuk-footer");
 }

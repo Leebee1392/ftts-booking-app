@@ -6,7 +6,10 @@ interface ViewError {
 }
 
 export class ErrorFilter {
-  public static existsAsAnErrorIn(fieldName: string, errors: ViewError[]): boolean {
+  public static existsAsAnErrorIn(
+    fieldName: string,
+    errors: ViewError[]
+  ): boolean {
     if (errors === undefined) {
       return false;
     }
@@ -14,26 +17,36 @@ export class ErrorFilter {
     return errors.some((err: ViewError) => err.param === fieldName);
   }
 
-  public static fieldErrorMessage(fieldName: string, errors: ViewError[]): string {
+  public static fieldErrorMessage(
+    fieldName: string,
+    errors: ViewError[]
+  ): string {
     if (errors === undefined) {
-      return '';
+      return "";
     }
 
-    const errorsForParam = errors.filter((err: ViewError) => err.param === fieldName);
+    const errorsForParam = errors.filter(
+      (err: ViewError) => err.param === fieldName
+    );
 
     if (errorsForParam.length === 0) {
-      return '';
+      return "";
     }
 
-    return errorsForParam[0].msg || '';
+    return errorsForParam[0].msg || "";
   }
 
-  public static fieldErrorObject(fieldName: string, errors: ViewError[]): undefined | Record<string, unknown> {
+  public static fieldErrorObject(
+    fieldName: string,
+    errors: ViewError[]
+  ): undefined | Record<string, unknown> {
     if (!errors) {
       return undefined;
     }
 
-    const errorsForParam = errors.filter((err: ViewError) => err.param === fieldName);
+    const errorsForParam = errors.filter(
+      (err: ViewError) => err.param === fieldName
+    );
 
     if (!errorsForParam.length || !errorsForParam[0].msg.length) {
       return undefined;

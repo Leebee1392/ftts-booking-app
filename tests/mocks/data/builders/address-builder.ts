@@ -1,6 +1,6 @@
-import { build } from '@jackfranklin/test-data-bot';
-import { faker } from '@faker-js/faker';
-import { ELIG } from '@dvsa/ftts-eligibility-api-model';
+import { build } from "@jackfranklin/test-data-bot";
+import { faker } from "@faker-js/faker";
+import { ELIG } from "@dvsa/ftts-eligibility-api-model";
 
 export const addressBuilder = (line5?: string): ELIG.Address => {
   const overrides = {
@@ -14,7 +14,9 @@ export const addressBuilder = (line5?: string): ELIG.Address => {
       line3: faker.address.cityName(),
       line4: faker.address.county(),
       line5: undefined,
-      postcode: `${faker.address.countryCode('alpha-3')} ${faker.address.countryCode('alpha-3')}`,
+      postcode: `${faker.address.countryCode(
+        "alpha-3"
+      )} ${faker.address.countryCode("alpha-3")}`,
     },
   })({
     overrides,

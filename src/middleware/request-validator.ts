@@ -1,9 +1,11 @@
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import {
-  NextFunction, Request, RequestHandler, Response,
-} from 'express';
-import {
-  checkSchema, Location, validationResult, Schema, ValidationChain,
-} from 'express-validator';
+  checkSchema,
+  Location,
+  validationResult,
+  Schema,
+  ValidationChain,
+} from "express-validator";
 
 export type ValidatorSchema = Schema;
 export interface RequestValidationError {
@@ -12,7 +14,11 @@ export interface RequestValidationError {
   param: string;
 }
 
-function processValidationResults(req: Request, res: Response, next: NextFunction): void {
+function processValidationResults(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void {
   const errors = validationResult(req);
   req.errors = errors.array() as RequestValidationError[];
   req.hasErrors = req.errors.length > 0;
@@ -35,8 +41,14 @@ export function validateRequest(validationSchema: ValidatorSchema): any[] {
 }
 
 // For validating against dynamically-generated schema based on request
-export function conditionalValidateRequest(buildSchema: (req: Request) => ValidatorSchema) {
-  return async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+export function conditionalValidateRequest(
+  buildSchema: (req: Request) => ValidatorSchema
+) {
+  return async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
     const validations = checkSchema(buildSchema(req));
     await Promise.all(validations.map((val) => val.run(req)));
     return processValidationResults(req, res, next);

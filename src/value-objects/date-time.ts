@@ -1,9 +1,9 @@
-import { StringValue } from './string-value';
+import { StringValue } from "./string-value";
 
 export class DateTime extends StringValue {
   public static from(value: string): DateTime {
     if (!this.isValidDate(value)) {
-      throw new TypeError('This is not a valid format for a timestamp');
+      throw new TypeError("This is not a valid format for a timestamp");
     }
     return new DateTime(value);
   }

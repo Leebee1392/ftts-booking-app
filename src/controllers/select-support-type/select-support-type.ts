@@ -1,14 +1,16 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
+import { SupportType, Target, TestType, Voiceover } from "../../domain/enums";
+import { translate } from "../../helpers/language";
+import { ValidatorSchema } from "../../middleware/request-validator";
+import { Booking } from "../../services/session";
+import nsaNavigator from "../../helpers/nsa-navigator";
+import { SupportTypeOption } from "../../domain/types";
 import {
-  SupportType, Target, TestType, Voiceover,
-} from '../../domain/enums';
-import { translate } from '../../helpers/language';
-import { ValidatorSchema } from '../../middleware/request-validator';
-import { Booking } from '../../services/session';
-import nsaNavigator from '../../helpers/nsa-navigator';
-import { SupportTypeOption } from '../../domain/types';
-import { getInvalidOptions, removeInvalidOptions, toSupportTypeOptions } from '../../helpers/support';
-import { stringToArray } from '../../libraries/request-sanitizer';
+  getInvalidOptions,
+  removeInvalidOptions,
+  toSupportTypeOptions,
+} from "../../helpers/support";
+import { stringToArray } from "../../libraries/request-sanitizer";
 
 type SelectSupportTypeBody = {
   selectSupportType: SupportType[] | SupportType;
@@ -18,8 +20,13 @@ class SelectSupportType {
   options: Map<string, SupportTypeOption>;
 
   supportTypes: SupportType[] = [
-    SupportType.ON_SCREEN_BSL, SupportType.BSL_INTERPRETER, SupportType.VOICEOVER,
-    SupportType.TRANSLATOR, SupportType.EXTRA_TIME, SupportType.READING_SUPPORT, SupportType.OTHER,
+    SupportType.ON_SCREEN_BSL,
+    SupportType.BSL_INTERPRETER,
+    SupportType.VOICEOVER,
+    SupportType.TRANSLATOR,
+    SupportType.EXTRA_TIME,
+    SupportType.READING_SUPPORT,
+    SupportType.OTHER,
   ];
 
   constructor() {
@@ -35,7 +42,7 @@ class SelectSupportType {
       return this.render(req, res);
     }
     if (!req.session.journey) {
-      throw Error('SelectSupportType::post: No journey set');
+      throw Error("SelectSupportType::post: No journey set");
     }
 
     this.resetSessionOptions(req);
@@ -43,7 +50,7 @@ class SelectSupportType {
     const { selectSupportType } = req.body as SelectSupportTypeBody;
 
     let supportTypes: SupportType[] = [];
-    if (typeof selectSupportType === 'string') {
+    if (typeof selectSupportType === "string") {
       supportTypes.push(selectSupportType);
     } else {
       supportTypes = selectSupportType;
@@ -81,7 +88,7 @@ class SelectSupportType {
 
   private render = (req: Request, res: Response): void => {
     if (!req.session.currentBooking) {
-      throw Error('SelectSupportType::render: No currentBooking set');
+      throw Error("SelectSupportType::render: No currentBooking set");
     }
     this.options.clear();
     this.options = toSupportTypeOptions(this.supportTypes);
@@ -100,7 +107,7 @@ class SelectSupportType {
       return option;
     });
 
-    return res.render('supported/select-support-type', {
+    return res.render("supported/select-support-type", {
       errors: req.errors,
       options,
       backLink: this.getBackLink(req),
@@ -110,58 +117,67 @@ class SelectSupportType {
   /* istanbul ignore next */
   public postSchemaValidation = (req: Request): ValidatorSchema => ({
     selectSupportType: {
-      in: ['body'],
+      in: ["body"],
       custom: {
         options: this.supportTypeValidator(req),
       },
     },
   });
 
-  public supportTypeValidator = (req: Request) => (value: string[]): string[] => {
-    if (!value) {
-      throw new Error(translate('selectSupportType.errors.noneSelected'));
-    }
-    // Not allowed to select sign language and voiceover together
-    if (value.includes(SupportType.ON_SCREEN_BSL) && value.includes(SupportType.VOICEOVER)) {
-      throw new Error(translate('selectSupportType.errors.badCombination'));
-    }
-    if (this.hasInvalidOptionSelected(req, value)) {
-      throw new Error(translate('selectSupportType.errors.invalidOptionSelected'));
-    }
-    return value;
-  };
+  public supportTypeValidator =
+    (req: Request) =>
+    (value: string[]): string[] => {
+      if (!value) {
+        throw new Error(translate("selectSupportType.errors.noneSelected"));
+      }
+      // Not allowed to select sign language and voiceover together
+      if (
+        value.includes(SupportType.ON_SCREEN_BSL) &&
+        value.includes(SupportType.VOICEOVER)
+      ) {
+        throw new Error(translate("selectSupportType.errors.badCombination"));
+      }
+      if (this.hasInvalidOptionSelected(req, value)) {
+        throw new Error(
+          translate("selectSupportType.errors.invalidOptionSelected")
+        );
+      }
+      return value;
+    };
 
   private getBackLink = (req: Request): string => {
     if (!req.session.journey) {
-      throw Error('SelectSupportType::getBackLink: No journey set');
+      throw Error("SelectSupportType::getBackLink: No journey set");
     }
     const { inEditMode } = req.session.journey;
 
     if (inEditMode) {
-      return 'check-your-details';
+      return "check-your-details";
     }
 
     if (req.session.journey.confirmingSupport) {
-      return 'confirm-support';
+      return "confirm-support";
     }
 
     // Go back to the test-type page for NI (Cannot change test language for NI)
     // Go back to test type page for ERS Tests
-    if (req.session.target === Target.NI || req.session.currentBooking?.testType === TestType.ERS) {
-      return 'test-type';
+    if (
+      req.session.target === Target.NI ||
+      req.session.currentBooking?.testType === TestType.ERS
+    ) {
+      return "test-type";
     }
 
-    return 'test-language';
+    return "test-language";
   };
 
   private resetSessionOptions = (req: Request): void => {
     if (!req.session.currentBooking) {
-      throw new Error('SelectSupportType::resetSessionOptions: No journey set');
+      throw new Error("SelectSupportType::resetSessionOptions: No journey set");
     }
     const { selectSupportType } = req.body as SelectSupportTypeBody;
-    const {
-      bsl, voiceover, translator, customSupport,
-    } = req.session.currentBooking;
+    const { bsl, voiceover, translator, customSupport } =
+      req.session.currentBooking;
 
     let updatedBsl: boolean | undefined = false;
     let updatedVoiceover: Voiceover | undefined = Voiceover.NONE;
@@ -198,7 +214,9 @@ class SelectSupportType {
     const { target } = req.session;
     const invalidOptions = getInvalidOptions(testType, target as Target);
     if (invalidOptions.length > 0) {
-      const invalidOptionSelected = stringToArray(value).find((element) => invalidOptions.includes(element as SupportType));
+      const invalidOptionSelected = stringToArray(value).find((element) =>
+        invalidOptions.includes(element as SupportType)
+      );
       if (invalidOptionSelected) return true;
     }
     return false;

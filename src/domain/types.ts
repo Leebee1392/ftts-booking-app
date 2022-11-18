@@ -1,5 +1,5 @@
-import { CRMEvidenceStatus } from '../services/crm-gateway/enums';
-import { SupportType, TCNRegion, TestType } from './enums';
+import { CRMEvidenceStatus } from "../services/crm-gateway/enums";
+import { SupportType, TCNRegion, TestType } from "./enums";
 
 export interface Centre {
   testCentreId?: string;
@@ -53,7 +53,7 @@ export interface PriceListItem {
 
 export type SupportTypeOption = {
   attributes: {
-    'data-automation-id': string;
+    "data-automation-id": string;
   };
   checked: boolean;
   text: string;

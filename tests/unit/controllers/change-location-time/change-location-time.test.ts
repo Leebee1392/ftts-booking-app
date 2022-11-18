@@ -1,21 +1,28 @@
-import changeLocationTime from '@controllers/change-location-time/change-location-time';
-import RadioButtonItem from '../../../../src/interfaces/radio-button-item';
-import { mockCurrentBooking, mockManageBooking } from '../../../mocks/data/manage-bookings';
+import changeLocationTime from "@controllers/change-location-time/change-location-time";
+import RadioButtonItem from "../../../../src/interfaces/radio-button-item";
+import {
+  mockCurrentBooking,
+  mockManageBooking,
+} from "../../../mocks/data/manage-bookings";
 
-jest.mock('../../../../src/helpers/language', () => ({
-  translate: () => 'translated-label',
+jest.mock("../../../../src/helpers/language", () => ({
+  translate: () => "translated-label",
 }));
 
-describe('ChangeLocationTime', () => {
-  const radioOptionValues = ['changeTimeOnlyOption', 'changeTimeAndDateOption', 'changeLocationOption'];
+describe("ChangeLocationTime", () => {
+  const radioOptionValues = [
+    "changeTimeOnlyOption",
+    "changeTimeAndDateOption",
+    "changeLocationOption",
+  ];
 
   const commonRadioAttributes: Partial<RadioButtonItem> = {
-    text: 'translated-label',
+    text: "translated-label",
     label: {
-      classes: 'govuk-label--s',
+      classes: "govuk-label--s",
     },
     hint: {
-      text: 'translated-label',
+      text: "translated-label",
     },
     checked: false,
   };
@@ -34,7 +41,7 @@ describe('ChangeLocationTime', () => {
       body: {},
       errors: [],
       params: {},
-      url: '',
+      url: "",
       session: {
         journey: {},
         manageBookingEdits: {},
@@ -47,119 +54,128 @@ describe('ChangeLocationTime', () => {
     };
   });
 
-  describe('get', () => {
-    test('renders the change location time template', () => {
+  describe("get", () => {
+    test("renders the change location time template", () => {
       changeLocationTime.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('change-location-time', {
+      expect(res.render).toHaveBeenCalledWith("change-location-time", {
         options: radioItems,
-        checkAnswersLink: 'check-your-answers',
+        checkAnswersLink: "check-your-answers",
         errors: [],
       });
     });
-    test('resets the manage bookings edit session and renders the correct template when in managed edit mode', () => {
+    test("resets the manage bookings edit session and renders the correct template when in managed edit mode", () => {
       req.session.journey.inManagedBookingEditMode = true;
       req.session.manageBookingEdits = {
         bsl: true,
       };
-      req.url = '/manage-change-location-time';
-      req.params.ref = 'mock-booking-ref';
+      req.url = "/manage-change-location-time";
+      req.params.ref = "mock-booking-ref";
 
       changeLocationTime.get(req, res);
 
       expect(req.session.manageBookingEdits).toBeUndefined();
-      expect(res.render).toHaveBeenCalledWith('change-location-time', {
+      expect(res.render).toHaveBeenCalledWith("change-location-time", {
         options: radioItems,
-        checkAnswersLink: '/manage-booking/mock-booking-ref',
+        checkAnswersLink: "/manage-booking/mock-booking-ref",
         errors: [],
       });
     });
   });
 
-  describe('POST', () => {
-    test('renders the check your answers template when successful', () => {
+  describe("POST", () => {
+    test("renders the check your answers template when successful", () => {
       changeLocationTime.post(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith('check-your-answers');
+      expect(res.redirect).toHaveBeenCalledWith("check-your-answers");
     });
 
-    test('renders an error on the same template when validation fails', () => {
-      req.body = { changeLocationOrTime: '' };
+    test("renders an error on the same template when validation fails", () => {
+      req.body = { changeLocationOrTime: "" };
       req.hasErrors = true;
       req.errors = [
-        { param: 'changeLocationOrTime', msg: 'Please select an opption' },
+        { param: "changeLocationOrTime", msg: "Please select an opption" },
       ];
 
       changeLocationTime.post(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('change-location-time', expect.objectContaining({
-        errors: req.errors,
-      }));
+      expect(res.render).toHaveBeenCalledWith(
+        "change-location-time",
+        expect.objectContaining({
+          errors: req.errors,
+        })
+      );
     });
 
     test.each([
-      ['changeTimeOnlyOption', '/choose-appointment'],
-      ['changeTimeAndDateOption', '/select-date'],
-      ['changeLocationOption', '/find-test-centre'],
-    ])('when the %s options is selected - redirects to the %s template', (optionSelected: string, template: string) => {
-      req.body = { changeLocationOrTime: optionSelected };
+      ["changeTimeOnlyOption", "/choose-appointment"],
+      ["changeTimeAndDateOption", "/select-date"],
+      ["changeLocationOption", "/find-test-centre"],
+    ])(
+      "when the %s options is selected - redirects to the %s template",
+      (optionSelected: string, template: string) => {
+        req.body = { changeLocationOrTime: optionSelected };
 
-      changeLocationTime.post(req, res);
+        changeLocationTime.post(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith(template);
-    });
+        expect(res.redirect).toHaveBeenCalledWith(template);
+      }
+    );
 
     test.each([
-      ['changeTimeAndDateOption', '/manage-booking/select-date'],
-      ['changeLocationOption', '/manage-booking/find-test-centre'],
-    ])('when the %s options is selected - redirects to the %s template when managing a booking', (optionSelected: string, template: string) => {
-      req.url = '/manage-change-location-time';
-      req.body = {
-        changeLocationOrTime: optionSelected,
-      };
-      req.session.manageBookings = {
-        bookings: [
-          mockManageBooking(),
-        ],
-      };
-      req.session.currentBooking = mockCurrentBooking();
+      ["changeTimeAndDateOption", "/manage-booking/select-date"],
+      ["changeLocationOption", "/manage-booking/find-test-centre"],
+    ])(
+      "when the %s options is selected - redirects to the %s template when managing a booking",
+      (optionSelected: string, template: string) => {
+        req.url = "/manage-change-location-time";
+        req.body = {
+          changeLocationOrTime: optionSelected,
+        };
+        req.session.manageBookings = {
+          bookings: [mockManageBooking()],
+        };
+        req.session.currentBooking = mockCurrentBooking();
 
-      changeLocationTime.post(req, res);
+        changeLocationTime.post(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith(template);
-    });
+        expect(res.redirect).toHaveBeenCalledWith(template);
+      }
+    );
 
-    describe('manage booking', () => {
+    describe("manage booking", () => {
       let booking;
       let currentBooking;
       beforeEach(() => {
         booking = mockManageBooking();
         currentBooking = mockCurrentBooking();
         req.session.manageBookings = {
-          bookings: [
-            booking,
-          ],
+          bookings: [booking],
         };
         req.session.currentBooking = currentBooking;
       });
 
-      test('set manage booking mode on', () => {
+      test("set manage booking mode on", () => {
         req.session.journey.inManagedBookingEditMode = true;
-        req.url = '/manage-change-location-time';
+        req.url = "/manage-change-location-time";
         req.params.ref = booking.reference;
 
         changeLocationTime.post(req, res);
 
-        expect(req.session.journey.inManagedBookingEditMode).toStrictEqual(true);
+        expect(req.session.journey.inManagedBookingEditMode).toStrictEqual(
+          true
+        );
         expect(req.session.currentBooking).toStrictEqual(currentBooking);
       });
     });
 
-    test('handles missing journey', () => {
+    test("handles missing journey", () => {
       delete req.session.journey;
-      req.url = '/manage-change-location-time';
+      req.url = "/manage-change-location-time";
 
-      expect(() => changeLocationTime.post(req, res)).toThrow(Error('setManageBookingEditMode:: No journey set'));
+      expect(() => changeLocationTime.post(req, res)).toThrow(
+        Error("setManageBookingEditMode:: No journey set")
+      );
     });
   });
 });

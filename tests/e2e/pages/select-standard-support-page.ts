@@ -1,13 +1,14 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click } from '../utils/helpers';
-import { SupportType } from '../../../src/domain/enums';
+import { BasePage } from "./base-page";
+import { click } from "../utils/helpers";
+import { SupportType } from "../../../src/domain/enums";
 
 export class SelectStandardSupportPage extends BasePage {
   // locators
   pageHeadingLocator = 'h1[data-automation-id="heading"]';
 
-  supportTypeRadioButton = 'input[name="selectStandardSupportType"][value="<>"]';
+  supportTypeRadioButton =
+    'input[name="selectStandardSupportType"][value="<>"]';
 
   onScreenBslRadioButton = 'input[data-automation-id="support-onScreenBsl"]';
 
@@ -19,25 +20,28 @@ export class SelectStandardSupportPage extends BasePage {
 
   backLink = 'a[data-automation-id="back"]';
 
-  pathUrl = 'select-standard-support';
+  pathUrl = "select-standard-support";
 
   errorLink = 'a[href="#voiceover"]';
 
-  errorMessageRadioLocator = '#voiceover-error';
+  errorMessageRadioLocator = "#voiceover-error";
 
-  errorMessageLocator = '#error-summary-title';
+  errorMessageLocator = "#error-summary-title";
 
-  errorMessageList = '.govuk-list.govuk-error-summary__list';
+  errorMessageList = ".govuk-list.govuk-error-summary__list";
 
   // content
-  pageHeading = 'Which support would you like?';
+  pageHeading = "Which support would you like?";
 
-  errorMessageHeader = 'There is a problem';
+  errorMessageHeader = "There is a problem";
 
-  errorMessageText = 'You must select one option.';
+  errorMessageText = "You must select one option.";
 
   async selectSupportTypeRequired(supportType: SupportType): Promise<void> {
-    const supportTypeSelector = this.supportTypeRadioButton.replace('<>', supportType);
+    const supportTypeSelector = this.supportTypeRadioButton.replace(
+      "<>",
+      supportType
+    );
     await click(supportTypeSelector);
     await click(this.continueButton);
   }

@@ -1,24 +1,29 @@
-import dedent from 'ts-dedent';
+import dedent from "ts-dedent";
 
-import { SupportType } from '../../../../../domain/enums';
-import { isDeafCandidate } from '../../../../../helpers/evidence-helper';
-import { translate } from '../../../../../helpers/language';
-import { SupportRequestDetails } from '../../../types';
-import { escapeNotifyMarkdown, formatSupportTypes } from '../../helpers';
+import { SupportType } from "../../../../../domain/enums";
+import { isDeafCandidate } from "../../../../../helpers/evidence-helper";
+import { translate } from "../../../../../helpers/language";
+import { SupportRequestDetails } from "../../../types";
+import { escapeNotifyMarkdown, formatSupportTypes } from "../../helpers";
 
-const optionalDeafCandidateSection = (details: SupportRequestDetails): string => {
-  if (isDeafCandidate(details.supportTypes) && details.supportTypes.includes(SupportType.EXTRA_TIME)) {
+const optionalDeafCandidateSection = (
+  details: SupportRequestDetails
+): string => {
+  if (
+    isDeafCandidate(details.supportTypes) &&
+    details.supportTypes.includes(SupportType.EXTRA_TIME)
+  ) {
     return dedent`
       # When you don't need to provide evidence
 
       You don't need to provide evidence if you are deaf or have a hearing impairment and asked for support related to deafness, as well as extra time. If you asked for any other type of support you will need to provide evidence.
     `;
   }
-  return '';
+  return "";
 };
 
 export default {
-  subject: 'DVSA: your theory test support request',
+  subject: "DVSA: your theory test support request",
   buildBody: (details: SupportRequestDetails): string => dedent`
     # Thank you for your driving theory test support request
 
@@ -33,11 +38,25 @@ export default {
     # Your test and support details
 
     Test type: ${translate(`generalContent.testTypes.${details.testType}`)}
-    On-screen language: ${translate(`generalContent.language.${details.testLanguage}`)}
-    Support requested: ${details.supportTypes.length > 0 ? translate('generalContent.yes') : translate('generalContent.no')}
+    On-screen language: ${translate(
+      `generalContent.language.${details.testLanguage}`
+    )}
+    Support requested: ${
+      details.supportTypes.length > 0
+        ? translate("generalContent.yes")
+        : translate("generalContent.no")
+    }
     Support types you selected: ${formatSupportTypes(details.supportTypes)}
-    Preferred time for test: ${details.preferredDay.text ? escapeNotifyMarkdown(details.preferredDay.text) : 'I will decide this later'}
-    Preferred locations for test: ${details.preferredLocation.text ? escapeNotifyMarkdown(details.preferredLocation.text) : 'I will decide this later'}
+    Preferred time for test: ${
+      details.preferredDay.text
+        ? escapeNotifyMarkdown(details.preferredDay.text)
+        : "I will decide this later"
+    }
+    Preferred locations for test: ${
+      details.preferredLocation.text
+        ? escapeNotifyMarkdown(details.preferredLocation.text)
+        : "I will decide this later"
+    }
 
     # You may need to provide evidence
 

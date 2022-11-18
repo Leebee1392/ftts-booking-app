@@ -5,8 +5,8 @@
   width: 300px;
   padding: govuk-spacing(6);
   transform: translate(-50%, -50%);
-  border: 5px solid govuk-colour('black');
-  background-color: govuk-colour('white');
+  border: 5px solid govuk-colour("black");
+  background-color: govuk-colour("white");
 
   @include govuk-media-query($from: tablet) {
     width: 435px;
@@ -31,8 +31,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: .8;
-  background-color: govuk-colour('black');
+  opacity: 0.8;
+  background-color: govuk-colour("black");
 }
 
 .no-scroll {

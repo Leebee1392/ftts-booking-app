@@ -1,33 +1,35 @@
-import dedent from 'ts-dedent';
+import dedent from "ts-dedent";
 
-import { SupportType } from '../../../../../domain/enums';
-import { translate } from '../../../../../helpers/language';
-import { SupportRequestDetails } from '../../../types';
-import { formatSupportTypes } from '../../helpers';
+import { SupportType } from "../../../../../domain/enums";
+import { translate } from "../../../../../helpers/language";
+import { SupportRequestDetails } from "../../../types";
+import { formatSupportTypes } from "../../helpers";
 
 const isSupportRequested = (supportTypes: SupportType[]) => {
   if (supportTypes.length) {
-    return translate('generalContent.yes');
+    return translate("generalContent.yes");
   }
-  return translate('generalContent.no');
+  return translate("generalContent.no");
 };
 
 const getPreferredDayText = (preferredDayText: string | undefined) => {
   if (preferredDayText) {
     return preferredDayText;
   }
-  return 'To be decided later';
+  return "To be decided later";
 };
 
-const getPreferredLocationText = (preferredLocationText: string | undefined) => {
+const getPreferredLocationText = (
+  preferredLocationText: string | undefined
+) => {
   if (preferredLocationText) {
     return preferredLocationText;
   }
-  return 'To be decided later';
+  return "To be decided later";
 };
 
 export default {
-  subject: 'DVA: your theory test support request',
+  subject: "DVA: your theory test support request",
   buildBody: (details: SupportRequestDetails): string => dedent`
     # Thank you for your driving theory test support request
 
@@ -43,7 +45,9 @@ export default {
 
     Test type: ${translate(`generalContent.testTypes.${details.testType}`)}
 
-    On-screen language: ${translate(`generalContent.language.${details.testLanguage}`)}
+    On-screen language: ${translate(
+      `generalContent.language.${details.testLanguage}`
+    )}
 
     Support requested: ${isSupportRequested(details.supportTypes)}
 
@@ -51,7 +55,9 @@ export default {
 
     Preferred time for test: ${getPreferredDayText(details.preferredDay.text)}
 
-    Preferred locations for test: ${getPreferredLocationText(details.preferredLocation.text)}
+    Preferred locations for test: ${getPreferredLocationText(
+      details.preferredLocation.text
+    )}
 
 
     # Evidence

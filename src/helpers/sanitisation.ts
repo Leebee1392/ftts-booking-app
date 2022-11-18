@@ -1,11 +1,11 @@
-const convertNullUndefinedToEmptyString = (field: string | null | undefined): string => {
+const convertNullUndefinedToEmptyString = (
+  field: string | null | undefined
+): string => {
   if (field) {
     return field;
   }
 
-  return '';
+  return "";
 };
 
-export {
-  convertNullUndefinedToEmptyString,
-};
+export { convertNullUndefinedToEmptyString };

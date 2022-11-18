@@ -125,12 +125,12 @@ export BROWSERSTACK_ACCEPT_SSL_CERTS=true
 
 Then you can provide the browser/device/os and version you want to test against, below are some examples:
 
-* Chrome 83 Windows 10: `npx testcafe "browserstack:chrome@83.0:Windows 10" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
-* Edge 81 Windows 10: `npx testcafe "browserstack:edge@81.0:Windows 10" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
-* Firefox 76 Windows 10: `npx testcafe "browserstack:firefox@76.0:Windows 10" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
-* IE11 Windows 7: `npx testcafe "browserstack:ie@11.0:Windows 7" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
-* iPhone 7 iOS 10.3 (specific ports supplied that are needed for Safari to work): `npx testcafe "browserstack:iPhone 7 Plus@10.3" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --ports 50208,54134,54136,60778,63342,64000 --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
-* Samsung Galaxy S10 Android 9.0: `npx testcafe "browserstack:Samsung Galaxy S10e@9.0" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
+- Chrome 83 Windows 10: `npx testcafe "browserstack:chrome@83.0:Windows 10" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
+- Edge 81 Windows 10: `npx testcafe "browserstack:edge@81.0:Windows 10" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
+- Firefox 76 Windows 10: `npx testcafe "browserstack:firefox@76.0:Windows 10" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
+- IE11 Windows 7: `npx testcafe "browserstack:ie@11.0:Windows 7" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
+- iPhone 7 iOS 10.3 (specific ports supplied that are needed for Safari to work): `npx testcafe "browserstack:iPhone 7 Plus@10.3" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --ports 50208,54134,54136,60778,63342,64000 --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
+- Samsung Galaxy S10 Android 9.0: `npx testcafe "browserstack:Samsung Galaxy S10e@9.0" "tests/e2e/ui" --reporter spec,xunit:report.xml,html:report.html --screenshots takeOnFails=true --selector-timeout 120000 --hostname bs-local.com --compiler-options typescript.configPath=tsconfig.test.json --skip-js-errors --disable-multiple-windows --assertion-timeout 120000`
 
 To run tests in parallel against BrowserStack, you can use a command similar to below:
 
@@ -151,10 +151,10 @@ export BROWSERSTACK_DEBUG="true"
 
 The test suite is grouped into 3 main sub test suites to make running all them easier or to target particular areas:
 
-* e2e - as its name suggests, the end-to-end user journeys to book tests
-* regression - cover functionality of individual pages in the booking app
-* manage-booking - cover functionality of the manage booking pages (login, cancel, rescheduling bookings)
-* instructor - cover functionality related to the instructor candidate booking journeys
+- e2e - as its name suggests, the end-to-end user journeys to book tests
+- regression - cover functionality of individual pages in the booking app
+- manage-booking - cover functionality of the manage booking pages (login, cancel, rescheduling bookings)
+- instructor - cover functionality related to the instructor candidate booking journeys
 
 To filter what sub-suite to run you can add the following command to your testcafe commands above:
 
@@ -184,29 +184,29 @@ The UI tests use candidate data which is stored in the Eligibilty API mock to pr
 
 GB Candidate & Instructor tests:
 
-* Name: Tester Tester
-* DOB: 01-01-2000
-* Licence Number: Starting with TESTR252244N9 then ending with a number from 2-9 and either a VR or ZZ
+- Name: Tester Tester
+- DOB: 01-01-2000
+- Licence Number: Starting with TESTR252244N9 then ending with a number from 2-9 and either a VR or ZZ
 
 NI Candidate & Instructor tests:
 
-* Name: Tester Tester
-* DOB: 01-01-2000
-* Licence Number: Starting with 9463719 then ending with a number from 0-9
+- Name: Tester Tester
+- DOB: 01-01-2000
+- Licence Number: Starting with 9463719 then ending with a number from 0-9
 
 For Bulk Compensation tests, we have a separate list of candidates to avoid clashes in cancelled bookings showing up where they are not expected.
 
 GB Candidate & Instructor bulk compensation tests:
 
-* Name: Tester Tester
-* DOB: 01-01-2000
-* Licence Number: TESTR252244N92ZX, TESTR252244N93ZX, TESTR252244N94ZX
+- Name: Tester Tester
+- DOB: 01-01-2000
+- Licence Number: TESTR252244N92ZX, TESTR252244N93ZX, TESTR252244N94ZX
 
 NI Candidate & Instructor bulk compensation tests:
 
-* Name: Tester Tester
-* DOB: 01-01-2000
-* Licence Number: 94637180, 94637181, 94637182
+- Name: Tester Tester
+- DOB: 01-01-2000
+- Licence Number: 94637180, 94637181, 94637182
 
 NOTE: Its recommended to only run the bulk-compensation fixture with a maximum of 3 parallel tests to avoid issues
 
@@ -284,7 +284,7 @@ To view or amend the API data that is being served by json-server, please see `s
 
 To setup the mock server:
 
-* Configure the .env file using the following settings:
+- Configure the .env file using the following settings:
 
 ```bash
 CRM_API_URL=http://localhost:5000/crm
@@ -297,13 +297,13 @@ MAPS_API_KEY=<google maps js api key for local dev>
 
 Then start the mock server:
 
-* `npm run start:mock-server`
+- `npm run start:mock-server`
 
 And then start the app:
 
-* `npm run start` - if using the Express server
-OR
-* `npm run func:start` = if using the Azure function app
+- `npm run start` - if using the Express server
+  OR
+- `npm run func:start` = if using the Azure function app
 
 ## Running Local Booking App through Docker against json-server mock for testing
 
@@ -317,12 +317,14 @@ docker-compose -f docker-compose-testing.yml up --build
 
 This will then build and spin up:
 
-* the Booking App (running on localhost:80)
-* a redis cache server
-* json-server mock server to manage all API requests from the Booking App
+- the Booking App (running on localhost:80)
+- a redis cache server
+- json-server mock server to manage all API requests from the Booking App
+
 ### Running Queue It in dev
 
 To run Queue it in the dev env:
-1. Firstly ensure Front door is deployed on the env 
+
+1. Firstly ensure Front door is deployed on the env
 2. CUSTOM_DOMAIN_URI value in the configuration window will manually need to be changed to https://dsuksdvfntendfd< env number>.azurefd.net/
-3. Ensure queue it implementation is set to either server-side or client-side depending what one you woul like to use. 
+3. Ensure queue it implementation is set to either server-side or client-side depending what one you woul like to use.

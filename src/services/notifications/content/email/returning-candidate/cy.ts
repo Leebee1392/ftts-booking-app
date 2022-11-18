@@ -1,33 +1,35 @@
-import dedent from 'ts-dedent';
+import dedent from "ts-dedent";
 
-import { SupportType } from '../../../../../domain/enums';
-import { translate } from '../../../../../helpers/language';
-import { SupportRequestDetails } from '../../../types';
-import { formatSupportTypes } from '../../helpers';
+import { SupportType } from "../../../../../domain/enums";
+import { translate } from "../../../../../helpers/language";
+import { SupportRequestDetails } from "../../../types";
+import { formatSupportTypes } from "../../helpers";
 
 const isSupportRequested = (supportTypes: SupportType[]) => {
   if (supportTypes.length) {
-    return translate('generalContent.yes');
+    return translate("generalContent.yes");
   }
-  return translate('generalContent.no');
+  return translate("generalContent.no");
 };
 
 const getPreferredDayText = (preferredDayText: string | undefined) => {
   if (preferredDayText) {
     return preferredDayText;
   }
-  return 'Bydd hyn yn cael ei benderfynu yn ddiweddarach';
+  return "Bydd hyn yn cael ei benderfynu yn ddiweddarach";
 };
 
-const getPreferredLocationText = (preferredLocationText: string | undefined) => {
+const getPreferredLocationText = (
+  preferredLocationText: string | undefined
+) => {
   if (preferredLocationText) {
     return preferredLocationText;
   }
-  return 'Bydd hyn yn cael ei benderfynu yn ddiweddarach';
+  return "Bydd hyn yn cael ei benderfynu yn ddiweddarach";
 };
 
 export default {
-  subject: 'DVSA: eich cais am gymorth am eich prawf theori',
+  subject: "DVSA: eich cais am gymorth am eich prawf theori",
   buildBody: (details: SupportRequestDetails): string => dedent`
     # Diolch am eich cais am gymorth gyda'ch prawf theori gyrru
 
@@ -44,15 +46,21 @@ export default {
 
     Math o brawf: ${translate(`generalContent.testTypes.${details.testType}`)}
 
-    Iaith ar sgrîn: ${translate(`generalContent.language.${details.testLanguage}`)}
+    Iaith ar sgrîn: ${translate(
+      `generalContent.language.${details.testLanguage}`
+    )}
 
     Cymorth sydd angen: ${isSupportRequested(details.supportTypes)}
 
     Y mathau o gymorth a ddewiswyd: ${formatSupportTypes(details.supportTypes)}
 
-    Amser sy'n well gennych ar gyfer y prawf: ${getPreferredDayText(details.preferredDay.text)}
+    Amser sy'n well gennych ar gyfer y prawf: ${getPreferredDayText(
+      details.preferredDay.text
+    )}
 
-    Y lleoliadau sy'n well gennych ar gyfer y prawf: ${getPreferredLocationText(details.preferredDay.text)}
+    Y lleoliadau sy'n well gennych ar gyfer y prawf: ${getPreferredLocationText(
+      details.preferredDay.text
+    )}
 
 
     # Tystiolaeth

@@ -1,37 +1,46 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
+import { BasePage } from "./base-page";
 import {
-  capitalizeFirstLetter, click, convertDateToDisplayFormat, getVoiceoverOption, verifyContainsText, verifyExactText, verifyIsNotVisible, verifyIsVisible, verifyTitleContainsText,
-} from '../utils/helpers';
-import { ContactDetailsPage } from './contact-details-page';
-import { LanguagePage } from './language-page';
-import { TestTypePage } from './test-type-page';
-import { SessionData } from '../data/session-data';
-import { Languages, SupportTypeText, TestTypeName } from '../data/constants';
-import { YesOrNo } from '../../../src/value-objects/yes-or-no';
-import { PaymentsPage } from './payments-page';
-import { SupportType, Target } from '../../../src/domain/enums';
-import { ChooseSupportPage } from './choose-support-page';
-import { SelectSupportTypePage } from './select-support-type-page';
-import { CustomSupportPage } from './custom-support-page';
-import { TranslatorPage } from './translator-page';
-import { PreferredDayNSAPage } from './preferred-day-nsa-page';
-import { PreferredLocationNSAPage } from './preferred-location-nsa-page';
-import { NsaVoiceoverPage } from './nsa-voiceover-page';
-import { NsaVoicemailPage } from './nsa-voicemail-page';
-import { NsaTelephoneContactPage } from './nsa-telephone-contact-page';
+  capitalizeFirstLetter,
+  click,
+  convertDateToDisplayFormat,
+  getVoiceoverOption,
+  verifyContainsText,
+  verifyExactText,
+  verifyIsNotVisible,
+  verifyIsVisible,
+  verifyTitleContainsText,
+} from "../utils/helpers";
+import { ContactDetailsPage } from "./contact-details-page";
+import { LanguagePage } from "./language-page";
+import { TestTypePage } from "./test-type-page";
+import { SessionData } from "../data/session-data";
+import { Languages, SupportTypeText, TestTypeName } from "../data/constants";
+import { YesOrNo } from "../../../src/value-objects/yes-or-no";
+import { PaymentsPage } from "./payments-page";
+import { SupportType, Target } from "../../../src/domain/enums";
+import { ChooseSupportPage } from "./choose-support-page";
+import { SelectSupportTypePage } from "./select-support-type-page";
+import { CustomSupportPage } from "./custom-support-page";
+import { TranslatorPage } from "./translator-page";
+import { PreferredDayNSAPage } from "./preferred-day-nsa-page";
+import { PreferredLocationNSAPage } from "./preferred-location-nsa-page";
+import { NsaVoiceoverPage } from "./nsa-voiceover-page";
+import { NsaVoicemailPage } from "./nsa-voicemail-page";
+import { NsaTelephoneContactPage } from "./nsa-telephone-contact-page";
 
 export class CheckYourDetailsNsaPage extends BasePage {
   pageHeadingLocator = 'h1[data-automation-id="heading"]';
 
-  pageHeading = 'Check your details';
+  pageHeading = "Check your details";
 
   backLink = 'a[data-automation-id="back"]';
 
-  personalDetailsHeadingLocator = 'h2[data-automation-id="personal-details-heading"]';
+  personalDetailsHeadingLocator =
+    'h2[data-automation-id="personal-details-heading"]';
 
-  personalDetailsLocator = '.govuk-summary-list:nth-of-type(1)';
+  personalDetailsLocator = ".govuk-summary-list:nth-of-type(1)";
 
   personalDetailsKey = `${this.personalDetailsLocator} dt.govuk-summary-list__key`;
 
@@ -45,7 +54,7 @@ export class CheckYourDetailsNsaPage extends BasePage {
 
   testDetailsHeadingLocator = 'h2[data-automation-id="test-details-heading"]';
 
-  testDetailsLocator = '.govuk-summary-list:nth-of-type(2)';
+  testDetailsLocator = ".govuk-summary-list:nth-of-type(2)";
 
   testDetailsKey = `${this.testDetailsLocator} dt.govuk-summary-list__key`;
 
@@ -57,7 +66,7 @@ export class CheckYourDetailsNsaPage extends BasePage {
 
   supportDetailsHeadingLocator = 'h2[data-automation-id="support-heading"]';
 
-  supportDetailsLocator = '.govuk-summary-list:nth-of-type(3)';
+  supportDetailsLocator = ".govuk-summary-list:nth-of-type(3)";
 
   supportDetailsKey = `${this.supportDetailsLocator} dt.govuk-summary-list__key`;
 
@@ -79,7 +88,7 @@ export class CheckYourDetailsNsaPage extends BasePage {
 
   continueButton = 'button[data-automation-id="continue"]';
 
-  pathUrl = 'nsa/check-your-details';
+  pathUrl = "nsa/check-your-details";
 
   async continueBooking(): Promise<PaymentsPage> {
     await click(this.continueButton);
@@ -153,55 +162,133 @@ export class CheckYourDetailsNsaPage extends BasePage {
   async checkDataMatchesSession(sessionData: SessionData): Promise<void> {
     await verifyTitleContainsText(this.pageHeading);
     // personal details
-    await verifyExactText(this.personalDetailsValue, `${sessionData.candidate.firstnames} ${sessionData.candidate.surname}`, 0);
+    await verifyExactText(
+      this.personalDetailsValue,
+      `${sessionData.candidate.firstnames} ${sessionData.candidate.surname}`,
+      0
+    );
     const sessionDobDate = new Date(sessionData.candidate.dateOfBirth);
     const expDobDate = convertDateToDisplayFormat(sessionDobDate);
     await verifyExactText(this.personalDetailsValue, expDobDate, 1);
-    await verifyExactText(this.personalDetailsValue, sessionData.candidate.licenceNumber, 2);
-    if (sessionData.candidate.telephone !== null && sessionData.candidate.telephone.toString().length > 0) {
-      await verifyExactText(this.personalDetailsValue, sessionData.candidate.telephone.toString(), 3);
+    await verifyExactText(
+      this.personalDetailsValue,
+      sessionData.candidate.licenceNumber,
+      2
+    );
+    if (
+      sessionData.candidate.telephone !== null &&
+      sessionData.candidate.telephone.toString().length > 0
+    ) {
+      await verifyExactText(
+        this.personalDetailsValue,
+        sessionData.candidate.telephone.toString(),
+        3
+      );
       if (sessionData.currentBooking.voicemail) {
-        await verifyContainsText(this.personalDetailsValue, capitalizeFirstLetter(YesOrNo.fromBoolean(sessionData.currentBooking.voicemail).toString()), 5);
+        await verifyContainsText(
+          this.personalDetailsValue,
+          capitalizeFirstLetter(
+            YesOrNo.fromBoolean(sessionData.currentBooking.voicemail).toString()
+          ),
+          5
+        );
       }
     } else {
-      await verifyExactText(this.personalDetailsValue, 'You added no details', 3);
+      await verifyExactText(
+        this.personalDetailsValue,
+        "You added no details",
+        3
+      );
     }
 
-    await verifyExactText(this.personalDetailsValue, sessionData.candidate.email, 4);
+    await verifyExactText(
+      this.personalDetailsValue,
+      sessionData.candidate.email,
+      4
+    );
 
     // test details
-    await verifyContainsText(this.testDetailsValue, TestTypeName.get(sessionData.currentBooking.testType), 0);
-    await verifyContainsText(this.testDetailsValue, Languages.get(sessionData.currentBooking.language), 1);
+    await verifyContainsText(
+      this.testDetailsValue,
+      TestTypeName.get(sessionData.currentBooking.testType),
+      0
+    );
+    await verifyContainsText(
+      this.testDetailsValue,
+      Languages.get(sessionData.currentBooking.language),
+      1
+    );
 
     // support details
-    await verifyContainsText(this.supportDetailsValue, capitalizeFirstLetter(YesOrNo.fromBoolean(sessionData.journey.support).toString()), 0);
+    await verifyContainsText(
+      this.supportDetailsValue,
+      capitalizeFirstLetter(
+        YesOrNo.fromBoolean(sessionData.journey.support).toString()
+      ),
+      0
+    );
     const supportTypes = sessionData.currentBooking.selectSupportType;
     for (let index = 0; index < supportTypes.length; index++) {
       const supportTypeAbbrevText = SupportTypeText.get(supportTypes[index]);
-      await verifyContainsText(this.supportDetailsValue, supportTypeAbbrevText, 1);
+      await verifyContainsText(
+        this.supportDetailsValue,
+        supportTypeAbbrevText,
+        1
+      );
     }
 
     // add extra offset is some options are present/not present
     let OFFSET_INDEX = 0;
     if (supportTypes.includes(SupportType.VOICEOVER)) {
-      await verifyContainsText(this.supportDetailsValue, getVoiceoverOption(sessionData), 2);
+      await verifyContainsText(
+        this.supportDetailsValue,
+        getVoiceoverOption(sessionData),
+        2
+      );
     } else {
       OFFSET_INDEX--;
     }
 
-    if (sessionData.target === Target.NI && supportTypes.includes(SupportType.TRANSLATOR)) {
+    if (
+      sessionData.target === Target.NI &&
+      supportTypes.includes(SupportType.TRANSLATOR)
+    ) {
       OFFSET_INDEX = 1;
-      await verifyContainsText(this.supportDetailsValue, sessionData.currentBooking.translator, 3);
+      await verifyContainsText(
+        this.supportDetailsValue,
+        sessionData.currentBooking.translator,
+        3
+      );
     }
     if (sessionData.currentBooking.customSupport) {
-      await verifyContainsText(this.supportDetailsValue, sessionData.currentBooking.customSupport, 3 + OFFSET_INDEX);
+      await verifyContainsText(
+        this.supportDetailsValue,
+        sessionData.currentBooking.customSupport,
+        3 + OFFSET_INDEX
+      );
     } else {
       OFFSET_INDEX--;
     }
-    await verifyContainsText(this.supportDetailsValue, 'I want a particular time or day', 4 + OFFSET_INDEX);
-    await verifyContainsText(this.supportDetailsValue, sessionData.currentBooking.preferredDay, 4 + OFFSET_INDEX);
-    await verifyContainsText(this.supportDetailsValue, 'I know which locations I want', 5 + OFFSET_INDEX);
-    await verifyContainsText(this.supportDetailsValue, sessionData.currentBooking.preferredLocation, 5 + OFFSET_INDEX);
+    await verifyContainsText(
+      this.supportDetailsValue,
+      "I want a particular time or day",
+      4 + OFFSET_INDEX
+    );
+    await verifyContainsText(
+      this.supportDetailsValue,
+      sessionData.currentBooking.preferredDay,
+      4 + OFFSET_INDEX
+    );
+    await verifyContainsText(
+      this.supportDetailsValue,
+      "I know which locations I want",
+      5 + OFFSET_INDEX
+    );
+    await verifyContainsText(
+      this.supportDetailsValue,
+      sessionData.currentBooking.preferredLocation,
+      5 + OFFSET_INDEX
+    );
 
     if (sessionData.journey.isInstructor) {
       await verifyIsNotVisible(this.changeTestTypeLink);

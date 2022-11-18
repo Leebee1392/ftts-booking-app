@@ -1,37 +1,37 @@
-import { EmailType } from '../types';
-import { Locale } from '../../../domain/enums';
+import { EmailType } from "../types";
+import { Locale } from "../../../domain/enums";
 
-import gbBookingConfirmationEmail from './email/booking-confirmation/gb';
-import cyBookingConfirmationEmail from './email/booking-confirmation/cy';
-import niBookingConfirmationEmail from './email/booking-confirmation/ni';
+import gbBookingConfirmationEmail from "./email/booking-confirmation/gb";
+import cyBookingConfirmationEmail from "./email/booking-confirmation/cy";
+import niBookingConfirmationEmail from "./email/booking-confirmation/ni";
 
-import gbBookingCancellationEmail from './email/booking-cancellation/gb';
-import cyBookingCancellationEmail from './email/booking-cancellation/cy';
-import niBookingCancellationEmail from './email/booking-cancellation/ni';
+import gbBookingCancellationEmail from "./email/booking-cancellation/gb";
+import cyBookingCancellationEmail from "./email/booking-cancellation/cy";
+import niBookingCancellationEmail from "./email/booking-cancellation/ni";
 
-import gbBookingRescheduledEmail from './email/booking-rescheduled/gb';
-import cyBookingRescheduledEmail from './email/booking-rescheduled/cy';
-import niBookingRescheduledEmail from './email/booking-rescheduled/ni';
+import gbBookingRescheduledEmail from "./email/booking-rescheduled/gb";
+import cyBookingRescheduledEmail from "./email/booking-rescheduled/cy";
+import niBookingRescheduledEmail from "./email/booking-rescheduled/ni";
 
-import gbEvidenceRequiredEmail from './email/evidence-required/gb';
-import cyEvidenceRequiredEmail from './email/evidence-required/cy';
-import niEvidenceRequiredEmail from './email/evidence-required/ni';
+import gbEvidenceRequiredEmail from "./email/evidence-required/gb";
+import cyEvidenceRequiredEmail from "./email/evidence-required/cy";
+import niEvidenceRequiredEmail from "./email/evidence-required/ni";
 
-import gbEvidenceNotRequiredEmail from './email/evidence-not-required/gb';
-import cyEvidenceNotRequiredEmail from './email/evidence-not-required/cy';
-import niEvidenceNotRequiredEmail from './email/evidence-not-required/ni';
+import gbEvidenceNotRequiredEmail from "./email/evidence-not-required/gb";
+import cyEvidenceNotRequiredEmail from "./email/evidence-not-required/cy";
+import niEvidenceNotRequiredEmail from "./email/evidence-not-required/ni";
 
-import gbEvidenceMayBeRequiredEmail from './email/evidence-may-be-required/gb';
-import cyEvidenceMayBeRequiredEmail from './email/evidence-may-be-required/cy';
-import niEvidenceMayBeRequiredEmail from './email/evidence-may-be-required/ni';
+import gbEvidenceMayBeRequiredEmail from "./email/evidence-may-be-required/gb";
+import cyEvidenceMayBeRequiredEmail from "./email/evidence-may-be-required/cy";
+import niEvidenceMayBeRequiredEmail from "./email/evidence-may-be-required/ni";
 
-import gbReturningCandidateEmail from './email/returning-candidate/gb';
-import cyReturningCandidateEmail from './email/returning-candidate/cy';
-import niReturningCandidateEmail from './email/returning-candidate/ni';
+import gbReturningCandidateEmail from "./email/returning-candidate/gb";
+import cyReturningCandidateEmail from "./email/returning-candidate/cy";
+import niReturningCandidateEmail from "./email/returning-candidate/ni";
 
-import gbRefundRequestEmail from './email/refund-request/gb';
-import cyRefundRequestEmail from './email/refund-request/cy';
-import niRefundRequestEmail from './email/refund-request/ni';
+import gbRefundRequestEmail from "./email/refund-request/gb";
+import cyRefundRequestEmail from "./email/refund-request/cy";
+import niRefundRequestEmail from "./email/refund-request/ni";
 
 export default {
   email: {

@@ -1,7 +1,7 @@
-import { CrmCreateUpdateCandidateError } from './CrmCreateUpdateCandidateError';
-import { CrmRetrieveLicenceError } from './CrmRetrieveLicenceError';
-import { CrmServerError } from './CrmServerError';
-import { CrmTooManyRequestsError } from './CrmTooManyRequestsError';
+import { CrmCreateUpdateCandidateError } from "./CrmCreateUpdateCandidateError";
+import { CrmRetrieveLicenceError } from "./CrmRetrieveLicenceError";
+import { CrmServerError } from "./CrmServerError";
+import { CrmTooManyRequestsError } from "./CrmTooManyRequestsError";
 
 export {
   CrmCreateUpdateCandidateError,

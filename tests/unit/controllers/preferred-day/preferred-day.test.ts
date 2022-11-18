@@ -1,7 +1,7 @@
-import { PreferredDayController } from '@controllers/preferred-day/preferred-day';
-import { PreferredDay } from '../../../../src/domain/enums';
+import { PreferredDayController } from "@controllers/preferred-day/preferred-day";
+import { PreferredDay } from "../../../../src/domain/enums";
 
-describe('Preferred Day controller', () => {
+describe("Preferred Day controller", () => {
   let preferredDayController: PreferredDayController;
   let res;
   let req;
@@ -12,7 +12,7 @@ describe('Preferred Day controller', () => {
     req = {
       session: {
         currentBooking: {
-          preferredDay: 'mockSavedPreferredDay',
+          preferredDay: "mockSavedPreferredDay",
           preferredDayOption: PreferredDay.ParticularDay,
         },
         journey: {
@@ -22,7 +22,7 @@ describe('Preferred Day controller', () => {
       hasErrors: false,
       errors: [],
       body: {
-        dayInput: 'mockPreferredDay',
+        dayInput: "mockPreferredDay",
         preferredDayOption: PreferredDay.ParticularDay,
       },
     };
@@ -37,46 +37,46 @@ describe('Preferred Day controller', () => {
     jest.resetAllMocks();
   });
 
-  describe('GET request', () => {
-    test('renders the preferred day page with saved text & options', () => {
+  describe("GET request", () => {
+    test("renders the preferred day page with saved text & options", () => {
       req.body.dayInput = undefined;
       req.body.preferredDayOption = undefined;
 
       preferredDayController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('supported/preferred-day', {
+      expect(res.render).toHaveBeenCalledWith("supported/preferred-day", {
         errors: [],
-        savedPreferredDay: 'mockSavedPreferredDay',
+        savedPreferredDay: "mockSavedPreferredDay",
         preferredDayOption: PreferredDay.ParticularDay,
-        backLink: 'staying-nsa',
+        backLink: "staying-nsa",
       });
     });
 
-    test('edit mode - renders the preferred day page with saved text & options', () => {
+    test("edit mode - renders the preferred day page with saved text & options", () => {
       req.body.dayInput = undefined;
       req.body.preferredDayOption = undefined;
       req.session.journey.inEditMode = true;
 
       preferredDayController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('supported/preferred-day', {
+      expect(res.render).toHaveBeenCalledWith("supported/preferred-day", {
         errors: [],
-        savedPreferredDay: 'mockSavedPreferredDay',
+        savedPreferredDay: "mockSavedPreferredDay",
         preferredDayOption: PreferredDay.ParticularDay,
-        backLink: 'check-your-details',
+        backLink: "check-your-details",
       });
     });
   });
 
-  describe('POST request', () => {
-    test('post validation schema - setting particular day', () => {
+  describe("POST request", () => {
+    test("post validation schema - setting particular day", () => {
       req.body.preferredDayOption = PreferredDay.ParticularDay;
 
       const schema = preferredDayController.postSchemaValidation(req);
 
       expect(schema).toStrictEqual({
         dayInput: {
-          in: ['body'],
+          in: ["body"],
           isLength: {
             options: { max: 4000 },
             errorMessage: expect.anything(),
@@ -85,14 +85,14 @@ describe('Preferred Day controller', () => {
       });
     });
 
-    test('post validation schema - particular option not set', () => {
+    test("post validation schema - particular option not set", () => {
       req.body.preferredDayOption = PreferredDay.DecideLater;
 
       const schema = preferredDayController.postSchemaValidation(req);
 
       expect(schema).toStrictEqual({
         preferredDayOption: {
-          in: ['body'],
+          in: ["body"],
           errorMessage: expect.anything(),
           custom: {
             options: expect.anything(),
@@ -101,48 +101,52 @@ describe('Preferred Day controller', () => {
       });
     });
 
-    test('renders the preferred day page if there are errors', () => {
-      const longString = new Array(4001 + 1).join('a');
+    test("renders the preferred day page if there are errors", () => {
+      const longString = new Array(4001 + 1).join("a");
       req.body.dayInput = longString;
       req.hasErrors = true;
 
       preferredDayController.post(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('supported/preferred-day', {
+      expect(res.render).toHaveBeenCalledWith("supported/preferred-day", {
         errors: [],
         savedPreferredDay: longString,
         preferredDayOption: PreferredDay.ParticularDay,
-        backLink: 'staying-nsa',
+        backLink: "staying-nsa",
       });
     });
 
-    test('selecting decide later will still save the users text', () => {
-      req.body.dayInput = 'new text';
+    test("selecting decide later will still save the users text", () => {
+      req.body.dayInput = "new text";
       req.body.preferredDayOption = PreferredDay.DecideLater;
 
       preferredDayController.post(req, res);
 
-      expect(req.session.currentBooking.preferredDay).toStrictEqual('new text');
-      expect(res.redirect).toHaveBeenCalledWith('preferred-location');
+      expect(req.session.currentBooking.preferredDay).toStrictEqual("new text");
+      expect(res.redirect).toHaveBeenCalledWith("preferred-location");
     });
 
-    test('navigate to next page', () => {
-      req.body.dayInput = 'changed day preference';
+    test("navigate to next page", () => {
+      req.body.dayInput = "changed day preference";
 
       preferredDayController.post(req, res);
 
-      expect(req.session.currentBooking.preferredDay).toStrictEqual('changed day preference');
-      expect(res.redirect).toHaveBeenCalledWith('preferred-location');
+      expect(req.session.currentBooking.preferredDay).toStrictEqual(
+        "changed day preference"
+      );
+      expect(res.redirect).toHaveBeenCalledWith("preferred-location");
     });
 
-    test('edit mode - navigate to check your details page', () => {
-      req.body.dayInput = 'changed day preference';
+    test("edit mode - navigate to check your details page", () => {
+      req.body.dayInput = "changed day preference";
       req.session.journey.inEditMode = true;
 
       preferredDayController.post(req, res);
 
-      expect(req.session.currentBooking.preferredDay).toStrictEqual('changed day preference');
-      expect(res.redirect).toHaveBeenCalledWith('check-your-details');
+      expect(req.session.currentBooking.preferredDay).toStrictEqual(
+        "changed day preference"
+      );
+      expect(res.redirect).toHaveBeenCalledWith("check-your-details");
     });
   });
 });

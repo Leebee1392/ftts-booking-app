@@ -1,17 +1,17 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click, enter, link } from '../utils/helpers';
-import { NsaVoicemailPage } from './nsa-voicemail-page';
+import { BasePage } from "./base-page";
+import { click, enter, link } from "../utils/helpers";
+import { NsaVoicemailPage } from "./nsa-voicemail-page";
 
 export class NsaTelephoneContactPage extends BasePage {
   // locators
-  pageHeadingLocator = '.govuk-fieldset__heading';
+  pageHeadingLocator = ".govuk-fieldset__heading";
 
   yesButton = 'input[data-automation-id="yes"]';
 
   noButton = 'input[data-automation-id="no"]';
 
-  telephoneField = '#telephoneNumber';
+  telephoneField = "#telephoneNumber";
 
   continueButton = 'button[data-automation-id="submit"]';
 
@@ -19,32 +19,35 @@ export class NsaTelephoneContactPage extends BasePage {
 
   backLink = 'a[data-automation-id="back"]';
 
-  pathUrl = 'nsa/telephone-contact';
+  pathUrl = "nsa/telephone-contact";
 
   errorLink = 'a[href="contactByTelephone"]';
 
-  errorMessageRadioLocator = 'span[data-automation-id="contactByTelephone-error"]';
+  errorMessageRadioLocator =
+    'span[data-automation-id="contactByTelephone-error"]';
 
-  errorMessageLocator = '#error-summary-title';
+  errorMessageLocator = "#error-summary-title";
 
-  errorMessageList = '.govuk-list.govuk-error-summary__list';
+  errorMessageList = ".govuk-list.govuk-error-summary__list";
 
   // content
-  pageHeading = 'Would you prefer to be contacted by telephone?';
+  pageHeading = "Would you prefer to be contacted by telephone?";
 
-  errorMessageHeader = 'There is a problem';
+  errorMessageHeader = "There is a problem";
 
-  errorMessageText = 'You must select one option.';
+  errorMessageText = "You must select one option.";
 
-  errorEnterTelephone = 'Enter a telephone number';
+  errorEnterTelephone = "Enter a telephone number";
 
-  error50Chars = 'The telephone number must be 50 characters or fewer';
+  error50Chars = "The telephone number must be 50 characters or fewer";
 
-  continueButtonText = 'Continue';
+  continueButtonText = "Continue";
 
-  cancelLinkText = 'keep your existing choice';
+  cancelLinkText = "keep your existing choice";
 
-  async selectTelephoneContactPreference(telephoneContact: boolean): Promise<void> {
+  async selectTelephoneContactPreference(
+    telephoneContact: boolean
+  ): Promise<void> {
     if (telephoneContact) {
       await click(this.yesButton);
     } else {

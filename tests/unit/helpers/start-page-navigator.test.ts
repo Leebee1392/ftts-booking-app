@@ -1,11 +1,15 @@
-import config from '../../../src/config';
-import { Context, Locale, Target } from '../../../src/domain/enums';
-import { getBackLinkToStartPage, getInstructorBackLinkToStartPage, getManageBookingLinkToStartPage } from '../../../src/helpers/start-page-navigator';
+import config from "../../../src/config";
+import { Context, Locale, Target } from "../../../src/domain/enums";
+import {
+  getBackLinkToStartPage,
+  getInstructorBackLinkToStartPage,
+  getManageBookingLinkToStartPage,
+} from "../../../src/helpers/start-page-navigator";
 
-const gbGovLink = 'https://www.gov.uk';
-const niGovLink = 'https://www.nidirect.gov.uk';
+const gbGovLink = "https://www.gov.uk";
+const niGovLink = "https://www.nidirect.gov.uk";
 
-describe('Start page navigator', () => {
+describe("Start page navigator", () => {
   let req;
   beforeEach(() => {
     req = {
@@ -57,79 +61,93 @@ describe('Start page navigator', () => {
     };
   });
 
-  describe('getBackLinkToStartPage', () => {
-    test('go back to gov uk book a theory test', () => {
+  describe("getBackLinkToStartPage", () => {
+    test("go back to gov uk book a theory test", () => {
       const url = getBackLinkToStartPage(req);
 
-      expect(url).toStrictEqual('https://www.gov.uk/book-theory-test');
+      expect(url).toStrictEqual("https://www.gov.uk/book-theory-test");
     });
 
-    test('go back to gov uk book a theory test with welsh language', () => {
+    test("go back to gov uk book a theory test with welsh language", () => {
       req.session.locale = Locale.CY;
 
       const url = getBackLinkToStartPage(req);
 
-      expect(url).toStrictEqual('https://www.gov.uk/archebu-prawf-gyrru-theori');
+      expect(url).toStrictEqual(
+        "https://www.gov.uk/archebu-prawf-gyrru-theori"
+      );
     });
 
-    test('go back to nidirect book a theory test when target equals NI', () => {
+    test("go back to nidirect book a theory test when target equals NI", () => {
       req.session.target = Target.NI;
 
       const url = getBackLinkToStartPage(req);
 
-      expect(url).toStrictEqual('https://www.nidirect.gov.uk/services/book-change-or-cancel-your-theory-test-online');
+      expect(url).toStrictEqual(
+        "https://www.nidirect.gov.uk/services/book-change-or-cancel-your-theory-test-online"
+      );
     });
   });
 
-  describe('getManageBookingLinkToStartPage', () => {
-    test('go back to gov uk change a theory test', () => {
+  describe("getManageBookingLinkToStartPage", () => {
+    test("go back to gov uk change a theory test", () => {
       const url = getManageBookingLinkToStartPage(req);
 
-      expect(url).toStrictEqual('https://www.gov.uk/change-theory-test');
+      expect(url).toStrictEqual("https://www.gov.uk/change-theory-test");
     });
 
-    test('go back to nidirect change a theory test when target equals NI', () => {
+    test("go back to nidirect change a theory test when target equals NI", () => {
       req.session.target = Target.NI;
 
       const url = getManageBookingLinkToStartPage(req);
 
-      expect(url).toStrictEqual('https://www.nidirect.gov.uk/services/book-change-or-cancel-your-theory-test-online');
+      expect(url).toStrictEqual(
+        "https://www.nidirect.gov.uk/services/book-change-or-cancel-your-theory-test-online"
+      );
     });
 
-    test('go back to gov uk instructor change a theory test', () => {
+    test("go back to gov uk instructor change a theory test", () => {
       req.session.context = Context.INSTRUCTOR;
 
       const url = getManageBookingLinkToStartPage(req);
 
-      expect(url).toStrictEqual('https://www.gov.uk/check-change-cancel-your-instructor-theory-test');
+      expect(url).toStrictEqual(
+        "https://www.gov.uk/check-change-cancel-your-instructor-theory-test"
+      );
     });
 
-    test('go back to nidirect instructor change a theory test when target equals NI', () => {
+    test("go back to nidirect instructor change a theory test when target equals NI", () => {
       req.session.target = Target.NI;
       req.session.context = Context.INSTRUCTOR;
 
       const url = getManageBookingLinkToStartPage(req);
 
-      expect(url).toStrictEqual('https://www.nidirect.gov.uk/services/adi-theory-test-part-one-hazard-perception-test');
+      expect(url).toStrictEqual(
+        "https://www.nidirect.gov.uk/services/adi-theory-test-part-one-hazard-perception-test"
+      );
     });
   });
 
-  describe('getInstructorBackLinkToStartPage', () => {
-    test('go back to gov uk instructor book a theory test', () => {
+  describe("getInstructorBackLinkToStartPage", () => {
+    test("go back to gov uk instructor book a theory test", () => {
       req.session.context = Context.INSTRUCTOR;
 
       const url = getInstructorBackLinkToStartPage(req);
 
-      expect(url).toStrictEqual('https://www.gov.uk/book-your-instructor-theory-test');
+      expect(url).toStrictEqual(
+        "https://www.gov.uk/book-your-instructor-theory-test"
+      );
     });
 
-    test('go back to nidirect instructor book a theory test when target equals NI', () => {
+    test("go back to nidirect instructor book a theory test when target equals NI", () => {
       req.session.target = Target.NI;
       req.session.context = Context.INSTRUCTOR;
 
       const url = getInstructorBackLinkToStartPage(req);
 
-      expect(url).toStrictEqual('https://www.nidirect.gov.uk/services/adi-theory-test-part-one-hazard-perception-test');
+      expect(url).toStrictEqual(
+        "https://www.nidirect.gov.uk/services/adi-theory-test-part-one-hazard-perception-test"
+      );
     });
   });
 });

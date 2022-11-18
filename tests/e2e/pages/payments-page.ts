@@ -1,80 +1,96 @@
-import { t } from 'testcafe';
-import { BasePage } from './base-page';
+import { t } from "testcafe";
+import { BasePage } from "./base-page";
 import {
-  click, enter, fillInFields, link, verifyIsVisible, verifyTitleContainsText,
-} from '../utils/helpers';
-import { PaymentModel } from '../data/payment-model';
-import { BookingConfirmationPage } from './booking-confirmation-page';
-import { CpmsPaymentModel } from '../data/cpms-payment-model';
+  click,
+  enter,
+  fillInFields,
+  link,
+  verifyIsVisible,
+  verifyTitleContainsText,
+} from "../utils/helpers";
+import { PaymentModel } from "../data/payment-model";
+import { BookingConfirmationPage } from "./booking-confirmation-page";
+import { CpmsPaymentModel } from "../data/cpms-payment-model";
 
 export class PaymentsPage extends BasePage {
   // Real CPMS
-  pageHeadingCpms = 'Card Details';
+  pageHeadingCpms = "Card Details";
 
-  email = '#scp_additionalInformationPage_email_input';
+  email = "#scp_additionalInformationPage_email_input";
 
-  emailConfirm = '#scp_additionalInformationPage_emailConfirmation_input';
+  emailConfirm = "#scp_additionalInformationPage_emailConfirmation_input";
 
-  cardNumberCpms = '#scp_cardPage_cardNumber_input';
+  cardNumberCpms = "#scp_cardPage_cardNumber_input";
 
-  expiryDateMonthCpms = '#scp_cardPage_expiryDate_input';
+  expiryDateMonthCpms = "#scp_cardPage_expiryDate_input";
 
-  expiryDateYearCpms = '#scp_cardPage_expiryDate_input2';
+  expiryDateYearCpms = "#scp_cardPage_expiryDate_input2";
 
-  securityCodeCpms = 'scp_cardPage_csc_input';
+  securityCodeCpms = "scp_cardPage_csc_input";
 
-  cardHoldersName = '#scp_additionalInformationPage_cardholderName_input';
+  cardHoldersName = "#scp_additionalInformationPage_cardholderName_input";
 
-  billingInfoCardHoldersName = '#scp_tdsv2AdditionalInfoPage_cardholderName_input';
+  billingInfoCardHoldersName =
+    "#scp_tdsv2AdditionalInfoPage_cardholderName_input";
 
-  billingInfoAddressLine1 = '#scp_tdsv2AdditionalInfoPage_address_1_input';
+  billingInfoAddressLine1 = "#scp_tdsv2AdditionalInfoPage_address_1_input";
 
-  billingInfoAddressCity = '#scp_tdsv2AdditionalInfoPage_city_input';
+  billingInfoAddressCity = "#scp_tdsv2AdditionalInfoPage_city_input";
 
-  billingInfoAddressPostcode = '#scp_tdsv2AdditionalInfoPage_postcode_input';
+  billingInfoAddressPostcode = "#scp_tdsv2AdditionalInfoPage_postcode_input";
 
-  billingInfoEmail = '#scp_tdsv2AdditionalInfoPage_email_input';
+  billingInfoEmail = "#scp_tdsv2AdditionalInfoPage_email_input";
 
-  billingInfoContinueButton = '#scp_tdsv2AdditionalInfoPage_buttons_continue_button';
+  billingInfoContinueButton =
+    "#scp_tdsv2AdditionalInfoPage_buttons_continue_button";
 
-  continueButtonPage1 = '#scp_cardPage_buttonsNoBack_continue_button';
+  continueButtonPage1 = "#scp_cardPage_buttonsNoBack_continue_button";
 
-  continueButtonPage2 = '#scp_additionalInformationPage_buttons_continue_button';
+  continueButtonPage2 =
+    "#scp_additionalInformationPage_buttons_continue_button";
 
-  makePaymentButtonCpms = '#scp_confirmationPage_buttons_payment_button';
+  makePaymentButtonCpms = "#scp_confirmationPage_buttons_payment_button";
 
-  authPageIFrame = '#scp_threeDSecure_iframe';
+  authPageIFrame = "#scp_threeDSecure_iframe";
 
-  passwordField = '#password';
+  passwordField = "#password";
 
-  continueButtonAuthPage = '#Continue';
+  continueButtonAuthPage = "#Continue";
 
-  cancelLink = '#scp_customer_framework_cancelLink';
+  cancelLink = "#scp_customer_framework_cancelLink";
 
   // CPMS Mock
-  pageHeadingLocator = 'h1';
+  pageHeadingLocator = "h1";
 
-  pageHeading = 'Online Payments';
+  pageHeading = "Online Payments";
 
-  emailID = '#email';
+  emailID = "#email";
 
-  cardNumber = '#card-number';
+  cardNumber = "#card-number";
 
-  expiryDateMonth = '#expiry-date';
+  expiryDateMonth = "#expiry-date";
 
-  expiryDateYear = '#expiry-date-m';
+  expiryDateYear = "#expiry-date-m";
 
-  securityCode = '#security-code';
+  securityCode = "#security-code";
 
-  makePaymentButton = '#submit';
+  makePaymentButton = "#submit";
 
-  mockCancelLink = 'Cancel';
+  mockCancelLink = "Cancel";
 
-  async enterPaymentDetailsCpms(paymentModel: CpmsPaymentModel, email: string): Promise<void> {
+  async enterPaymentDetailsCpms(
+    paymentModel: CpmsPaymentModel,
+    email: string
+  ): Promise<void> {
     // page 1 CPMS
     await verifyTitleContainsText(this.pageHeadingCpms, 10000);
     await verifyIsVisible(this.cardNumberCpms);
-    await fillInFields(paymentModel.cardNumber, paymentModel.expiryDateMonth, paymentModel.expiryDateYear, paymentModel.securityCode);
+    await fillInFields(
+      paymentModel.cardNumber,
+      paymentModel.expiryDateMonth,
+      paymentModel.expiryDateYear,
+      paymentModel.securityCode
+    );
 
     // page additional info - billing address CPMS
     await enter(this.billingInfoCardHoldersName, paymentModel.name);
@@ -94,7 +110,10 @@ export class PaymentsPage extends BasePage {
     await t.switchToMainWindow();
   }
 
-  async enterPaymentDetails(paymentModel: PaymentModel, email: string): Promise<void> {
+  async enterPaymentDetails(
+    paymentModel: PaymentModel,
+    email: string
+  ): Promise<void> {
     await enter(this.emailID, email);
     await enter(this.cardNumber, paymentModel.cardNumber);
     await enter(this.expiryDateMonth, paymentModel.expiryDateMonth);
@@ -111,7 +130,12 @@ export class PaymentsPage extends BasePage {
     if (paymentModel instanceof CpmsPaymentModel) {
       await verifyTitleContainsText(this.pageHeadingCpms, 10000);
       await verifyIsVisible(this.cardNumberCpms);
-      await fillInFields(paymentModel.cardNumber, paymentModel.expiryDateMonth, paymentModel.expiryDateYear, paymentModel.securityCode);
+      await fillInFields(
+        paymentModel.cardNumber,
+        paymentModel.expiryDateMonth,
+        paymentModel.expiryDateYear,
+        paymentModel.securityCode
+      );
       await enter(this.billingInfoCardHoldersName, paymentModel.name);
       await click(this.cancelLink);
     } else {
@@ -119,7 +143,10 @@ export class PaymentsPage extends BasePage {
     }
   }
 
-  async makePayment(paymentModel: PaymentModel, email: string): Promise<BookingConfirmationPage> {
+  async makePayment(
+    paymentModel: PaymentModel,
+    email: string
+  ): Promise<BookingConfirmationPage> {
     if (paymentModel instanceof CpmsPaymentModel) {
       await this.enterPaymentDetailsCpms(paymentModel, email);
     } else {

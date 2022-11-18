@@ -1,12 +1,17 @@
-import { Request, Response } from 'express';
-import { Meta } from 'express-validator';
+import { Request, Response } from "express";
+import { Meta } from "express-validator";
 
-import config from '../../config';
-import { translate } from '../../helpers/language';
-import { RequestValidationError, ValidatorSchema } from '../../middleware/request-validator';
+import config from "../../config";
+import { translate } from "../../helpers/language";
 import {
-  isNonStandardJourney, isStandardJourney, isSupportedStandardJourney,
-} from '../../helpers/journey-helper';
+  RequestValidationError,
+  ValidatorSchema,
+} from "../../middleware/request-validator";
+import {
+  isNonStandardJourney,
+  isStandardJourney,
+  isSupportedStandardJourney,
+} from "../../helpers/journey-helper";
 
 type ViewData = {
   backLink: string | undefined;
@@ -22,7 +27,7 @@ export class EmailContactController {
 
   public get = (req: Request, res: Response): void => {
     if (!req.session.candidate) {
-      throw Error('EmailContactController::get: No candidate set');
+      throw Error("EmailContactController::get: No candidate set");
     }
     const { email } = req.session.candidate;
     const { locale } = req.session;
@@ -35,7 +40,7 @@ export class EmailContactController {
       locale,
     };
 
-    return res.render('common/email-contact', viewData);
+    return res.render("common/email-contact", viewData);
   };
 
   public post = (req: Request, res: Response): void => {
@@ -49,10 +54,10 @@ export class EmailContactController {
         digitalResultsEmailInfo: config.featureToggles.digitalResultsEmailInfo,
         locale,
       };
-      return res.render('common/email-contact', viewData);
+      return res.render("common/email-contact", viewData);
     }
     if (!req.session.journey) {
-      throw Error('EmailContactController::post: No journey set');
+      throw Error("EmailContactController::post: No journey set");
     }
 
     req.session.candidate = {
@@ -63,57 +68,59 @@ export class EmailContactController {
     const { inEditMode } = req.session.journey;
     if (inEditMode) {
       if (isStandardJourney(req) || isSupportedStandardJourney(req)) {
-        return res.redirect('check-your-answers');
+        return res.redirect("check-your-answers");
       }
-      return res.redirect('check-your-details');
+      return res.redirect("check-your-details");
     }
     if (isStandardJourney(req)) {
-      return res.redirect('test-type');
+      return res.redirect("test-type");
     }
     if (isSupportedStandardJourney(req)) {
       if (req.session.journey?.isInstructor) {
-        return res.redirect('/instructor/find-test-centre');
+        return res.redirect("/instructor/find-test-centre");
       }
 
-      return res.redirect('/find-test-centre');
+      return res.redirect("/find-test-centre");
     }
     if (isNonStandardJourney(req)) {
-      return res.redirect('telephone-contact');
+      return res.redirect("telephone-contact");
     }
-    return res.redirect('test-type');
+    return res.redirect("test-type");
   };
 
   /* istanbul ignore next */
   public postSchemaValidation = (): ValidatorSchema => ({
     email: {
-      in: ['body'],
+      in: ["body"],
       trim: true,
       toLowerCase: true,
       isEmail: {
-        errorMessage: (): string => translate('emailContact.emailValidationError'),
+        errorMessage: (): string =>
+          translate("emailContact.emailValidationError"),
         options: {
           ignore_max_length: true,
         },
       },
       isLength: {
-        errorMessage: (): string => translate('emailContact.emailTooLong'),
+        errorMessage: (): string => translate("emailContact.emailTooLong"),
         options: {
           max: this.EMAIL_MAX_LENGTH,
         },
       },
     },
     confirmEmail: {
-      in: ['body'],
+      in: ["body"],
       trim: true,
       toLowerCase: true,
       isEmail: {
-        errorMessage: (): string => translate('emailContact.confirmEmailValidationError'),
+        errorMessage: (): string =>
+          translate("emailContact.confirmEmailValidationError"),
         options: {
           ignore_max_length: true,
         },
       },
       isLength: {
-        errorMessage: (): string => translate('emailContact.emailTooLong'),
+        errorMessage: (): string => translate("emailContact.emailTooLong"),
         options: {
           max: this.EMAIL_MAX_LENGTH,
         },
@@ -126,11 +133,11 @@ export class EmailContactController {
 
   public matchingEmailValidator = (value: string, { req }: Meta): string => {
     if (!value) {
-      throw new Error(translate('emailContact.unmatchingError'));
+      throw new Error(translate("emailContact.unmatchingError"));
     }
 
     if (value !== req.body.email) {
-      throw new Error(translate('emailContact.unmatchingError'));
+      throw new Error(translate("emailContact.unmatchingError"));
     }
 
     return value;
@@ -138,27 +145,27 @@ export class EmailContactController {
 
   private getBackLink = (req: Request): string | undefined => {
     if (!req.session.journey) {
-      throw Error('EmailContactController::getBackLink: No journey set');
+      throw Error("EmailContactController::getBackLink: No journey set");
     }
     const { inEditMode } = req.session.journey;
     if (inEditMode) {
       if (isStandardJourney(req) || isSupportedStandardJourney(req)) {
-        return 'check-your-answers';
+        return "check-your-answers";
       }
-      return 'check-your-details';
+      return "check-your-details";
     }
     if (isStandardJourney(req)) {
       return undefined;
     }
     if (isNonStandardJourney(req)) {
-      return 'preferred-location';
+      return "preferred-location";
     }
     if (isSupportedStandardJourney(req)) {
       if (req.session.journey?.isInstructor) {
-        return '/instructor/nsa/leaving-nsa';
+        return "/instructor/nsa/leaving-nsa";
       }
 
-      return '/nsa/leaving-nsa';
+      return "/nsa/leaving-nsa";
     }
     return undefined;
   };

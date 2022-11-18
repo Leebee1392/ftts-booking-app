@@ -1,14 +1,22 @@
-import { Request, Response } from 'express';
-import { Meta } from 'express-validator';
-import { ValidatorSchema } from '../../middleware/request-validator';
-import { translate } from '../../helpers/language';
-import { store } from '../../services/session';
-import { existsInEnum, TestType, Target } from '../../domain/enums';
-import { isNonStandardJourney, isStandardJourney, isSupportedStandardJourney } from '../../helpers/journey-helper';
-import { CRMGateway } from '../../services/crm-gateway/crm-gateway';
-import { Eligibility, PriceListItem } from '../../domain/types';
-import { isBookable, isInstructorBookable, isZeroCostTest } from '../../domain/eligibility';
-import { fromCRMProductNumber } from '../../services/crm-gateway/maps';
+import { Request, Response } from "express";
+import { Meta } from "express-validator";
+import { ValidatorSchema } from "../../middleware/request-validator";
+import { translate } from "../../helpers/language";
+import { store } from "../../services/session";
+import { existsInEnum, TestType, Target } from "../../domain/enums";
+import {
+  isNonStandardJourney,
+  isStandardJourney,
+  isSupportedStandardJourney,
+} from "../../helpers/journey-helper";
+import { CRMGateway } from "../../services/crm-gateway/crm-gateway";
+import { Eligibility, PriceListItem } from "../../domain/types";
+import {
+  isBookable,
+  isInstructorBookable,
+  isZeroCostTest,
+} from "../../domain/eligibility";
+import { fromCRMProductNumber } from "../../services/crm-gateway/maps";
 
 interface TestItem {
   key: TestType;
@@ -22,26 +30,25 @@ interface TestTypeBody {
 }
 
 export class TestTypeController {
-  constructor(
-    private crm: CRMGateway,
-  ) { }
+  constructor(private crm: CRMGateway) {}
 
-  public get = async (req: Request, res: Response): Promise<void> => this.renderPage(req, res);
+  public get = async (req: Request, res: Response): Promise<void> =>
+    this.renderPage(req, res);
 
   public post = async (req: Request, res: Response): Promise<void> => {
     if (req.hasErrors) {
       return this.renderPage(req, res);
     }
     if (!req.session.journey) {
-      throw Error('TestTypeController::post: No journey set');
+      throw Error("TestTypeController::post: No journey set");
     }
     /* istanbul ignore next */
     if (!req.session.priceLists) {
-      throw Error('TestTypeController::post: No price list set');
+      throw Error("TestTypeController::post: No price list set");
     }
     /* istanbul ignore next */
     if (!req.session.candidate) {
-      throw Error('TestTypeController::post: No candidate set');
+      throw Error("TestTypeController::post: No candidate set");
     }
     req.session.journey.receivedSupportRequestPageFlag = false;
     req.session.journey.shownStandardSupportPageFlag = false;
@@ -62,16 +69,25 @@ export class TestTypeController {
     const { testType } = req.body as TestTypeBody;
 
     const eligibilities = req.session.candidate.eligibilities ?? [];
-    const eligibility = eligibilities.find((eligibilityObj) => eligibilityObj.testType === testType);
+    const eligibility = eligibilities.find(
+      (eligibilityObj) => eligibilityObj.testType === testType
+    );
 
     const allPriceLists: PriceListItem[] = req.session.priceLists;
-    const selectedPriceList = allPriceLists.find((item) => item.testType === testType);
+    const selectedPriceList = allPriceLists.find(
+      (item) => item.testType === testType
+    );
 
     const compensationBookings = req.session.compensationBookings ?? [];
-    const selectedCompensationBooking = compensationBookings.find((compensationBooking) => fromCRMProductNumber(compensationBooking.productNumber) === testType);
+    const selectedCompensationBooking = compensationBookings.find(
+      (compensationBooking) =>
+        fromCRMProductNumber(compensationBooking.productNumber) === testType
+    );
 
     if (!selectedPriceList) {
-      throw Error(`TestTypeController::post: priceList missing for test type: ${testType}`);
+      throw Error(
+        `TestTypeController::post: priceList missing for test type: ${testType}`
+      );
     }
 
     req.session.currentBooking = {
@@ -83,24 +99,28 @@ export class TestTypeController {
     };
 
     if (!isNonStandardJourney(req)) {
-      const userDraftNSABookings = await this.crm.getUserDraftNSABookingsIfExist(req.session.candidate.candidateId as string, testType);
+      const userDraftNSABookings =
+        await this.crm.getUserDraftNSABookingsIfExist(
+          req.session.candidate.candidateId as string,
+          testType
+        );
       if (userDraftNSABookings) {
-        req.session.lastPage = 'test-type';
-        return res.redirect('received-support-request');
+        req.session.lastPage = "test-type";
+        return res.redirect("received-support-request");
       }
     }
-    return res.redirect('test-language');
+    return res.redirect("test-language");
   };
 
   private async renderPage(req: Request, res: Response): Promise<void> {
     if (!req.session.journey) {
-      throw Error('TestTypeController::renderPage: No journey set');
+      throw Error("TestTypeController::renderPage: No journey set");
     }
     if (!req.session.currentBooking) {
-      throw Error('TestTypeController::renderPage: No currentBooking set');
+      throw Error("TestTypeController::renderPage: No currentBooking set");
     }
     if (!req.session.candidate?.candidateId) {
-      throw Error('TestTypeController::renderPage: No candidate set');
+      throw Error("TestTypeController::renderPage: No candidate set");
     }
 
     const { inEditMode, isInstructor } = req.session.journey;
@@ -110,14 +130,28 @@ export class TestTypeController {
     const eligibilities = req.session.candidate.eligibilities ?? [];
     let prn;
     if (isInstructor) {
-      prn = target === Target.NI ? req.session.candidate.paymentReceiptNumber : req.session.candidate.personalReferenceNumber;
+      prn =
+        target === Target.NI
+          ? req.session.candidate.paymentReceiptNumber
+          : req.session.candidate.personalReferenceNumber;
     }
-    const bookableTestTypes = this.getBookableTestTypes(eligibilities, target, isInstructor, prn);
+    const bookableTestTypes = this.getBookableTestTypes(
+      eligibilities,
+      target,
+      isInstructor,
+      prn
+    );
 
-    const priceList: PriceListItem[] = await this.crm.getPriceList(target, bookableTestTypes);
+    const priceList: PriceListItem[] = await this.crm.getPriceList(
+      target,
+      bookableTestTypes
+    );
     req.session.priceLists = priceList;
 
-    const compensationBookings = await this.crm.getCandidateCompensatedBookings(req.session.candidate.candidateId, target);
+    const compensationBookings = await this.crm.getCandidateCompensatedBookings(
+      req.session.candidate.candidateId,
+      target
+    );
     req.session.compensationBookings = compensationBookings;
 
     const tests: Map<TestType, TestItem> = new Map();
@@ -125,7 +159,13 @@ export class TestTypeController {
       tests.set(testType, {
         key: testType,
         price: priceList.find((item) => item.testType === testType)?.price,
-        isCompensationBooking: compensationBookings ? compensationBookings.find((compensationTest) => fromCRMProductNumber(compensationTest.productNumber) === testType) !== undefined : false,
+        isCompensationBooking: compensationBookings
+          ? compensationBookings.find(
+              (compensationTest) =>
+                fromCRMProductNumber(compensationTest.productNumber) ===
+                testType
+            ) !== undefined
+          : false,
         isZeroCostBooking: isZeroCostTest(testType),
       });
     });
@@ -133,15 +173,15 @@ export class TestTypeController {
     let backLink;
     if (inEditMode) {
       if (isStandardJourney(req) || isSupportedStandardJourney(req)) {
-        backLink = 'check-your-answers';
+        backLink = "check-your-answers";
       } else {
-        backLink = 'check-your-details';
+        backLink = "check-your-details";
       }
     } else {
-      backLink = isNonStandardJourney(req) ? undefined : 'email-contact';
+      backLink = isNonStandardJourney(req) ? undefined : "email-contact";
     }
 
-    return res.render('common/test-type', {
+    return res.render("common/test-type", {
       backLink,
       errors: req.errors,
       chosenTestType,
@@ -149,7 +189,12 @@ export class TestTypeController {
     });
   }
 
-  private getBookableTestTypes(eligibilities: Eligibility[], target: Target, isInstructor?: boolean, prn?: string): TestType[] {
+  private getBookableTestTypes(
+    eligibilities: Eligibility[],
+    target: Target,
+    isInstructor?: boolean,
+    prn?: string
+  ): TestType[] {
     if (isInstructor) {
       if (!prn) {
         return [];
@@ -157,8 +202,13 @@ export class TestTypeController {
 
       return eligibilities
         .filter((eligibility) => {
-          const doesPRNMatchTestType = target === Target.NI ? eligibility.paymentReceiptNumber === prn : eligibility.personalReferenceNumber === prn;
-          return isInstructorBookable(eligibility, target) && doesPRNMatchTestType;
+          const doesPRNMatchTestType =
+            target === Target.NI
+              ? eligibility.paymentReceiptNumber === prn
+              : eligibility.personalReferenceNumber === prn;
+          return (
+            isInstructorBookable(eligibility, target) && doesPRNMatchTestType
+          );
         })
         .map((eligibility) => eligibility.testType);
     }
@@ -171,8 +221,8 @@ export class TestTypeController {
   /* istanbul ignore next */
   public postSchemaValidation: ValidatorSchema = {
     testType: {
-      in: ['body'],
-      errorMessage: (): string => translate('testType.validationError'),
+      in: ["body"],
+      errorMessage: (): string => translate("testType.validationError"),
       custom: {
         options: (value: string, { req }: Meta): boolean => {
           if (!value || !existsInEnum(TestType)(value)) {
@@ -184,15 +234,21 @@ export class TestTypeController {
           const { eligibilities } = req.session.candidate;
           let prn;
           if (isInstructor) {
-            prn = target === Target.NI ? req.session.candidate.paymentReceiptNumber : req.session.candidate.personalReferenceNumber;
+            prn =
+              target === Target.NI
+                ? req.session.candidate.paymentReceiptNumber
+                : req.session.candidate.personalReferenceNumber;
           }
-          return this.getBookableTestTypes(eligibilities, target, isInstructor, prn).includes(value as TestType);
+          return this.getBookableTestTypes(
+            eligibilities,
+            target,
+            isInstructor,
+            prn
+          ).includes(value as TestType);
         },
       },
     },
   };
 }
 
-export default new TestTypeController(
-  CRMGateway.getInstance(),
-);
+export default new TestTypeController(CRMGateway.getInstance());

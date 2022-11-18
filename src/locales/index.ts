@@ -1,6 +1,6 @@
-import cyTranslations from './cy/translation.json';
-import gbTranslations from './gb/translation.json';
-import niTranslations from './ni/translation.json';
+import cyTranslations from "./cy/translation.json";
+import gbTranslations from "./gb/translation.json";
+import niTranslations from "./ni/translation.json";
 
 const resources = {
   cy: {

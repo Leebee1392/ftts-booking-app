@@ -1,12 +1,12 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click, enter } from '../utils/helpers';
+import { BasePage } from "./base-page";
+import { click, enter } from "../utils/helpers";
 
 export class TranslatorPage extends BasePage {
   // locators
   pageHeadingLocator = 'label[data-automation-id="heading"]';
 
-  updateBanner = 'div.alert';
+  updateBanner = "div.alert";
 
   continueButton = 'button[data-automation-id="submit"]';
 
@@ -16,32 +16,34 @@ export class TranslatorPage extends BasePage {
 
   errorLink = 'a[href="#translator"]';
 
-  errorMessageLocator = '#error-summary-title';
+  errorMessageLocator = "#error-summary-title";
 
-  errorMessageList = '.govuk-list.govuk-error-summary__list';
+  errorMessageList = ".govuk-list.govuk-error-summary__list";
 
-  errorMessageTextAreaLocator = '#translator-error';
+  errorMessageTextAreaLocator = "#translator-error";
 
   backLink = 'a[data-automation-id="back"]';
 
-  pathUrl = 'nsa/translator';
+  pathUrl = "nsa/translator";
 
   // content
-  pageHeading = 'Which language do you want translated?';
+  pageHeading = "Which language do you want translated?";
 
-  errorMessageHeader = 'There is a problem';
+  errorMessageHeader = "There is a problem";
 
-  emptyErrorMessageText = 'Enter the language you need translated';
+  emptyErrorMessageText = "Enter the language you need translated";
 
-  overLimitErrorMessageText = 'The translation language description must be 100 characters or fewer';
+  overLimitErrorMessageText =
+    "The translation language description must be 100 characters or fewer";
 
-  updateBannerText = 'You can change your mind about which language you want translated during your test. Or you can keep your existing choice.';
+  updateBannerText =
+    "You can change your mind about which language you want translated during your test. Or you can keep your existing choice.";
 
-  updateButtonText = 'Confirm change and continue';
+  updateButtonText = "Confirm change and continue";
 
-  cancelButtonText = 'Cancel and keep your existing choice';
+  cancelButtonText = "Cancel and keep your existing choice";
 
-  cancelLinkText = 'keep your existing choice';
+  cancelLinkText = "keep your existing choice";
 
   async enterTranslatorDetails(translatorText: string): Promise<void> {
     await enter(this.translatorTextArea, translatorText);

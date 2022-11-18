@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
-import { Target } from '../../domain/enums';
-import { setCorrectLanguage } from '../../helpers/language';
-import { getStartAgainLink } from '../../helpers/links';
-import { store } from '../../services/session';
+import { Request, Response } from "express";
+import { Target } from "../../domain/enums";
+import { setCorrectLanguage } from "../../helpers/language";
+import { getStartAgainLink } from "../../helpers/links";
+import { store } from "../../services/session";
 
 export class TechnicalErrorController {
   public get = async (req: Request, res: Response): Promise<void> => {
@@ -12,7 +12,7 @@ export class TechnicalErrorController {
     const lang = await setCorrectLanguage(req, res, target);
     const source = String(req?.query?.source);
 
-    return res.render('common/error-technical', {
+    return res.render("common/error-technical", {
       startAgainLink: getStartAgainLink(target, lang, source),
     });
   };

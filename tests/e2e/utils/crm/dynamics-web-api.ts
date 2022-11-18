@@ -1,16 +1,22 @@
-import { ClientSecretCredential } from '@dvsa/ftts-auth-client';
-import DynamicsWebApi from 'dynamics-web-api';
-import config from '../../../../src/config';
+import { ClientSecretCredential } from "@dvsa/ftts-auth-client";
+import DynamicsWebApi from "dynamics-web-api";
+import config from "../../../../src/config";
 
-const tokenCredential = new ClientSecretCredential(config.crm.auth.tenantId, config.crm.auth.clientId, config.crm.auth.clientSecret);
+const tokenCredential = new ClientSecretCredential(
+  config.crm.auth.tenantId,
+  config.crm.auth.clientId,
+  config.crm.auth.clientSecret
+);
 
-const onTokenRefresh = async (dynamicsWebApiCallback: (token: string) => void): Promise<void> => {
+const onTokenRefresh = async (
+  dynamicsWebApiCallback: (token: string) => void
+): Promise<void> => {
   try {
     const accessToken = await tokenCredential.getToken(config.crm.auth.scope);
     dynamicsWebApiCallback(accessToken.token);
   } catch (error) {
     // Callback needs to be called - to prevent function from hanging
-    dynamicsWebApiCallback('');
+    dynamicsWebApiCallback("");
   }
 };
 

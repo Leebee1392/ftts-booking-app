@@ -8,14 +8,11 @@
     "strict": true,
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "typeRoots": [
-      "./node_modules/@types", 
-      "./types"
-    ],
+    "typeRoots": ["./node_modules/@types", "./types"],
     "baseUrl": ".",
     "paths": {
-      "@controllers/*": ["src/controllers/*"],
-    },
+      "@controllers/*": ["src/controllers/*"]
+    }
   },
   "include": [
     "src/",
@@ -23,6 +20,6 @@
     "ftts-booking-app.ts",
     "function.json",
     "host.json",
-    "server.local.ts",
+    "server.local.ts"
   ]
 }

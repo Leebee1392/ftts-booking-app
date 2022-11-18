@@ -1,11 +1,11 @@
 // static config
-import { getDataverseAppUserClientIds } from '@dvsa/ftts-auth-client';
+import { getDataverseAppUserClientIds } from "@dvsa/ftts-auth-client";
 
 const isSecure = (): boolean => {
-  if (process.env.NODE_ENV === 'development') {
+  if (process.env.NODE_ENV === "development") {
     return false;
   }
-  if (process.env.NODE_ENV === 'test') {
+  if (process.env.NODE_ENV === "test") {
     return false;
   }
   return true;
@@ -99,7 +99,7 @@ export interface Config {
       retrieve: number;
       reserve: number;
       confirm: number;
-    }
+    };
   };
   testCentreIncrementValue: number;
   payment: {
@@ -119,11 +119,11 @@ export interface Config {
       multipleApplicationUsers: {
         enabled: boolean;
         clientIds: string[];
-      }
+      };
     };
     retryPolicy: {
       backoff: number;
-      exponentialFactor: number,
+      exponentialFactor: number;
       maxRetryAfter: number;
       retries: number;
     };
@@ -188,220 +188,299 @@ export interface Config {
     enableExistingBookingValidation: boolean;
     digitalResultsEmailInfo: boolean;
     enableViewNsaBookingSlots: boolean;
-  }
+  };
 }
 
-const gbGovLink = 'https://www.gov.uk';
-const niGovLink = 'https://www.nidirect.gov.uk';
+const gbGovLink = "https://www.gov.uk";
+const niGovLink = "https://www.nidirect.gov.uk";
 
 const config: Config = {
-  serviceContextId: process.env.WEBSITE_SITE_NAME || 'BOOKING-APP-MOCK-CONTEXT-ID',
+  serviceContextId:
+    process.env.WEBSITE_SITE_NAME || "BOOKING-APP-MOCK-CONTEXT-ID",
 
-  buildVersion: process.env.BUILD_VERSION || '99999',
+  buildVersion: process.env.BUILD_VERSION || "99999",
 
-  localPort: process.env.LOCAL_PORT || '3000',
+  localPort: process.env.LOCAL_PORT || "3000",
 
-  defaultTimeZone: process.env.DEFAULT_TIME_ZONE || 'Europe/London',
+  defaultTimeZone: process.env.DEFAULT_TIME_ZONE || "Europe/London",
 
   redisClient: {
-    auth_pass: process.env.SESSION_STORAGE_PASSWORD || '',
-    host: process.env.SESSION_STORAGE_URL || '',
+    auth_pass: process.env.SESSION_STORAGE_PASSWORD || "",
+    host: process.env.SESSION_STORAGE_URL || "",
     no_ready_check: true,
-    port: parseInt(process.env.SESSION_STORAGE_PORT || '6380', 10),
+    port: parseInt(process.env.SESSION_STORAGE_PORT || "6380", 10),
     tls: {
-      servername: process.env.SESSION_STORAGE_URL || '',
+      servername: process.env.SESSION_STORAGE_URL || "",
     },
   },
 
   googleAnalytics: {
-    url: process.env.GOOGLE_ANALYTICS_BASE_URL || '',
-    measurementId: process.env.GOOGLE_ANALYTICS_MEASUREMENT_ID || '',
+    url: process.env.GOOGLE_ANALYTICS_BASE_URL || "",
+    measurementId: process.env.GOOGLE_ANALYTICS_MEASUREMENT_ID || "",
   },
 
   queueit: {
-    enabled: process.env.QUEUE_IT_IMPLEMENTATION || '',
-    customerId: process.env.QUEUE_IT_CUSTOMER_ID || '',
-    secretKey: process.env.QUEUE_IT_SECRET_KEY || '',
-    eventId: process.env.QUEUE_IT_EVENT_ID || '',
-    layoutName: process.env.QUEUE_IT_LAYOUT_NAME || '',
-    culture: 'en-gb',
-    queueDomain: process.env.QUEUE_IT_QUEUE_DOMAIN || '',
+    enabled: process.env.QUEUE_IT_IMPLEMENTATION || "",
+    customerId: process.env.QUEUE_IT_CUSTOMER_ID || "",
+    secretKey: process.env.QUEUE_IT_SECRET_KEY || "",
+    eventId: process.env.QUEUE_IT_EVENT_ID || "",
+    layoutName: process.env.QUEUE_IT_LAYOUT_NAME || "",
+    culture: "en-gb",
+    queueDomain: process.env.QUEUE_IT_QUEUE_DOMAIN || "",
     extendCookieValidity: true,
     cookieValidityMinute: 30,
-    cookieDomain: '',
+    cookieDomain: "",
     version: Number(process.env.QUEUE_IT_VERSION),
-    redirectUrl: process.env.CUSTOM_DOMAIN_URI || '',
+    redirectUrl: process.env.CUSTOM_DOMAIN_URI || "",
   },
 
-  sessionTtlSessionDuration: Number(process.env.SESSION_TTL_SESSION_DURATION || 1740),
-  sessionTimeoutWarningMinutes: Number(process.env.SESSION_TIMEOUT_WARNING_MINUTES || 5),
+  sessionTtlSessionDuration: Number(
+    process.env.SESSION_TTL_SESSION_DURATION || 1740
+  ),
+  sessionTimeoutWarningMinutes: Number(
+    process.env.SESSION_TIMEOUT_WARNING_MINUTES || 5
+  ),
 
   session: {
-    secret: process.env.SESSION_STORAGE_SECRET || '',
-    name: 'ftts',
+    secret: process.env.SESSION_STORAGE_SECRET || "",
+    name: "ftts",
     resave: true,
     saveUninitialized: true,
     cookie: {
       // Can only be secure if SSL is active so switch off for local envs
       secure: true,
-      name: 'ftts',
-      maxAge: Number(process.env.SESSION_TTL_SESSION_DURATION || 29 * 60) * 1000, // 29 minutes
+      name: "ftts",
+      maxAge:
+        Number(process.env.SESSION_TTL_SESSION_DURATION || 29 * 60) * 1000, // 29 minutes
       httpOnly: true,
       signed: true,
     },
   },
 
-  currencySymbol: '£',
+  currencySymbol: "£",
 
-  currencyCode: 'GBP',
+  currencyCode: "GBP",
 
-  appEnv: process.env.APP_ENV || 'local',
+  appEnv: process.env.APP_ENV || "local",
 
   notification: {
-    baseUrl: process.env.NOTIFICATION_API_BASE_URL || '',
+    baseUrl: process.env.NOTIFICATION_API_BASE_URL || "",
     identity: {
-      azureTenantId: process.env.NOTIFICATIONS_TENANT_ID || '',
-      azureClientId: process.env.NOTIFICATIONS_CLIENT_ID || '',
-      azureClientSecret: process.env.NOTIFICATIONS_CLIENT_SECRET || '',
-      scope: process.env.NOTIFICATION_API_SCOPE || '',
-      userAssignedEntityClientId: process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || '',
+      azureTenantId: process.env.NOTIFICATIONS_TENANT_ID || "",
+      azureClientId: process.env.NOTIFICATIONS_CLIENT_ID || "",
+      azureClientSecret: process.env.NOTIFICATIONS_CLIENT_SECRET || "",
+      scope: process.env.NOTIFICATION_API_SCOPE || "",
+      userAssignedEntityClientId:
+        process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || "",
     },
     retryPolicy: {
-      defaultRetryDelay: parseInt(process.env.NOTIFICATION_RETRY_CLIENT_DEFAULT_DELAY || '300', 10),
-      exponentialBackoff: process.env.NOTIFICATION_RETRY_CLIENT_EXPONETIAL_BACKOFF === 'true',
-      maxRetries: parseInt(process.env.NOTIFICATION_RETRY_CLIENT_MAX_RETRIES || '3', 10),
-      maxRetryAfter: parseInt(process.env.NOTIFICATION_RETRY_CLIENT_MAX_RETRY_AFTER || '1000', 10),
+      defaultRetryDelay: parseInt(
+        process.env.NOTIFICATION_RETRY_CLIENT_DEFAULT_DELAY || "300",
+        10
+      ),
+      exponentialBackoff:
+        process.env.NOTIFICATION_RETRY_CLIENT_EXPONETIAL_BACKOFF === "true",
+      maxRetries: parseInt(
+        process.env.NOTIFICATION_RETRY_CLIENT_MAX_RETRIES || "3",
+        10
+      ),
+      maxRetryAfter: parseInt(
+        process.env.NOTIFICATION_RETRY_CLIENT_MAX_RETRY_AFTER || "1000",
+        10
+      ),
     },
   },
 
   location: {
-    baseUrl: process.env.LOCATION_API_BASE_URL || '',
+    baseUrl: process.env.LOCATION_API_BASE_URL || "",
     identity: {
-      azureTenantId: process.env.LOCATION_TENANT_ID || '',
-      azureClientId: process.env.LOCATION_CLIENT_ID || '',
-      azureClientSecret: process.env.LOCATION_CLIENT_SECRET || '',
-      scope: process.env.LOCATION_API_SCOPE || '',
-      userAssignedEntityClientId: process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || '',
+      azureTenantId: process.env.LOCATION_TENANT_ID || "",
+      azureClientId: process.env.LOCATION_CLIENT_ID || "",
+      azureClientSecret: process.env.LOCATION_CLIENT_SECRET || "",
+      scope: process.env.LOCATION_API_SCOPE || "",
+      userAssignedEntityClientId:
+        process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || "",
     },
     retryPolicy: {
-      defaultRetryDelay: parseInt(process.env.LOCATION_RETRY_CLIENT_DEFAULT_DELAY || '300', 10),
-      exponentialBackoff: process.env.LOCATION_RETRY_CLIENT_EXPONETIAL_BACKOFF === 'true',
-      maxRetries: parseInt(process.env.LOCATION_RETRY_CLIENT_MAX_RETRIES || '3', 10),
-      maxRetryAfter: parseInt(process.env.LOCATION_RETRY_CLIENT_MAX_RETRY_AFTER || '1000', 10),
+      defaultRetryDelay: parseInt(
+        process.env.LOCATION_RETRY_CLIENT_DEFAULT_DELAY || "300",
+        10
+      ),
+      exponentialBackoff:
+        process.env.LOCATION_RETRY_CLIENT_EXPONETIAL_BACKOFF === "true",
+      maxRetries: parseInt(
+        process.env.LOCATION_RETRY_CLIENT_MAX_RETRIES || "3",
+        10
+      ),
+      maxRetryAfter: parseInt(
+        process.env.LOCATION_RETRY_CLIENT_MAX_RETRY_AFTER || "1000",
+        10
+      ),
     },
   },
 
   scheduling: {
-    baseUrl: process.env.SCHEDULING_API_BASE_URL || '',
+    baseUrl: process.env.SCHEDULING_API_BASE_URL || "",
     identity: {
-      azureTenantId: process.env.SCHEDULING_TENANT_ID || '',
-      azureClientId: process.env.SCHEDULING_CLIENT_ID || '',
-      azureClientSecret: process.env.SCHEDULING_CLIENT_SECRET || '',
-      scope: process.env.SCHEDULING_SCOPE || '',
-      userAssignedEntityClientId: process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || '',
+      azureTenantId: process.env.SCHEDULING_TENANT_ID || "",
+      azureClientId: process.env.SCHEDULING_CLIENT_ID || "",
+      azureClientSecret: process.env.SCHEDULING_CLIENT_SECRET || "",
+      scope: process.env.SCHEDULING_SCOPE || "",
+      userAssignedEntityClientId:
+        process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || "",
     },
-    lockTime: parseInt(process.env.SCHEDULING_API_LOCK_TIME || '1800', 10),
+    lockTime: parseInt(process.env.SCHEDULING_API_LOCK_TIME || "1800", 10),
     retryPolicy: {
-      defaultRetryDelay: parseInt(process.env.SCHEDULING_RETRY_CLIENT_DEFAULT_DELAY || '300', 10),
-      exponentialBackoff: process.env.SCHEDULING_RETRY_CLIENT_EXPONETIAL_BACKOFF === 'true',
-      maxRetries: parseInt(process.env.SCHEDULING_RETRY_CLIENT_MAX_RETRIES || '3', 10),
-      maxRetryAfter: parseInt(process.env.SCHEDULING_RETRY_CLIENT_MAX_RETRY_AFTER || '1000', 10),
+      defaultRetryDelay: parseInt(
+        process.env.SCHEDULING_RETRY_CLIENT_DEFAULT_DELAY || "300",
+        10
+      ),
+      exponentialBackoff:
+        process.env.SCHEDULING_RETRY_CLIENT_EXPONETIAL_BACKOFF === "true",
+      maxRetries: parseInt(
+        process.env.SCHEDULING_RETRY_CLIENT_MAX_RETRIES || "3",
+        10
+      ),
+      maxRetryAfter: parseInt(
+        process.env.SCHEDULING_RETRY_CLIENT_MAX_RETRY_AFTER || "1000",
+        10
+      ),
     },
     maxRetriesByEndpoint: {
-      retrieve: parseInt(process.env.SCHEDULING_RETRY_CLIENT_MAX_RETRIES_GET_ENDPOINT || '0', 10),
-      reserve: parseInt(process.env.SCHEDULING_RETRY_CLIENT_MAX_RETRIES_RESERVE_ENDPOINT || '1', 10),
-      confirm: parseInt(process.env.SCHEDULING_RETRY_CLIENT_MAX_RETRIES_CONFIRM_ENDPOINT || '3', 10),
+      retrieve: parseInt(
+        process.env.SCHEDULING_RETRY_CLIENT_MAX_RETRIES_GET_ENDPOINT || "0",
+        10
+      ),
+      reserve: parseInt(
+        process.env.SCHEDULING_RETRY_CLIENT_MAX_RETRIES_RESERVE_ENDPOINT || "1",
+        10
+      ),
+      confirm: parseInt(
+        process.env.SCHEDULING_RETRY_CLIENT_MAX_RETRIES_CONFIRM_ENDPOINT || "3",
+        10
+      ),
     },
   },
 
   eligibility: {
-    baseUrl: process.env.ELIGIBILITY_API_BASE_URL || '',
+    baseUrl: process.env.ELIGIBILITY_API_BASE_URL || "",
     identity: {
-      azureTenantId: process.env.ELIGIBILITY_TENANT_ID || '',
-      azureClientId: process.env.ELIGIBILITY_CLIENT_ID || '',
-      azureClientSecret: process.env.ELIGIBILITY_CLIENT_SECRET || '',
-      scope: process.env.ELIGIBILITY_API_SCOPE || '',
-      userAssignedEntityClientId: process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || '',
+      azureTenantId: process.env.ELIGIBILITY_TENANT_ID || "",
+      azureClientId: process.env.ELIGIBILITY_CLIENT_ID || "",
+      azureClientSecret: process.env.ELIGIBILITY_CLIENT_SECRET || "",
+      scope: process.env.ELIGIBILITY_API_SCOPE || "",
+      userAssignedEntityClientId:
+        process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || "",
     },
     retryPolicy: {
-      defaultRetryDelay: parseInt(process.env.ELIGIBILITY_RETRY_CLIENT_DEFAULT_DELAY || '300', 10),
-      exponentialBackoff: process.env.ELIGIBILITY_RETRY_CLIENT_EXPONETIAL_BACKOFF === 'true',
-      maxRetries: parseInt(process.env.ELIGIBILITY_RETRY_CLIENT_MAX_RETRIES || '0', 10),
-      maxRetryAfter: parseInt(process.env.ELIGIBILITY_RETRY_CLIENT_MAX_RETRY_AFTER || '1000', 10),
+      defaultRetryDelay: parseInt(
+        process.env.ELIGIBILITY_RETRY_CLIENT_DEFAULT_DELAY || "300",
+        10
+      ),
+      exponentialBackoff:
+        process.env.ELIGIBILITY_RETRY_CLIENT_EXPONETIAL_BACKOFF === "true",
+      maxRetries: parseInt(
+        process.env.ELIGIBILITY_RETRY_CLIENT_MAX_RETRIES || "0",
+        10
+      ),
+      maxRetryAfter: parseInt(
+        process.env.ELIGIBILITY_RETRY_CLIENT_MAX_RETRY_AFTER || "1000",
+        10
+      ),
     },
   },
 
-  testCentreIncrementValue: Number(process.env.TEST_CENTRE_INCREMENT_VALUE) || 5,
+  testCentreIncrementValue:
+    Number(process.env.TEST_CENTRE_INCREMENT_VALUE) || 5,
 
   payment: {
-    baseUrl: process.env.PAYMENT_API_BASE_URL || '',
+    baseUrl: process.env.PAYMENT_API_BASE_URL || "",
     identity: {
-      azureTenantId: process.env.PAYMENT_TENANT_ID || '',
-      azureClientId: process.env.PAYMENT_CLIENT_ID || '',
-      azureClientSecret: process.env.PAYMENT_CLIENT_SECRET || '',
-      scope: process.env.PAYMENT_API_SCOPE || '',
-      userAssignedEntityClientId: process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || '',
+      azureTenantId: process.env.PAYMENT_TENANT_ID || "",
+      azureClientId: process.env.PAYMENT_CLIENT_ID || "",
+      azureClientSecret: process.env.PAYMENT_CLIENT_SECRET || "",
+      scope: process.env.PAYMENT_API_SCOPE || "",
+      userAssignedEntityClientId:
+        process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || "",
     },
-    redirectUri: process.env.PAYMENT_REDIRECT_URI || '',
+    redirectUri: process.env.PAYMENT_REDIRECT_URI || "",
     retryPolicy: {
-      defaultRetryDelay: parseInt(process.env.PAYMENT_RETRY_CLIENT_DEFAULT_DELAY || '300', 10),
-      exponentialBackoff: process.env.PAYMENT_RETRY_CLIENT_EXPONETIAL_BACKOFF === 'true',
-      maxRetries: parseInt(process.env.PAYMENT_RETRY_CLIENT_MAX_RETRIES || '0', 10),
-      maxRetryAfter: parseInt(process.env.PAYMENT_RETRY_CLIENT_MAX_RETRY_AFTER || '1000', 10),
+      defaultRetryDelay: parseInt(
+        process.env.PAYMENT_RETRY_CLIENT_DEFAULT_DELAY || "300",
+        10
+      ),
+      exponentialBackoff:
+        process.env.PAYMENT_RETRY_CLIENT_EXPONETIAL_BACKOFF === "true",
+      maxRetries: parseInt(
+        process.env.PAYMENT_RETRY_CLIENT_MAX_RETRIES || "0",
+        10
+      ),
+      maxRetryAfter: parseInt(
+        process.env.PAYMENT_RETRY_CLIENT_MAX_RETRY_AFTER || "1000",
+        10
+      ),
     },
   },
 
-  mapsApiKey: process.env.MAPS_API_KEY || '',
+  mapsApiKey: process.env.MAPS_API_KEY || "",
 
   crm: {
     auth: {
-      tenantId: process.env.CRM_TENANT_ID || '',
-      clientId: process.env.CRM_CLIENT_ID || '',
-      clientSecret: process.env.CRM_CLIENT_SECRET || '',
-      userAssignedEntityClientId: process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || '',
-      scope: process.env.CRM_SCOPE || '',
+      tenantId: process.env.CRM_TENANT_ID || "",
+      clientId: process.env.CRM_CLIENT_ID || "",
+      clientSecret: process.env.CRM_CLIENT_SECRET || "",
+      userAssignedEntityClientId:
+        process.env.USER_ASSIGNED_ENTITY_CLIENT_ID || "",
+      scope: process.env.CRM_SCOPE || "",
       multipleApplicationUsers: {
-        enabled: process.env.DAU_USE_MULTI === 'true',
+        enabled: process.env.DAU_USE_MULTI === "true",
         clientIds: getDataverseAppUserClientIds(),
       },
     },
-    apiUrl: process.env.CRM_API_URL || '',
+    apiUrl: process.env.CRM_API_URL || "",
     retryPolicy: {
-      backoff: parseInt(process.env.CRM_RETRY_CLIENT_DEFAULT_DELAY || '300', 10),
+      backoff: parseInt(
+        process.env.CRM_RETRY_CLIENT_DEFAULT_DELAY || "300",
+        10
+      ),
       exponentialFactor: 1.2,
-      maxRetryAfter: parseInt(process.env.CRM_RETRY_CLIENT_MAX_RETRY_AFTER || '1000', 10),
-      retries: parseInt(process.env.CRM_RETRY_CLIENT_MAX_RETRIES || '3', 10),
+      maxRetryAfter: parseInt(
+        process.env.CRM_RETRY_CLIENT_MAX_RETRY_AFTER || "1000",
+        10
+      ),
+      retries: parseInt(process.env.CRM_RETRY_CLIENT_MAX_RETRIES || "3", 10),
     },
     priceListId: {
-      dvsa: process.env.CRM_PRICE_LIST_ID_DVSA || '',
-      dva: process.env.CRM_PRICE_LIST_ID_DVA || '',
+      dvsa: process.env.CRM_PRICE_LIST_ID_DVSA || "",
+      dva: process.env.CRM_PRICE_LIST_ID_DVA || "",
     },
     ownerId: {
-      dvsa: process.env.CRM_OWNING_TEAM_DVSA || '',
+      dvsa: process.env.CRM_OWNING_TEAM_DVSA || "",
     },
   },
 
   http: {
-    timeout: parseInt(process.env.DEFAULT_REQUEST_TIMEOUT || '30000', 10),
+    timeout: parseInt(process.env.DEFAULT_REQUEST_TIMEOUT || "30000", 10),
   },
 
   view: {
-    assetDomain: process.env.ASSETS_DOMAIN || '',
-    assetPath: process.env.ASSETS_URL_PREFIX || '/public',
-    gtmID: process.env.GOOGLE_TAG_MANAGER_TRACKING_ID || '',
-    insights: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || '',
-    serviceName: 'Book a theory test',
+    assetDomain: process.env.ASSETS_DOMAIN || "",
+    assetPath: process.env.ASSETS_URL_PREFIX || "/public",
+    gtmID: process.env.GOOGLE_TAG_MANAGER_TRACKING_ID || "",
+    insights: process.env.APPINSIGHTS_INSTRUMENTATIONKEY || "",
+    serviceName: "Book a theory test",
   },
 
   // defaults are the test values, not production surveys to prevent bad data in prod
   survey: {
-    cy: process.env.SURVEY_CY || 'https://www.smartsurvey.co.uk/s/LAJMAM/',
-    gb: process.env.SURVEY_GB || 'https://www.smartsurvey.co.uk/s/MMLWFY/',
-    ni: process.env.SURVEY_NI || 'https://www.smartsurvey.co.uk/s/UGTG32/',
+    cy: process.env.SURVEY_CY || "https://www.smartsurvey.co.uk/s/LAJMAM/",
+    gb: process.env.SURVEY_GB || "https://www.smartsurvey.co.uk/s/MMLWFY/",
+    ni: process.env.SURVEY_NI || "https://www.smartsurvey.co.uk/s/UGTG32/",
   },
 
   landing: {
-    enableInternalEntrypoints: `${process.env.ENABLE_INTERNAL_ENTRYPOINTS}` === 'true' || false,
+    enableInternalEntrypoints:
+      `${process.env.ENABLE_INTERNAL_ENTRYPOINTS}` === "true" || false,
     gb: {
       citizen: {
         book: `${gbGovLink}/book-theory-test`,
@@ -431,13 +510,17 @@ const config: Config = {
       },
     },
   },
-  refreshTimeForLandingPage: Number(process.env.REFRESH_TIME_FOR_LANDING_PAGE) || 3,
+  refreshTimeForLandingPage:
+    Number(process.env.REFRESH_TIME_FOR_LANDING_PAGE) || 3,
 
   featureToggles: {
-    enableCustomSupportInputValidation: process.env.ENABLE_CUSTOM_SUPPORT_INPUT_VALIDATION === 'true' || false,
-    enableExistingBookingValidation: process.env.ENABLE_EXISTING_BOOKING_VALIDATION !== 'false',
-    digitalResultsEmailInfo: process.env.DIGITAL_RESULTS_EMAIL_INFO === 'true',
-    enableViewNsaBookingSlots: process.env.ENABLE_VIEW_NSA_BOOKING_SLOTS === 'true',
+    enableCustomSupportInputValidation:
+      process.env.ENABLE_CUSTOM_SUPPORT_INPUT_VALIDATION === "true" || false,
+    enableExistingBookingValidation:
+      process.env.ENABLE_EXISTING_BOOKING_VALIDATION !== "false",
+    digitalResultsEmailInfo: process.env.DIGITAL_RESULTS_EMAIL_INFO === "true",
+    enableViewNsaBookingSlots:
+      process.env.ENABLE_VIEW_NSA_BOOKING_SLOTS === "true",
   },
 };
 

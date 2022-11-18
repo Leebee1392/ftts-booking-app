@@ -1,7 +1,5 @@
-import { ELIG } from '@dvsa/ftts-eligibility-api-model';
-import {
-  TCNRegion, PreferredDay, PreferredLocation,
-} from '../../domain/enums';
+import { ELIG } from "@dvsa/ftts-eligibility-api-model";
+import { TCNRegion, PreferredDay, PreferredLocation } from "../../domain/enums";
 import {
   CRMOrigin,
   CRMTestLanguage,
@@ -24,7 +22,7 @@ import {
   CRMTestSupportNeed,
   CRMNsaBookingSlotStatus,
   NsaStatus,
-} from './enums';
+} from "./enums";
 
 export interface CRMContact {
   contactid: string; // Required on get but not create
@@ -44,19 +42,19 @@ export interface CRMContact {
   address1_city?: string | null;
   address1_postalcode: string;
   gendercode?: CRMGenderCode;
-  'ownerid@odata.bind': string;
+  "ownerid@odata.bind": string;
 }
 
 export interface CRMLicence {
   ftts_licence: string;
-  'ftts_Person@odata.bind': string;
+  "ftts_Person@odata.bind": string;
   ftts_address1_street1?: string;
   ftts_address1_street2?: string | null;
   ftts_address1street3?: string | null;
   ftts_address1street4?: string | null;
   ftts_address1_city?: string | null;
   ftts_address1_postalcode?: string;
-  'ownerid@odata.bind': string;
+  "ownerid@odata.bind": string;
 }
 
 export interface CRMBooking {
@@ -85,17 +83,17 @@ export interface CRMBooking {
   ftts_preferredcommunicationmethod?: CRMPreferredCommunicationMethod;
   ftts_proxypermitted?: boolean;
   ftts_voicemailmessagespermitted?: boolean;
-  'ftts_candidateid@odata.bind': string;
-  'ftts_pricelist@odata.bind'?: string;
-  'ftts_LicenceId@odata.bind': string;
-  'ftts_testcentre@odata.bind'?: string;
-  'ftts_selectedtestcentrelocation@odata.bind'?: string;
+  "ftts_candidateid@odata.bind": string;
+  "ftts_pricelist@odata.bind"?: string;
+  "ftts_LicenceId@odata.bind": string;
+  "ftts_testcentre@odata.bind"?: string;
+  "ftts_selectedtestcentrelocation@odata.bind"?: string;
   ftts_productid?: CRMProduct;
-  'ownerid@odata.bind'?: string;
-  'ftts_tcnpreferreddate'?: string;
-  'ftts_dateavailableonoraftertoday'?: string;
-  'ftts_dateavailableonorbeforepreferreddate'?: string;
-  'ftts_dateavailableonorafterpreferreddate'?: string;
+  "ownerid@odata.bind"?: string;
+  ftts_tcnpreferreddate?: string;
+  ftts_dateavailableonoraftertoday?: string;
+  ftts_dateavailableonorbeforepreferreddate?: string;
+  ftts_dateavailableonorafterpreferreddate?: string;
   ftts_testsselected?: boolean;
 }
 
@@ -115,13 +113,13 @@ export interface CRMBookingProduct {
   ftts_eligiblefrom?: string;
   ftts_eligibleto?: string;
   ftts_additionalsupportoptions?: CRMAdditionalSupport;
-  'ftts_bookingid@odata.bind': string;
-  'ftts_testcategoryId@odata.bind': string;
-  'ftts_CandidateId@odata.bind'?: string;
-  'ftts_productid@odata.bind'?: string;
-  'ftts_ihttcid@odata.bind'?: string;
-  'ftts_drivinglicencenumber@odata.bind'?: string;
-  'ownerid@odata.bind'?: string;
+  "ftts_bookingid@odata.bind": string;
+  "ftts_testcategoryId@odata.bind": string;
+  "ftts_CandidateId@odata.bind"?: string;
+  "ftts_productid@odata.bind"?: string;
+  "ftts_ihttcid@odata.bind"?: string;
+  "ftts_drivinglicencenumber@odata.bind"?: string;
+  "ownerid@odata.bind"?: string;
 }
 
 export interface CRMProduct {
@@ -201,13 +199,13 @@ export interface NsaBookingFields {
   ftts_nonstandardaccommodation: boolean;
   ftts_nsastatus: CRMNsaStatus | undefined;
   ftts_supportrequirements: string | undefined;
-  ftts_preferreddateandtime: string | undefined,
-  ftts_preferreddateselected: true,
+  ftts_preferreddateandtime: string | undefined;
+  ftts_preferreddateselected: true;
   ftts_preferredtestcentrelocation: string | undefined;
   ftts_preferredcommunicationmethod: CRMPreferredCommunicationMethod;
-  ftts_proxypermitted: boolean,
+  ftts_proxypermitted: boolean;
   ftts_voicemailmessagespermitted: boolean | undefined;
-  'ownerid@odata.bind': string | undefined;
+  "ownerid@odata.bind": string | undefined;
 }
 
 export interface BookingDetailsCentre {
@@ -280,36 +278,36 @@ export interface CRMXmlBookingDetails {
   ftts_paymentstatus?: CRMPaymentStatus | null;
   ftts_salesreference?: string | null;
   ftts_additionalsupportoptions?: CRMAdditionalSupport | null;
-  'booking.ftts_origin'?: CRMOrigin | null;
+  "booking.ftts_origin"?: CRMOrigin | null;
   bookingReference?: string | null;
-  'booking.ftts_nonstandardaccommodation'?: boolean | null;
-  'booking.ftts_zerocostbooking'?: boolean | null;
-  'booking.ftts_enableeligibilitybypass'?: boolean | null;
-  'booking.ftts_governmentagency'?: CRMGovernmentAgency | null;
-  'booking.ftts_nsastatus'?: CRMNsaStatus | null;
-  'booking.ftts_owedcompbookingassigned'?: string | null;
-  'booking.ftts_owedcompbookingrecognised'?: string | null;
-  'booking.ftts_testsupportneed'?: string | null;
-  'booking.ftts_foreignlanguageselected'?: string | null;
-  'booking.ftts_voicemailmessagespermitted'?: boolean | null;
-  'booking.ftts_nivoiceoveroptions'?: CRMVoiceOver | null;
-  'account.name'?: string;
-  'account.address1_line1'?: string;
-  'account.address1_line2'?: string;
-  'account.address1_city'?: string;
-  'account.address1_county'?: string;
-  'account.address1_postalcode'?: string;
-  'account.ftts_remit'?: CRMRemit;
-  'account.ftts_siteid'?: string;
-  'account.accountid'?: string;
-  'account.ftts_tcntestcentreid'?: string;
-  'parentaccountid.ftts_regiona'?: boolean | null;
-  'parentaccountid.ftts_regionb'?: boolean | null;
-  'parentaccountid.ftts_regionc'?: boolean | null;
-  'product.productid': string;
-  'product.parentproductid': string;
-  'product.productnumber'?: CRMProductNumber;
-  'product.name'?: string;
+  "booking.ftts_nonstandardaccommodation"?: boolean | null;
+  "booking.ftts_zerocostbooking"?: boolean | null;
+  "booking.ftts_enableeligibilitybypass"?: boolean | null;
+  "booking.ftts_governmentagency"?: CRMGovernmentAgency | null;
+  "booking.ftts_nsastatus"?: CRMNsaStatus | null;
+  "booking.ftts_owedcompbookingassigned"?: string | null;
+  "booking.ftts_owedcompbookingrecognised"?: string | null;
+  "booking.ftts_testsupportneed"?: string | null;
+  "booking.ftts_foreignlanguageselected"?: string | null;
+  "booking.ftts_voicemailmessagespermitted"?: boolean | null;
+  "booking.ftts_nivoiceoveroptions"?: CRMVoiceOver | null;
+  "account.name"?: string;
+  "account.address1_line1"?: string;
+  "account.address1_line2"?: string;
+  "account.address1_city"?: string;
+  "account.address1_county"?: string;
+  "account.address1_postalcode"?: string;
+  "account.ftts_remit"?: CRMRemit;
+  "account.ftts_siteid"?: string;
+  "account.accountid"?: string;
+  "account.ftts_tcntestcentreid"?: string;
+  "parentaccountid.ftts_regiona"?: boolean | null;
+  "parentaccountid.ftts_regionb"?: boolean | null;
+  "parentaccountid.ftts_regionc"?: boolean | null;
+  "product.productid": string;
+  "product.parentproductid": string;
+  "product.productnumber"?: CRMProductNumber;
+  "product.name"?: string;
   ftts_nsabookingslots?: CRMNsaBookingSlots[];
 }
 
@@ -318,7 +316,7 @@ export interface CRMProductPriceLevel {
   amount: number;
   productid: {
     productid: string;
-    '_parentproductid_value': string;
+    _parentproductid_value: string;
     name: string;
   };
 }
@@ -384,7 +382,7 @@ export interface CreateCandidateResponse {
 export interface CreateBookingProductResponse {
   // There are a lot more fields avalible but the ones below are the only ones we care about
   ftts_bookingproductid: string;
-  ftts_reference: string
+  ftts_reference: string;
 }
 
 export interface LicenceBatchResponse {
@@ -455,7 +453,7 @@ export interface CRMLicenceCandidateResponse {
 }
 
 export interface GetWorkingDaysResponse {
-  '@odata.context': string;
+  "@odata.context": string;
   oDataContext: string;
   DueDate: Date | string;
 }
@@ -473,7 +471,7 @@ export interface GetPaymentInformationResponse {
 
 export interface RescheduleUpdateRequest {
   ftts_testdate: string;
-  'ftts_testcentre@odata.bind'?: string;
+  "ftts_testcentre@odata.bind"?: string;
   ftts_bookingstatus: CRMBookingStatus;
   ftts_callamend?: string;
   ftts_tcnpreferreddate?: string;

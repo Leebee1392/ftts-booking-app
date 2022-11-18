@@ -1,7 +1,7 @@
-import { build } from '@jackfranklin/test-data-bot';
-import { faker } from '@faker-js/faker';
-import { PriceListItem } from '../../../../src/domain/types';
-import { eligibleTestTypes } from './types';
+import { build } from "@jackfranklin/test-data-bot";
+import { faker } from "@faker-js/faker";
+import { PriceListItem } from "../../../../src/domain/types";
+import { eligibleTestTypes } from "./types";
 
 export const pricelistBuilder = (): PriceListItem => {
   const testType = faker.helpers.arrayElement(eligibleTestTypes);

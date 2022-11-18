@@ -1,8 +1,14 @@
-import { Request, Response } from 'express';
-import { Target } from '../../domain/enums';
-import { isNonStandardJourney, isSupportedStandardJourney } from '../../helpers/journey-helper';
-import { translate } from '../../helpers/language';
-import { RequestValidationError, ValidatorSchema } from '../../middleware/request-validator';
+import { Request, Response } from "express";
+import { Target } from "../../domain/enums";
+import {
+  isNonStandardJourney,
+  isSupportedStandardJourney,
+} from "../../helpers/journey-helper";
+import { translate } from "../../helpers/language";
+import {
+  RequestValidationError,
+  ValidatorSchema,
+} from "../../middleware/request-validator";
 
 interface FindTestCentreBody {
   searchQuery: string;
@@ -10,19 +16,23 @@ interface FindTestCentreBody {
 export class InstructorFindTestCentreController {
   public get = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('InstructorFindTestCentreController::get: No journey set');
+      throw Error("InstructorFindTestCentreController::get: No journey set");
     }
     if (!req.session.currentBooking) {
-      throw Error('InstructorFindTestCentreController::get: No currentBooking set');
+      throw Error(
+        "InstructorFindTestCentreController::get: No currentBooking set"
+      );
     }
     const { testCentreSearch } = req.session;
     const { inEditMode } = req.session.journey;
 
     if (testCentreSearch?.zeroCentreResults) {
-      req.errors = [{
-        msg: translate('findTestCentre.errorNotRecognised'),
-        param: 'searchQuery',
-      } as RequestValidationError];
+      req.errors = [
+        {
+          msg: translate("findTestCentre.errorNotRecognised"),
+          param: "searchQuery",
+        } as RequestValidationError,
+      ];
 
       // Remove the flag so we don't keep showing the validation
       req.session.testCentreSearch = {
@@ -34,22 +44,22 @@ export class InstructorFindTestCentreController {
     let backLink;
     if (isSupportedStandardJourney(req)) {
       // Back link for coming into the SA journey from NSA
-      backLink = 'nsa/email-contact';
+      backLink = "nsa/email-contact";
     } else if (req.session.target === Target.NI && !isNonStandardJourney(req)) {
       if (req.session.journey.receivedSupportRequestPageFlag) {
-        backLink = 'received-support-request';
+        backLink = "received-support-request";
       } else {
-        backLink = 'test-type';
+        backLink = "test-type";
       }
     } else if (req.session.journey.shownVoiceoverPageFlag) {
-      backLink = 'change-voiceover';
+      backLink = "change-voiceover";
     } else if (req.session.journey.shownStandardSupportPageFlag) {
-      backLink = 'select-standard-support';
+      backLink = "select-standard-support";
     } else {
-      backLink = 'test-type';
+      backLink = "test-type";
     }
 
-    res.render('instructor/find-test-centre', {
+    res.render("instructor/find-test-centre", {
       errors: req.errors?.length ? req.errors : undefined,
       searchQuery: !inEditMode ? testCentreSearch?.searchQuery : undefined,
       backLink,
@@ -59,18 +69,20 @@ export class InstructorFindTestCentreController {
 
   public post = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('InstructorFindTestCentreController::post: No journey set');
+      throw Error("InstructorFindTestCentreController::post: No journey set");
     }
     if (!req.session.currentBooking) {
-      throw Error('InstructorFindTestCentreController::post: No currentBooking set');
+      throw Error(
+        "InstructorFindTestCentreController::post: No currentBooking set"
+      );
     }
     const { support, standardAccommodation } = req.session.journey;
     if (req.hasErrors) {
-      let backLink = 'test-language';
+      let backLink = "test-language";
       if (support && standardAccommodation) {
-        backLink = 'email-contact';
+        backLink = "email-contact";
       }
-      return res.render('instructor/find-test-centre', {
+      return res.render("instructor/find-test-centre", {
         errors: req.errors,
         backLink,
         noResultsError: !req.errors?.length,
@@ -83,15 +95,16 @@ export class InstructorFindTestCentreController {
       searchQuery,
       numberOfResults: undefined,
     };
-    return res.redirect('select-test-centre');
+    return res.redirect("select-test-centre");
   };
 
   /* istanbul ignore next */
   public postSchemaValidation: ValidatorSchema = {
     searchQuery: {
-      in: ['body'],
+      in: ["body"],
       isLength: {
-        errorMessage: (): string => translate('findTestCentre.errorNotRecognised'),
+        errorMessage: (): string =>
+          translate("findTestCentre.errorNotRecognised"),
         options: {
           min: 3,
           max: 512,

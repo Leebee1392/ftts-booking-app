@@ -1,8 +1,8 @@
-import { InstructorTelephoneContactController } from '@controllers/instructor-telephone-contact/instructor-telephone-contact';
-import { YesNo } from '../../../../src/domain/enums';
+import { InstructorTelephoneContactController } from "@controllers/instructor-telephone-contact/instructor-telephone-contact";
+import { YesNo } from "../../../../src/domain/enums";
 
-describe('Instructor Telephone contact controller', () => {
-  const mockPhoneNumber = '+44 1919191919';
+describe("Instructor Telephone contact controller", () => {
+  const mockPhoneNumber = "+44 1919191919";
   let controller: InstructorTelephoneContactController;
   let req;
   let res;
@@ -12,8 +12,8 @@ describe('Instructor Telephone contact controller', () => {
 
     req = {
       session: {
-        candidate: { },
-        currentBooking: { },
+        candidate: {},
+        currentBooking: {},
         journey: {
           inEditMode: false,
         },
@@ -36,17 +36,17 @@ describe('Instructor Telephone contact controller', () => {
     jest.resetAllMocks();
   });
 
-  describe('GET request', () => {
-    test('renders the page', () => {
+  describe("GET request", () => {
+    test("renders the page", () => {
       req.body.telephoneNumber = undefined;
       req.body.contactByTelephone = YesNo.NO;
 
       controller.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('instructor/telephone-contact', {
+      expect(res.render).toHaveBeenCalledWith("instructor/telephone-contact", {
         contactByTelephone: YesNo.NO,
         telephoneNumber: undefined,
-        backLink: 'email-contact',
+        backLink: "email-contact",
         errors: expect.any(Array),
       });
     });
@@ -58,10 +58,10 @@ describe('Instructor Telephone contact controller', () => {
 
       controller.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('instructor/telephone-contact', {
+      expect(res.render).toHaveBeenCalledWith("instructor/telephone-contact", {
         contactByTelephone: YesNo.YES,
         telephoneNumber: mockPhoneNumber,
-        backLink: 'email-contact',
+        backLink: "email-contact",
         errors: expect.any(Array),
       });
     });
@@ -73,20 +73,20 @@ describe('Instructor Telephone contact controller', () => {
 
       controller.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('instructor/telephone-contact', {
+      expect(res.render).toHaveBeenCalledWith("instructor/telephone-contact", {
         contactByTelephone: YesNo.NO,
         telephoneNumber: false,
-        backLink: 'email-contact',
+        backLink: "email-contact",
         errors: expect.any(Array),
       });
     });
   });
 
-  describe('POST request', () => {
-    test('redirects to the next page', () => {
+  describe("POST request", () => {
+    test("redirects to the next page", () => {
       controller.post(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith('voicemail');
+      expect(res.redirect).toHaveBeenCalledWith("voicemail");
     });
 
     test('sets the session if "yes" option selected and phone number entered', () => {
@@ -114,23 +114,23 @@ describe('Instructor Telephone contact controller', () => {
       expect(req.session.currentBooking.voicemail).toBeUndefined();
     });
 
-    test('re-renders the page on bad input', () => {
+    test("re-renders the page on bad input", () => {
       req.body.contactByTelephone = YesNo.YES;
-      req.body.telephoneNumber = '';
+      req.body.telephoneNumber = "";
       req.hasErrors = true;
-      req.errors = ['some errors'];
+      req.errors = ["some errors"];
 
       controller.post(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('instructor/telephone-contact', {
+      expect(res.render).toHaveBeenCalledWith("instructor/telephone-contact", {
         errors: req.errors,
         contactByTelephone: YesNo.YES,
-        telephoneNumber: '',
-        backLink: 'email-contact',
+        telephoneNumber: "",
+        backLink: "email-contact",
       });
     });
 
-    describe('Conditional validation schema', () => {
+    describe("Conditional validation schema", () => {
       test('builds correct schema for "yes" branch', () => {
         req.body.contactByTelephone = YesNo.YES;
         req.body.telephoneNumber = mockPhoneNumber;
@@ -139,7 +139,7 @@ describe('Instructor Telephone contact controller', () => {
 
         expect(schema).toStrictEqual({
           telephoneNumber: {
-            in: ['body'],
+            in: ["body"],
             notEmpty: {
               errorMessage: expect.any(Function),
             },
@@ -158,7 +158,7 @@ describe('Instructor Telephone contact controller', () => {
 
         expect(schema).toStrictEqual({
           contactByTelephone: {
-            in: ['body'],
+            in: ["body"],
             equals: {
               options: YesNo.NO,
               errorMessage: expect.any(Function),

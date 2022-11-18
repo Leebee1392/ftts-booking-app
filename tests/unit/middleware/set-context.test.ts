@@ -1,7 +1,7 @@
-import { Context } from '../../../src/domain/enums';
-import { setContext } from '../../../src/middleware/set-context';
+import { Context } from "../../../src/domain/enums";
+import { setContext } from "../../../src/middleware/set-context";
 
-describe('setContext', () => {
+describe("setContext", () => {
   let req;
   let res;
   let next;
@@ -11,12 +11,11 @@ describe('setContext', () => {
       query: {},
       session: {},
     };
-    res = {
-    };
+    res = {};
     next = jest.fn();
   });
 
-  test('can change the application context to Candidate', () => {
+  test("can change the application context to Candidate", () => {
     req.query = {
       context: Context.CITIZEN,
     };
@@ -27,7 +26,7 @@ describe('setContext', () => {
     expect(next).toHaveBeenCalled();
   });
 
-  test('can change the application context to Instructor', () => {
+  test("can change the application context to Instructor", () => {
     req.query = {
       context: Context.INSTRUCTOR,
     };
@@ -38,10 +37,10 @@ describe('setContext', () => {
     expect(next).toHaveBeenCalled();
   });
 
-  test('handle missing context parameter', () => {
+  test("handle missing context parameter", () => {
     req.query = {
-      lang: 'cy',
-      target: 'ni',
+      lang: "cy",
+      target: "ni",
     };
 
     setContext(req, res, next);

@@ -1,6 +1,6 @@
-import { supportAuth } from '../../../../src/middleware/auth/support-auth';
+import { supportAuth } from "../../../../src/middleware/auth/support-auth";
 
-describe('Auth middleware - support journey', () => {
+describe("Auth middleware - support journey", () => {
   let req: any;
   let res: any;
   let next: any;
@@ -9,7 +9,7 @@ describe('Auth middleware - support journey', () => {
     req = {
       session: {
         candidate: {
-          firstnames: 'First Names',
+          firstnames: "First Names",
         },
         journey: undefined,
       },
@@ -20,17 +20,19 @@ describe('Auth middleware - support journey', () => {
     next = jest.fn();
   });
 
-  test('redirects to start of journey if support is set to false', () => {
+  test("redirects to start of journey if support is set to false", () => {
     req.session.journey = {
       support: false,
     };
 
     supportAuth(req, res, next);
 
-    expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining('/timeout'));
+    expect(res.redirect).toHaveBeenCalledWith(
+      expect.stringContaining("/timeout")
+    );
   });
 
-  test('continues if support is set to true', () => {
+  test("continues if support is set to true", () => {
     req.session.journey = {
       support: true,
     };

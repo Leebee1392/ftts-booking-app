@@ -1,6 +1,6 @@
-import { BookingExistsController } from '@controllers/booking-exists/booking-exists';
+import { BookingExistsController } from "@controllers/booking-exists/booking-exists";
 
-describe('BookingsExistsController', () => {
+describe("BookingsExistsController", () => {
   let bookingExists: BookingExistsController;
   let req;
   let res;
@@ -9,20 +9,20 @@ describe('BookingsExistsController', () => {
     bookingExists = new BookingExistsController();
     req = {
       session: {
-        lastPage: 'previous-page',
+        lastPage: "previous-page",
       },
-      path: '/booking-exists',
+      path: "/booking-exists",
     };
     res = {
       render: jest.fn(),
     };
   });
 
-  describe('get', () => {
-    test('it should render the correct page', () => {
+  describe("get", () => {
+    test("it should render the correct page", () => {
       bookingExists.get(req, res);
-      expect(res.render).toHaveBeenCalledWith('common/booking-exists', {
-        backLink: 'previous-page',
+      expect(res.render).toHaveBeenCalledWith("common/booking-exists", {
+        backLink: "previous-page",
       });
     });
   });

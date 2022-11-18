@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import { existsInEnum } from '../../domain/enums';
-import { translate } from '../../helpers/language';
-import { ValidatorSchema } from '../../middleware/request-validator';
+import { Request, Response } from "express";
+import { existsInEnum } from "../../domain/enums";
+import { translate } from "../../helpers/language";
+import { ValidatorSchema } from "../../middleware/request-validator";
 
 export enum ConfirmSupportOption {
-  TELL_US_WHAT_SUPPORT = '1',
-  BOOK_WITHOUT_SUPPORT = '2',
-  CONTINUE_WITHOUT_TELLING_US = '3',
+  TELL_US_WHAT_SUPPORT = "1",
+  BOOK_WITHOUT_SUPPORT = "2",
+  CONTINUE_WITHOUT_TELLING_US = "3",
 }
 
 interface ConfirmSupportBody {
@@ -25,7 +25,9 @@ export class ConfirmSupportController {
 
   public post = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('ConfirmSupportController::post: Missing journey session data');
+      throw Error(
+        "ConfirmSupportController::post: Missing journey session data"
+      );
     }
 
     if (req.hasErrors) {
@@ -44,24 +46,27 @@ export class ConfirmSupportController {
         ...req.session.currentBooking,
         selectSupportType: undefined,
       };
-      res.redirect('select-support-type');
+      res.redirect("select-support-type");
     } else if (confirmSupport === ConfirmSupportOption.BOOK_WITHOUT_SUPPORT) {
-      res.redirect('leaving-nsa');
-    } else if (confirmSupport === ConfirmSupportOption.CONTINUE_WITHOUT_TELLING_US) {
-      res.redirect('staying-nsa');
+      res.redirect("leaving-nsa");
+    } else if (
+      confirmSupport === ConfirmSupportOption.CONTINUE_WITHOUT_TELLING_US
+    ) {
+      res.redirect("staying-nsa");
     }
   };
 
-  private render = (req: Request, res: Response): void => res.render('supported/confirm-support', {
-    errors: req.errors,
-    backLink: 'select-support-type',
-  });
+  private render = (req: Request, res: Response): void =>
+    res.render("supported/confirm-support", {
+      errors: req.errors,
+      backLink: "select-support-type",
+    });
 
   /* istanbul ignore next */
   public postSchemaValidation = (): ValidatorSchema => ({
     confirmSupport: {
-      in: ['body'],
-      errorMessage: (): string => translate('confirmSupport.error'),
+      in: ["body"],
+      errorMessage: (): string => translate("confirmSupport.error"),
       custom: {
         options: existsInEnum(ConfirmSupportOption),
       },

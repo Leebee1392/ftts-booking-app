@@ -1,10 +1,10 @@
-import nunjucks from 'nunjucks';
-import { AssetFilter } from './asset-filter';
-import { CurrencyFilter } from './currency-filter';
-import { DistanceFilter } from './distance-filter';
-import { ErrorFilter } from './error-filter';
-import * as dateFilters from './local-date-time-filter';
-import { fromCRMProductNumber } from '../services/crm-gateway/maps';
+import nunjucks from "nunjucks";
+import { AssetFilter } from "./asset-filter";
+import { CurrencyFilter } from "./currency-filter";
+import { DistanceFilter } from "./distance-filter";
+import { ErrorFilter } from "./error-filter";
+import * as dateFilters from "./local-date-time-filter";
+import { fromCRMProductNumber } from "../services/crm-gateway/maps";
 
 // Add filters to Nunjucks environment
 export function addNunjucksFilters(env: nunjucks.Environment): void {

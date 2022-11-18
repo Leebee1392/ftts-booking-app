@@ -1,9 +1,9 @@
-import { StayingNSAController } from '@controllers/staying-nsa/staying-nsa';
-import { EvidencePath, SupportType } from '../../../../src/domain/enums';
-import * as EVIDENCE_HELPER from '../../../../src/helpers/evidence-helper';
-import * as CRM_HELPER from '../../../../src/services/crm-gateway/crm-helper';
+import { StayingNSAController } from "@controllers/staying-nsa/staying-nsa";
+import { EvidencePath, SupportType } from "../../../../src/domain/enums";
+import * as EVIDENCE_HELPER from "../../../../src/helpers/evidence-helper";
+import * as CRM_HELPER from "../../../../src/services/crm-gateway/crm-helper";
 
-describe('StayingNSAController', () => {
+describe("StayingNSAController", () => {
   let stayingNSAController: StayingNSAController;
   let request;
   let response;
@@ -22,7 +22,7 @@ describe('StayingNSAController', () => {
           selectSupportType: [SupportType.BSL_INTERPRETER],
         },
       },
-      path: '/nsa/staying-nsa',
+      path: "/nsa/staying-nsa",
     };
     response = {
       render: jest.fn(),
@@ -34,61 +34,85 @@ describe('StayingNSAController', () => {
     jest.resetAllMocks();
   });
 
-  describe('get', () => {
-    describe('renders the correct page', () => {
+  describe("get", () => {
+    describe("renders the correct page", () => {
       test.each([
         EvidencePath.EVIDENCE_REQUIRED,
         EvidencePath.EVIDENCE_NOT_REQUIRED,
         EvidencePath.EVIDENCE_MAY_BE_REQUIRED,
         EvidencePath.RETURNING_CANDIDATE,
-      ])('when determineEvidenceRoute() returns path "%s" then renders that route', async (evidencePath: EvidencePath) => {
-        jest.spyOn(EVIDENCE_HELPER, 'determineEvidenceRoute').mockReturnValue(evidencePath);
-        jest.spyOn(CRM_HELPER, 'hasCRMSupportNeeds').mockReturnValue(false);
+      ])(
+        'when determineEvidenceRoute() returns path "%s" then renders that route',
+        async (evidencePath: EvidencePath) => {
+          jest
+            .spyOn(EVIDENCE_HELPER, "determineEvidenceRoute")
+            .mockReturnValue(evidencePath);
+          jest.spyOn(CRM_HELPER, "hasCRMSupportNeeds").mockReturnValue(false);
+
+          await stayingNSAController.get(request, response);
+
+          expect(response.render).toHaveBeenCalledWith(
+            `supported/${evidencePath}`,
+            {
+              backLink: "select-support-type",
+              showExtraContent: false,
+            }
+          );
+        }
+      );
+
+      test("determineEvidenceRoute() is called with the correct values", async () => {
+        jest.spyOn(CRM_HELPER, "hasCRMSupportNeeds").mockReturnValue(false);
+        EVIDENCE_HELPER.determineEvidenceRoute = jest
+          .fn()
+          .mockReturnValue(EvidencePath.EVIDENCE_REQUIRED);
+        request.session.currentBooking.selectSupportType = [
+          SupportType.EXTRA_TIME,
+        ];
 
         await stayingNSAController.get(request, response);
 
-        expect(response.render).toHaveBeenCalledWith(`supported/${evidencePath}`, {
-          backLink: 'select-support-type',
-          showExtraContent: false,
-        });
-      });
-
-      test('determineEvidenceRoute() is called with the correct values', async () => {
-        jest.spyOn(CRM_HELPER, 'hasCRMSupportNeeds').mockReturnValue(false);
-        EVIDENCE_HELPER.determineEvidenceRoute = jest.fn().mockReturnValue(EvidencePath.EVIDENCE_REQUIRED);
-        request.session.currentBooking.selectSupportType = [SupportType.EXTRA_TIME];
-
-        await stayingNSAController.get(request, response);
-
-        expect(EVIDENCE_HELPER.determineEvidenceRoute).toHaveBeenCalledWith([SupportType.EXTRA_TIME], false);
+        expect(EVIDENCE_HELPER.determineEvidenceRoute).toHaveBeenCalledWith(
+          [SupportType.EXTRA_TIME],
+          false
+        );
         expect(EVIDENCE_HELPER.determineEvidenceRoute).toHaveBeenCalledTimes(1);
-        expect(response.render).toHaveBeenCalledWith(`supported/${EvidencePath.EVIDENCE_REQUIRED}`, {
-          backLink: 'select-support-type',
-          showExtraContent: false,
-        });
+        expect(response.render).toHaveBeenCalledWith(
+          `supported/${EvidencePath.EVIDENCE_REQUIRED}`,
+          {
+            backLink: "select-support-type",
+            showExtraContent: false,
+          }
+        );
         expect(request.session.currentBooking.hasSupportNeedsInCRM).toBeFalsy();
       });
 
-      test('sets the crm support need field in the session as true when the user has support', async () => {
-        jest.spyOn(CRM_HELPER, 'hasCRMSupportNeeds').mockReturnValue(true);
+      test("sets the crm support need field in the session as true when the user has support", async () => {
+        jest.spyOn(CRM_HELPER, "hasCRMSupportNeeds").mockReturnValue(true);
 
         await stayingNSAController.get(request, response);
 
-        expect(request.session.currentBooking.hasSupportNeedsInCRM).toBeTruthy();
+        expect(
+          request.session.currentBooking.hasSupportNeedsInCRM
+        ).toBeTruthy();
       });
 
-      test('throws error if the current booking has not been set', async () => {
+      test("throws error if the current booking has not been set", async () => {
         delete request.session.currentBooking;
 
-        await expect(stayingNSAController.get(request, response)).rejects.toThrow('StayingNSAController::get: No currentBooking set');
+        await expect(
+          stayingNSAController.get(request, response)
+        ).rejects.toThrow("StayingNSAController::get: No currentBooking set");
       });
 
-      test('if user already has NSA request should redirect to duplicate-support-request', async () => {
+      test("if user already has NSA request should redirect to duplicate-support-request", async () => {
         mockCrmGateway.getUserDraftNSABookingsIfExist.mockResolvedValue([true]);
 
         await stayingNSAController.get(request, response);
 
-        expect(response.redirect).toHaveBeenCalledWith('duplicate-support-request');
+        expect(response.redirect).toHaveBeenCalledWith(
+          "duplicate-support-request"
+        );
       });
 
       test.each([
@@ -97,27 +121,46 @@ describe('StayingNSAController', () => {
         [[SupportType.BSL_INTERPRETER, SupportType.EXTRA_TIME], true],
         [[SupportType.ON_SCREEN_BSL], false],
         [[SupportType.ON_SCREEN_BSL, SupportType.EXTRA_TIME], true],
-      ])('showExtraContent param is calculated and passed to view', async (selectedSupportOptions: SupportType[], expectedShowExtraContent: boolean) => {
-        jest.spyOn(CRM_HELPER, 'hasCRMSupportNeeds').mockReturnValue(false);
-        EVIDENCE_HELPER.determineEvidenceRoute = jest.fn().mockReturnValue(EvidencePath.EVIDENCE_REQUIRED);
-        request.session.currentBooking.selectSupportType = selectedSupportOptions;
+      ])(
+        "showExtraContent param is calculated and passed to view",
+        async (
+          selectedSupportOptions: SupportType[],
+          expectedShowExtraContent: boolean
+        ) => {
+          jest.spyOn(CRM_HELPER, "hasCRMSupportNeeds").mockReturnValue(false);
+          EVIDENCE_HELPER.determineEvidenceRoute = jest
+            .fn()
+            .mockReturnValue(EvidencePath.EVIDENCE_REQUIRED);
+          request.session.currentBooking.selectSupportType =
+            selectedSupportOptions;
 
-        await stayingNSAController.get(request, response);
+          await stayingNSAController.get(request, response);
 
-        expect(response.render).toHaveBeenCalledWith(`supported/${EvidencePath.EVIDENCE_REQUIRED}`, {
-          backLink: 'select-support-type',
-          showExtraContent: expectedShowExtraContent,
-        });
-      });
+          expect(response.render).toHaveBeenCalledWith(
+            `supported/${EvidencePath.EVIDENCE_REQUIRED}`,
+            {
+              backLink: "select-support-type",
+              showExtraContent: expectedShowExtraContent,
+            }
+          );
+        }
+      );
     });
 
-    describe('error handling', () => {
-      test.each([undefined, null, ' ', [], {}])('throws error if no support options provided', async (emptyValue) => {
-        request.session.currentBooking.selectSupportType = emptyValue;
-        await expect(stayingNSAController.get(request, response))
-          .rejects
-          .toThrow(Error('StayingNSAController::getSelectedSupportOptions: No support options provided'));
-      });
+    describe("error handling", () => {
+      test.each([undefined, null, " ", [], {}])(
+        "throws error if no support options provided",
+        async (emptyValue) => {
+          request.session.currentBooking.selectSupportType = emptyValue;
+          await expect(
+            stayingNSAController.get(request, response)
+          ).rejects.toThrow(
+            Error(
+              "StayingNSAController::getSelectedSupportOptions: No support options provided"
+            )
+          );
+        }
+      );
     });
   });
 });

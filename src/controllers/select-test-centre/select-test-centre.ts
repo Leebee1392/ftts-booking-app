@@ -1,14 +1,14 @@
-import { Request, Response } from 'express';
-import escapeHtml from 'escape-html';
-import config from '../../config';
-import { Target } from '../../domain/enums';
-import { clamp } from '../../helpers/math-helper';
-import { stringToArray } from '../../libraries/request-sanitizer';
-import { ValidatorSchema } from '../../middleware/request-validator';
-import locationsGateway from '../../services/locations/locations-gateway';
-import { Booking } from '../../services/session';
-import { distanceUomFrom } from '../../helpers/distance-uom';
-import { Centre } from '../../domain/types';
+import { Request, Response } from "express";
+import escapeHtml from "escape-html";
+import config from "../../config";
+import { Target } from "../../domain/enums";
+import { clamp } from "../../helpers/math-helper";
+import { stringToArray } from "../../libraries/request-sanitizer";
+import { ValidatorSchema } from "../../middleware/request-validator";
+import locationsGateway from "../../services/locations/locations-gateway";
+import { Booking } from "../../services/session";
+import { distanceUomFrom } from "../../helpers/distance-uom";
+import { Centre } from "../../domain/types";
 
 interface SelectTestCentreBody {
   testCentreId: string;
@@ -36,13 +36,15 @@ export class SelectTestCentreController {
       return this.render(req, res);
     }
     if (!req.session.journey) {
-      throw Error('SelectTestCentreController::post: No journey set');
+      throw Error("SelectTestCentreController::post: No journey set");
     }
     if (!req.session.currentBooking) {
-      throw Error('SelectTestCentreController::post: No currentBooking set');
+      throw Error("SelectTestCentreController::post: No currentBooking set");
     }
     const { testCentreId } = req.body as SelectTestCentreBody;
-    const centre = req.session.testCentres?.find((item) => item.testCentreId === testCentreId);
+    const centre = req.session.testCentres?.find(
+      (item) => item.testCentreId === testCentreId
+    );
 
     if (this.isManagedBookingSession(req)) {
       req.session.manageBookingEdits = {
@@ -50,7 +52,7 @@ export class SelectTestCentreController {
         centre,
       };
 
-      return res.redirect('/manage-booking/select-date');
+      return res.redirect("/manage-booking/select-date");
     }
 
     const { inEditMode } = req.session.journey;
@@ -74,22 +76,29 @@ export class SelectTestCentreController {
       };
     }
 
-    return res.redirect('select-date');
+    return res.redirect("select-date");
   };
 
   private render = async (req: Request, res: Response): Promise<void> => {
     const { searchQuery } = req.query;
     const { target } = req.session;
-    const numberOfResults = Number(req.query.numberOfResults) || config.testCentreIncrementValue;
+    const numberOfResults =
+      Number(req.query.numberOfResults) || config.testCentreIncrementValue;
 
     let centres;
     let showMore = false;
     try {
-      centres = searchQuery ? await locationsGateway.fetchCentres(searchQuery as string, target || Target.GB, clamp(numberOfResults + 1, 5, 50)) : [];
+      centres = searchQuery
+        ? await locationsGateway.fetchCentres(
+            searchQuery as string,
+            target || Target.GB,
+            clamp(numberOfResults + 1, 5, 50)
+          )
+        : [];
       showMore = centres.length > numberOfResults;
       centres = centres.slice(0, numberOfResults);
     } catch (error) {
-      return res.render('select-test-centre-error', { errors: true });
+      return res.render("select-test-centre-error", { errors: true });
     }
 
     const foundSomeResults = Boolean(centres?.length);
@@ -103,30 +112,40 @@ export class SelectTestCentreController {
     centres.forEach((centre: ViewCentre) => {
       centre.escapedAddress = {
         name: escapeHtml(centre.name),
-        line1: centre.addressLine1 ? escapeHtml(centre.addressLine1) : '',
-        line2: centre.addressLine2 ? escapeHtml(centre.addressLine2) : '',
-        city: centre.addressCity ? escapeHtml(centre.addressCity) : '',
-        postalCode: centre.addressPostalCode ? escapeHtml(centre.addressPostalCode) : '',
+        line1: centre.addressLine1 ? escapeHtml(centre.addressLine1) : "",
+        line2: centre.addressLine2 ? escapeHtml(centre.addressLine2) : "",
+        city: centre.addressCity ? escapeHtml(centre.addressCity) : "",
+        postalCode: centre.addressPostalCode
+          ? escapeHtml(centre.addressPostalCode)
+          : "",
       };
     });
 
     if (foundSomeResults) {
       req.session.testCentres = centres;
-      return res.render('select-test-centre', {
+      return res.render("select-test-centre", {
         searchQuery,
         centres,
         selectedCentres: req.query.centre,
         distanceUom: distanceUomFrom(req.query),
         errors: req.errors,
         numberOfResults,
-        nextNumberOfResults: clamp(numberOfResults + config.testCentreIncrementValue, 5, 50),
+        nextNumberOfResults: clamp(
+          numberOfResults + config.testCentreIncrementValue,
+          5,
+          50
+        ),
         testCentreIncrementValue: config.testCentreIncrementValue,
         mapsApiKey: config.mapsApiKey,
         showMore,
       });
     }
 
-    return res.redirect(!this.isManagedBookingSession(req) ? '/find-test-centre' : '/manage-booking/find-test-centre');
+    return res.redirect(
+      !this.isManagedBookingSession(req)
+        ? "/find-test-centre"
+        : "/manage-booking/find-test-centre"
+    );
   };
 
   private loadSavedSearchQuery = (req: Request): void => {
@@ -135,7 +154,10 @@ export class SelectTestCentreController {
       req.query.searchQuery = testCentreSearch?.searchQuery;
     }
 
-    if (!req.query.numberOfResults && testCentreSearch?.numberOfResults !== undefined) {
+    if (
+      !req.query.numberOfResults &&
+      testCentreSearch?.numberOfResults !== undefined
+    ) {
       req.query.numberOfResults = testCentreSearch?.numberOfResults.toString();
     }
   };
@@ -149,16 +171,18 @@ export class SelectTestCentreController {
     }
   };
 
-  private searchQueryIsInSession = (req: Request): boolean => !!req.session.testCentreSearch?.searchQuery;
+  private searchQueryIsInSession = (req: Request): boolean =>
+    !!req.session.testCentreSearch?.searchQuery;
 
-  private isManagedBookingSession = (req: Request): boolean => req.session.journey?.inManagedBookingEditMode || false;
+  private isManagedBookingSession = (req: Request): boolean =>
+    req.session.journey?.inManagedBookingEditMode || false;
 
   /* istanbul ignore next */
   public postSchemaValidation = (): ValidatorSchema => ({
     testCentreId: {
-      in: ['body'],
+      in: ["body"],
       isEmpty: {
-        errorMessage: 'Please choose a centre',
+        errorMessage: "Please choose a centre",
         negated: true,
       },
     },
@@ -167,7 +191,7 @@ export class SelectTestCentreController {
   /* istanbul ignore next */
   public getSchemaValidation = (): ValidatorSchema => ({
     centre: {
-      in: ['query'],
+      in: ["query"],
       optional: true,
       customSanitizer: {
         options: stringToArray,

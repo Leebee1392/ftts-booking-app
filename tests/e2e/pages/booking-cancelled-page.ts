@@ -1,23 +1,23 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click } from '../utils/helpers';
+import { BasePage } from "./base-page";
+import { click } from "../utils/helpers";
 
 export class BookingCancelledPage extends BasePage {
   // locators
-  pageHeadingLocator = '.govuk-heading-xl';
+  pageHeadingLocator = ".govuk-heading-xl";
 
-  startAgainButton = '#startButton';
+  startAgainButton = "#startButton";
 
-  pathUrl = 'payment-confirmation';
+  pathUrl = "payment-confirmation";
 
   // content
-  pageHeading = 'Booking process cancelled';
+  pageHeading = "Booking process cancelled";
 
-  pageHeadingCy = 'Canslwyd y broses archebu';
+  pageHeadingCy = "Canslwyd y broses archebu";
 
-  startAgainButtonText = 'Start again';
+  startAgainButtonText = "Start again";
 
-  startAgainButtonTextCy = 'Dechrau eto';
+  startAgainButtonTextCy = "Dechrau eto";
 
   async startBookingAgain(): Promise<void> {
     await click(this.startAgainButton);

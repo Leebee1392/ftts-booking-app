@@ -1,7 +1,7 @@
-import { BusinessTelemetryEvents, logger } from '../../../src/helpers/logger';
-import { paymentRedirect } from '../../../src/middleware/payment-redirect';
+import { BusinessTelemetryEvents, logger } from "../../../src/helpers/logger";
+import { paymentRedirect } from "../../../src/middleware/payment-redirect";
 
-describe('Payment redirect middleware', () => {
+describe("Payment redirect middleware", () => {
   let req: any;
   let res: any;
   let next: any;
@@ -9,7 +9,7 @@ describe('Payment redirect middleware', () => {
   beforeEach(() => {
     req = {
       params: {
-        bookingReference: 'B-000-000-001',
+        bookingReference: "B-000-000-001",
       },
       session: {
         currentBooking: {
@@ -25,18 +25,18 @@ describe('Payment redirect middleware', () => {
     jest.resetAllMocks();
   });
 
-  test('log event with booking ref when redirected from payments and session is empty', () => {
+  test("log event with booking ref when redirected from payments and session is empty", () => {
     paymentRedirect(req, res, next);
 
     expect(logger.event).toHaveBeenCalledWith(
       BusinessTelemetryEvents.PAYMENT_REDIRECT_SESSION_FAIL,
-      'paymentRedirect: Redirected back to an invalid or expired session from payments',
-      { bookingReference: 'B-000-000-001' },
+      "paymentRedirect: Redirected back to an invalid or expired session from payments",
+      { bookingReference: "B-000-000-001" }
     );
   });
 
-  test('does not log event with booking ref when redirected from payments if session is populated', () => {
-    req.session.currentBooking.bookingRef = 'B-001-001-001';
+  test("does not log event with booking ref when redirected from payments if session is populated", () => {
+    req.session.currentBooking.bookingRef = "B-001-001-001";
 
     paymentRedirect(req, res, next);
 

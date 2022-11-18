@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
 export class SupportAlertController {
   public get = (req: Request, res: Response): void => {
-    res.render('supported/support-alert', {
-      backLink: 'choose-support',
+    res.render("supported/support-alert", {
+      backLink: "choose-support",
     });
   };
 
@@ -14,7 +14,7 @@ export class SupportAlertController {
       standardAccommodation: false,
       inEditMode: false,
     };
-    res.redirect('nsa/candidate-details');
+    res.redirect("nsa/candidate-details");
   };
 }
 

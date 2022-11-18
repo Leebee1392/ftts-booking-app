@@ -1,31 +1,35 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click } from '../utils/helpers';
+import { BasePage } from "./base-page";
+import { click } from "../utils/helpers";
 
 export class SelectSupportTypePage extends BasePage {
   // contents
-  pageHeading = 'What test support do you need?';
+  pageHeading = "What test support do you need?";
 
-  errorMessageHeader = 'There is a problem';
+  errorMessageHeader = "There is a problem";
 
-  errorMessageNothingSelectText = 'You must select at least one option. If the support you want is not listed, select \'I need something else\'.';
+  errorMessageNothingSelectText =
+    "You must select at least one option. If the support you want is not listed, select 'I need something else'.";
 
-  errorMessageBslVoiceoverSelectedText = 'You have selected sign language and voiceover. Please select only one of these options. If the support you want is not listed, select \'I need something else\'.';
+  errorMessageBslVoiceoverSelectedText =
+    "You have selected sign language and voiceover. Please select only one of these options. If the support you want is not listed, select 'I need something else'.";
 
-  updateBannerText = 'You can tell us more about the support you need here. Or you can use the information you have already provided.';
+  updateBannerText =
+    "You can tell us more about the support you need here. Or you can use the information you have already provided.";
 
-  updateBannerWarningText = 'If you change your choices here, all details previously entered will be replaced.';
+  updateBannerWarningText =
+    "If you change your choices here, all details previously entered will be replaced.";
 
-  updateButtonText = 'Confirm change and continue';
+  updateButtonText = "Confirm change and continue";
 
-  cancelButtonText = 'Cancel and use information already provided';
+  cancelButtonText = "Cancel and use information already provided";
 
-  cancelLinkText = 'use the information you have already provided';
+  cancelLinkText = "use the information you have already provided";
 
   // locators
   pageHeadingLocator = 'h1[data-automation-id="heading"]';
 
-  updateBanner = 'div.alert';
+  updateBanner = "div.alert";
 
   continueButton = 'button[data-automation-id="submit"]';
 
@@ -33,7 +37,7 @@ export class SelectSupportTypePage extends BasePage {
 
   backLink = 'a[data-automation-id="back"]';
 
-  pathUrl = 'nsa/select-support-type';
+  pathUrl = "nsa/select-support-type";
 
   genericOptionLocator = 'input[data-automation-id="support-<>"]';
 
@@ -47,7 +51,8 @@ export class SelectSupportTypePage extends BasePage {
 
   extraTimeOption = 'input[data-automation-id="support-extraTime"]';
 
-  questionModifierOption = 'input[data-automation-id="support-questionModifier"]';
+  questionModifierOption =
+    'input[data-automation-id="support-questionModifier"]';
 
   readingSupportOption = 'input[data-automation-id="support-readingSupport"]';
 
@@ -55,14 +60,14 @@ export class SelectSupportTypePage extends BasePage {
 
   errorLink = 'a[href="#selectSupportType"]';
 
-  errorMessageFieldLocator = '#selectSupportType-error';
+  errorMessageFieldLocator = "#selectSupportType-error";
 
-  errorMessageLocator = '#error-summary-title';
+  errorMessageLocator = "#error-summary-title";
 
-  errorMessageList = '.govuk-list.govuk-error-summary__list';
+  errorMessageList = ".govuk-list.govuk-error-summary__list";
 
   getOptionSelector(supportType: string): string {
-    return this.genericOptionLocator.replace('<>', supportType);
+    return this.genericOptionLocator.replace("<>", supportType);
   }
 
   async selectSupportTypes(supportTypes: string[]): Promise<void> {

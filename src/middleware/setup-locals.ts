@@ -1,8 +1,8 @@
-import { NextFunction, Request, Response } from 'express';
-import config from '../config';
-import { Locale, Target } from '../domain/enums';
-import { getJourneyName } from '../helpers/journey-helper';
-import { getSessionExpiryInfo } from '../helpers/session-helper';
+import { NextFunction, Request, Response } from "express";
+import config from "../config";
+import { Locale, Target } from "../domain/enums";
+import { getJourneyName } from "../helpers/journey-helper";
+import { getSessionExpiryInfo } from "../helpers/session-helper";
 
 const setupLocals = (req: Request, res: Response, next: NextFunction): void => {
   const { journey, target, locale } = req.session;
@@ -34,7 +34,7 @@ const setupLocals = (req: Request, res: Response, next: NextFunction): void => {
   res.locals = {
     ...res.locals,
     target: target || Target.GB,
-    imgRoot: target === Target.NI ? 'images/ni/' : 'images/',
+    imgRoot: target === Target.NI ? "images/ni/" : "images/",
     inEditMode,
     standardAccommodation,
     inSupportMode,
@@ -43,13 +43,11 @@ const setupLocals = (req: Request, res: Response, next: NextFunction): void => {
     source: req.path,
     headerLink,
     journeyName,
-    organisation: req.session.target === Target.NI ? 'dva' : 'dvsa',
+    organisation: req.session.target === Target.NI ? "dva" : "dvsa",
     isInstructor,
   };
 
   return next();
 };
 
-export {
-  setupLocals,
-};
+export { setupLocals };

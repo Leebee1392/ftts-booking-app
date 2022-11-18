@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { ValidatorSchema } from '../../middleware/request-validator';
-import { YesOrNo } from '../../value-objects/yes-or-no';
-import { YesNo } from '../../domain/enums';
-import { translate } from '../../helpers/language';
+import { ValidatorSchema } from "../../middleware/request-validator";
+import { YesOrNo } from "../../value-objects/yes-or-no";
+import { YesNo } from "../../domain/enums";
+import { translate } from "../../helpers/language";
 
 interface BritishSignLanguageBody {
   bsl: YesNo;
@@ -12,7 +12,9 @@ interface BritishSignLanguageBody {
 export class InstructorBritishSignLanagugeController {
   public get = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('InstructorBritishSignLanagugeController::get: No journey set');
+      throw Error(
+        "InstructorBritishSignLanagugeController::get: No journey set"
+      );
     }
     this.renderPage(req, res);
   };
@@ -20,13 +22,15 @@ export class InstructorBritishSignLanagugeController {
   public post = (req: Request, res: Response): void => {
     if (req.hasErrors) {
       req.errors.forEach((error) => {
-        error.msg = translate('manageBookingChangeBSL.errorBannerNotification');
+        error.msg = translate("manageBookingChangeBSL.errorBannerNotification");
       });
 
       return this.renderPage(req, res);
     }
     if (!req.session.journey) {
-      throw Error('InstructorBritishSignLanagugeController::post: No journey set');
+      throw Error(
+        "InstructorBritishSignLanagugeController::post: No journey set"
+      );
     }
     const { bsl } = req.body as BritishSignLanguageBody;
 
@@ -35,22 +39,26 @@ export class InstructorBritishSignLanagugeController {
       bsl: bsl === YesNo.YES,
     };
 
-    return res.redirect('check-your-answers');
+    return res.redirect("check-your-answers");
   };
 
   private renderPage(req: Request, res: Response): void {
     if (!req.session.currentBooking) {
-      throw Error('InstructorBritishSignLanagugeController::renderPage: No currentBooking set');
+      throw Error(
+        "InstructorBritishSignLanagugeController::renderPage: No currentBooking set"
+      );
     }
     if (!req.session.journey) {
-      throw Error('InstructorBritishSignLanagugeController::renderPage: No journey set');
+      throw Error(
+        "InstructorBritishSignLanagugeController::renderPage: No journey set"
+      );
     }
     const { bsl, bookingRef } = req.session.currentBooking;
     const isEditMode = req.session.journey.inEditMode;
 
     const chosenBSL = bsl ? YesNo.YES : YesNo.NO;
 
-    return res.render('instructor/british-sign-language', {
+    return res.render("instructor/british-sign-language", {
       chosenBSL: isEditMode ? chosenBSL : undefined,
       bookingRef,
       errors: req.errors,
@@ -60,7 +68,7 @@ export class InstructorBritishSignLanagugeController {
   /* istanbul ignore next */
   public postSchemaValidation: ValidatorSchema = {
     bsl: {
-      in: ['body'],
+      in: ["body"],
       custom: {
         options: YesOrNo.isValid,
       },

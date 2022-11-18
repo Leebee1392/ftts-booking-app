@@ -1,22 +1,34 @@
-import * as Constants from '../data/constants';
-import { SessionData } from '../data/session-data';
-import { ChangeBookingPage } from '../pages/change-booking-page';
-import { LoginPage } from '../pages/login-page';
-import ManageBookingsPage from '../pages/manage-bookings-page';
+import * as Constants from "../data/constants";
+import { SessionData } from "../data/session-data";
+import { ChangeBookingPage } from "../pages/change-booking-page";
+import { LoginPage } from "../pages/login-page";
+import ManageBookingsPage from "../pages/manage-bookings-page";
 import {
-  verifyExactText, verifyContainsText, runningTestsLocally, click, verifyTitleContainsText, setAcceptCookies,
-} from '../utils/helpers';
+  verifyExactText,
+  verifyContainsText,
+  runningTestsLocally,
+  click,
+  verifyTitleContainsText,
+  setAcceptCookies,
+} from "../utils/helpers";
 import {
-  Language, Locale, Origin, PreferredDay, PreferredLocation, SupportType, Target, Voiceover,
-} from '../../../src/domain/enums';
-import { ChangeConfirmedPage } from '../pages/change-confirmed-page';
-import { CheckChangePage } from '../pages/check-change-page';
-import { generalTitle, generalTitleNI } from '../data/constants';
-import { createNewBookingInCrm } from '../utils/crm/crm-data-helper';
-import { dynamicsWebApiClient } from '../utils/crm/dynamics-web-api';
-import { CRMGateway } from '../utils/crm/crm-gateway-test';
-import { WhatDoYouWantToChangePage } from '../pages/what-do-you-want-to-change-page';
-import { CRMTestSupportNeed } from '../../../src/services/crm-gateway/enums';
+  Language,
+  Locale,
+  Origin,
+  PreferredDay,
+  PreferredLocation,
+  SupportType,
+  Target,
+  Voiceover,
+} from "../../../src/domain/enums";
+import { ChangeConfirmedPage } from "../pages/change-confirmed-page";
+import { CheckChangePage } from "../pages/check-change-page";
+import { generalTitle, generalTitleNI } from "../data/constants";
+import { createNewBookingInCrm } from "../utils/crm/crm-data-helper";
+import { dynamicsWebApiClient } from "../utils/crm/dynamics-web-api";
+import { CRMGateway } from "../utils/crm/crm-gateway-test";
+import { WhatDoYouWantToChangePage } from "../pages/what-do-you-want-to-change-page";
+import { CRMTestSupportNeed } from "../../../src/services/crm-gateway/enums";
 
 const crmGateway = new CRMGateway(dynamicsWebApiClient());
 
@@ -30,11 +42,15 @@ const pageUrl = `${process.env.BOOKING_APP_URL}/${loginPage.pathUrl}`;
 
 fixture`Change booking - Customer Service Centre created bookings`
   .page(pageUrl)
-  .before(async () => { await Constants.setRequestTimeout; })
-  .beforeEach(async () => { await setAcceptCookies(); })
-  .meta('type', 'manage-booking');
+  .before(async () => {
+    await Constants.setRequestTimeout;
+  })
+  .beforeEach(async () => {
+    await setAcceptCookies();
+  })
+  .meta("type", "manage-booking");
 
-test('Verify a candidate is able to manage their CSC Standard Accommodations booking', async () => {
+test("Verify a candidate is able to manage their CSC Standard Accommodations booking", async () => {
   const sessionData = new SessionData(Target.GB);
   sessionData.currentBooking.origin = Origin.CustomerServiceCentre;
 
@@ -46,11 +62,22 @@ test('Verify a candidate is able to manage their CSC Standard Accommodations boo
   const drivingLicence = sessionData.candidate.licenceNumber;
   await loginPage.login(bookingRef, drivingLicence);
   await ManageBookingsPage.viewTestWithBookingReference(bookingRef);
-  await verifyTitleContainsText(`${changeBookingPage.pageHeading} ${generalTitle}`);
-  await verifyContainsText(changeBookingPage.pageHeadingLocator, changeBookingPage.pageHeading);
-  await verifyContainsText(changeBookingPage.warningMessageLocator, changeBookingPage.refundWarningMessageText);
+  await verifyTitleContainsText(
+    `${changeBookingPage.pageHeading} ${generalTitle}`
+  );
+  await verifyContainsText(
+    changeBookingPage.pageHeadingLocator,
+    changeBookingPage.pageHeading
+  );
+  await verifyContainsText(
+    changeBookingPage.warningMessageLocator,
+    changeBookingPage.refundWarningMessageText
+  );
   await changeBookingPage.checkDataMatchesSession(sessionData);
-  await changeBookingPage.checkChangeActions(sessionData, Constants.ManageBookingActionTypes.STANDARD_BOOKING);
+  await changeBookingPage.checkChangeActions(
+    sessionData,
+    Constants.ManageBookingActionTypes.STANDARD_BOOKING
+  );
 
   if (!runningTestsLocally()) {
     const { bookingProductId } = sessionData.currentBooking;
@@ -58,7 +85,7 @@ test('Verify a candidate is able to manage their CSC Standard Accommodations boo
   }
 });
 
-test('Verify a candidate is able to reschedule the time, date and location of their CSC Standard Accommodations booking', async () => {
+test("Verify a candidate is able to reschedule the time, date and location of their CSC Standard Accommodations booking", async () => {
   const sessionData = new SessionData(Target.GB);
   sessionData.currentBooking.origin = Origin.CustomerServiceCentre;
 
@@ -72,21 +99,39 @@ test('Verify a candidate is able to reschedule the time, date and location of th
   await ManageBookingsPage.viewTestWithBookingReference(bookingRef);
 
   await changeBookingPage.rescheduleTest();
-  const findTheoryTestCentrePage = await whatDoYouWantToChangePage.selectLocationOnly();
-  const chooseTheoryTestCentrePage = await findTheoryTestCentrePage.findATheoryTestCentre(sessionData.testCentreSearch.searchQuery);
-  const preferredDatePage = await chooseTheoryTestCentrePage.selectANewTestCentre(sessionData.currentBooking.centre);
-  const chooseAppointmentPageAgain = await preferredDatePage.selectPreferredDateWithAppointments(sessionData.testCentreSearch);
-  await chooseAppointmentPageAgain.chooseAppointment(sessionData.currentBooking, 1);
+  const findTheoryTestCentrePage =
+    await whatDoYouWantToChangePage.selectLocationOnly();
+  const chooseTheoryTestCentrePage =
+    await findTheoryTestCentrePage.findATheoryTestCentre(
+      sessionData.testCentreSearch.searchQuery
+    );
+  const preferredDatePage =
+    await chooseTheoryTestCentrePage.selectANewTestCentre(
+      sessionData.currentBooking.centre
+    );
+  const chooseAppointmentPageAgain =
+    await preferredDatePage.selectPreferredDateWithAppointments(
+      sessionData.testCentreSearch
+    );
+  await chooseAppointmentPageAgain.chooseAppointment(
+    sessionData.currentBooking,
+    1
+  );
 
   // check the change page
-  await verifyExactText(checkChangePage.pageHeadingLocator, checkChangePage.pageHeading);
+  await verifyExactText(
+    checkChangePage.pageHeadingLocator,
+    checkChangePage.pageHeading
+  );
   await checkChangePage.checkUpdatedTestDateTimeLocation(sessionData);
   await checkChangePage.confirmChange();
 
   // confirmation page
   await changeConfirmedPage.checkBookingUpdatedConfirmationPage(sessionData);
   await click(changeConfirmedPage.viewAllBookingsButton);
-  await ManageBookingsPage.viewTestWithBookingReference(sessionData.currentBooking.bookingRef);
+  await ManageBookingsPage.viewTestWithBookingReference(
+    sessionData.currentBooking.bookingRef
+  );
   // check new confirmed changes are now displayed
   if (!runningTestsLocally()) {
     await changeBookingPage.checkDataMatchesSession(sessionData);
@@ -96,11 +141,11 @@ test('Verify a candidate is able to reschedule the time, date and location of th
 // Not applicable for NI bookings
 const dataSetLanguage = [
   {
-    testName: 'GB CSC SA bookings no Elig bypass',
+    testName: "GB CSC SA bookings no Elig bypass",
     eligibilityBypass: false,
   },
   {
-    testName: 'GB CSC SA bookings Elig bypass',
+    testName: "GB CSC SA bookings Elig bypass",
     eligibilityBypass: true,
   },
 ];
@@ -123,11 +168,18 @@ dataSetLanguage.forEach((data) => {
     await loginPage.login(bookingRef, drivingLicence);
     await ManageBookingsPage.viewTestWithBookingReference(bookingRef);
     const languagePage = await changeBookingPage.changeTestLanguage();
-    await languagePage.selectTestLanguage(Constants.Languages.get(sessionData.currentBooking.language));
+    await languagePage.selectTestLanguage(
+      Constants.Languages.get(sessionData.currentBooking.language)
+    );
 
     // check the change page
-    await verifyTitleContainsText(`${checkChangePage.pageHeading} ${generalTitle}`);
-    await verifyExactText(checkChangePage.pageHeadingLocator, checkChangePage.pageHeading);
+    await verifyTitleContainsText(
+      `${checkChangePage.pageHeading} ${generalTitle}`
+    );
+    await verifyExactText(
+      checkChangePage.pageHeadingLocator,
+      checkChangePage.pageHeading
+    );
     await checkChangePage.checkUpdatedLanguage(sessionData);
     await checkChangePage.confirmChange();
 
@@ -136,8 +188,14 @@ dataSetLanguage.forEach((data) => {
     await click(changeConfirmedPage.makeAnotherChangeButton);
 
     // back on change booking page
-    await verifyExactText(changeBookingPage.pageHeadingLocator, changeBookingPage.pageHeading);
-    await verifyContainsText(changeBookingPage.warningMessageLocator, changeBookingPage.refundWarningMessageText);
+    await verifyExactText(
+      changeBookingPage.pageHeadingLocator,
+      changeBookingPage.pageHeading
+    );
+    await verifyContainsText(
+      changeBookingPage.warningMessageLocator,
+      changeBookingPage.refundWarningMessageText
+    );
     // check new confirmed changes are now displayed
     if (!runningTestsLocally()) {
       await changeBookingPage.checkDataMatchesSession(sessionData);
@@ -149,25 +207,25 @@ dataSetLanguage.forEach((data) => {
 
 const dataSetVoiceover = [
   {
-    testName: 'GB CSC SA bookings no Elig bypass',
+    testName: "GB CSC SA bookings no Elig bypass",
     target: Target.GB,
     locale: Locale.GB,
     eligibilityBypass: false,
   },
   {
-    testName: 'NI CSC SA bookings no Elig bypass',
+    testName: "NI CSC SA bookings no Elig bypass",
     target: Target.NI,
     locale: Locale.NI,
     eligibilityBypass: false,
   },
   {
-    testName: 'GB CSC SA bookings Elig bypass',
+    testName: "GB CSC SA bookings Elig bypass",
     target: Target.GB,
     locale: Locale.GB,
     eligibilityBypass: true,
   },
   {
-    testName: 'NI CSC SA bookings Elig bypass',
+    testName: "NI CSC SA bookings Elig bypass",
     target: Target.NI,
     locale: Locale.NI,
     eligibilityBypass: true,
@@ -195,7 +253,9 @@ dataSetVoiceover.forEach((data) => {
     await loginPage.login(bookingRef, drivingLicence);
     await ManageBookingsPage.viewTestWithBookingReference(bookingRef);
     const voiceoverPage = await changeBookingPage.changeRequestVoiceover();
-    await voiceoverPage.selectVoiceoverRequired(sessionData.currentBooking.voiceover);
+    await voiceoverPage.selectVoiceoverRequired(
+      sessionData.currentBooking.voiceover
+    );
 
     // check the change page
     await checkChangePage.checkUpdatedVoiceover(sessionData);
@@ -215,7 +275,7 @@ dataSetVoiceover.forEach((data) => {
 
 const dataSetBsl = [
   {
-    description: 'GB CSC SA no elig bypass - from Yes to No',
+    description: "GB CSC SA no elig bypass - from Yes to No",
     target: Target.GB,
     locale: Locale.GB,
     oldBsl: true,
@@ -223,7 +283,7 @@ const dataSetBsl = [
     eligibilityBypass: false,
   },
   {
-    description: 'GB CSC SA no elig bypass - from No to Yes',
+    description: "GB CSC SA no elig bypass - from No to Yes",
     target: Target.GB,
     locale: Locale.GB,
     oldBsl: false,
@@ -231,7 +291,7 @@ const dataSetBsl = [
     eligibilityBypass: false,
   },
   {
-    description: 'NI CSC SA no elig bypass - from Yes to No',
+    description: "NI CSC SA no elig bypass - from Yes to No",
     target: Target.NI,
     locale: Locale.NI,
     oldBsl: true,
@@ -239,7 +299,7 @@ const dataSetBsl = [
     eligibilityBypass: false,
   },
   {
-    description: 'NI CSC SA no elig bypass - from No to Yes',
+    description: "NI CSC SA no elig bypass - from No to Yes",
     target: Target.NI,
     locale: Locale.NI,
     oldBsl: false,
@@ -247,7 +307,7 @@ const dataSetBsl = [
     eligibilityBypass: false,
   },
   {
-    description: 'GB CSC SA elig bypass - from Yes to No',
+    description: "GB CSC SA elig bypass - from Yes to No",
     target: Target.GB,
     locale: Locale.GB,
     oldBsl: true,
@@ -255,7 +315,7 @@ const dataSetBsl = [
     eligibilityBypass: true,
   },
   {
-    description: 'GB CSC SA elig bypass - from No to Yes',
+    description: "GB CSC SA elig bypass - from No to Yes",
     target: Target.GB,
     locale: Locale.GB,
     oldBsl: false,
@@ -263,14 +323,14 @@ const dataSetBsl = [
     eligibilityBypass: true,
   },
   {
-    description: 'NI CSC SA elig bypass - from Yes to No',
+    description: "NI CSC SA elig bypass - from Yes to No",
     target: Target.NI,
     locale: Locale.NI,
     oldBsl: true,
     newBsl: false,
   },
   {
-    description: 'NI CSC SA elig bypass - from No to Yes',
+    description: "NI CSC SA elig bypass - from No to Yes",
     target: Target.NI,
     locale: Locale.NI,
     oldBsl: false,
@@ -302,7 +362,10 @@ dataSetBsl.forEach((data) => {
 
     // check the change page
     await verifyTitleContainsText(`${checkChangePage.pageHeading}`);
-    await verifyContainsText(checkChangePage.pageHeadingLocator, checkChangePage.pageHeading);
+    await verifyContainsText(
+      checkChangePage.pageHeadingLocator,
+      checkChangePage.pageHeading
+    );
     await checkChangePage.checkUpdatedBsl(sessionData);
     await checkChangePage.confirmChange();
 
@@ -311,8 +374,14 @@ dataSetBsl.forEach((data) => {
     await click(changeConfirmedPage.makeAnotherChangeButton);
 
     // back on change booking page
-    await verifyContainsText(changeBookingPage.pageHeadingLocator, changeBookingPage.pageHeading);
-    await verifyContainsText(changeBookingPage.warningMessageLocator, changeBookingPage.refundWarningMessageText);
+    await verifyContainsText(
+      changeBookingPage.pageHeadingLocator,
+      changeBookingPage.pageHeading
+    );
+    await verifyContainsText(
+      changeBookingPage.warningMessageLocator,
+      changeBookingPage.refundWarningMessageText
+    );
 
     if (!runningTestsLocally()) {
       await changeBookingPage.checkDataMatchesSession(sessionData);
@@ -324,14 +393,14 @@ dataSetBsl.forEach((data) => {
 
 const dataSet = [
   {
-    testName: 'GB Bookings',
+    testName: "GB Bookings",
     target: Target.GB,
     locale: Locale.GB,
     warningMessage: changeBookingPage.noChangeAllowedTextDVSA,
     title: generalTitle,
   },
   {
-    testName: 'NI Bookings',
+    testName: "NI Bookings",
     target: Target.NI,
     locale: Locale.NI,
     warningMessage: changeBookingPage.noChangeAllowedTextDVA,
@@ -345,20 +414,36 @@ dataSet.forEach((data) => {
     const sessionData = new SessionData(data.target);
     sessionData.currentBooking.origin = Origin.CitizenPortal;
     sessionData.journey.standardAccommodation = false;
-    sessionData.currentBooking.selectSupportType = [SupportType.VOICEOVER, SupportType.EXTRA_TIME, SupportType.READING_SUPPORT, SupportType.OTHER];
+    sessionData.currentBooking.selectSupportType = [
+      SupportType.VOICEOVER,
+      SupportType.EXTRA_TIME,
+      SupportType.READING_SUPPORT,
+      SupportType.OTHER,
+    ];
     sessionData.currentBooking.voiceover = Voiceover.ENGLISH;
-    sessionData.currentBooking.customSupport = 'Please arrange for the support';
+    sessionData.currentBooking.customSupport = "Please arrange for the support";
     sessionData.currentBooking.voicemail = true;
     sessionData.currentBooking.preferredDayOption = PreferredDay.ParticularDay;
-    sessionData.currentBooking.preferredDay = 'I only want to have tests on Mondays';
-    sessionData.currentBooking.preferredLocationOption = PreferredLocation.ParticularLocation;
-    sessionData.currentBooking.preferredLocation = 'I only want to have tests in the City Centre';
+    sessionData.currentBooking.preferredDay =
+      "I only want to have tests on Mondays";
+    sessionData.currentBooking.preferredLocationOption =
+      PreferredLocation.ParticularLocation;
+    sessionData.currentBooking.preferredLocation =
+      "I only want to have tests in the City Centre";
 
     if (data.target === Target.GB) {
-      sessionData.currentBooking.testSupportNeeds = [CRMTestSupportNeed.SpecialTestingEquipment, CRMTestSupportNeed.HomeTest, CRMTestSupportNeed.SeperateRoom];
+      sessionData.currentBooking.testSupportNeeds = [
+        CRMTestSupportNeed.SpecialTestingEquipment,
+        CRMTestSupportNeed.HomeTest,
+        CRMTestSupportNeed.SeperateRoom,
+      ];
     } else {
-      sessionData.currentBooking.testSupportNeeds = [CRMTestSupportNeed.SpecialTestingEquipment, CRMTestSupportNeed.SeperateRoom, CRMTestSupportNeed.ForeignLanguageInterpreter];
-      sessionData.currentBooking.translator = 'Spanish';
+      sessionData.currentBooking.testSupportNeeds = [
+        CRMTestSupportNeed.SpecialTestingEquipment,
+        CRMTestSupportNeed.SeperateRoom,
+        CRMTestSupportNeed.ForeignLanguageInterpreter,
+      ];
+      sessionData.currentBooking.translator = "Spanish";
     }
 
     if (!runningTestsLocally()) {
@@ -370,12 +455,23 @@ dataSet.forEach((data) => {
     await t.navigateTo(`${pageUrl}?target=${data.target}`);
     await loginPage.login(bookingRef, drivingLicence);
     await ManageBookingsPage.viewTestWithBookingReference(bookingRef);
-    await verifyTitleContainsText(`${changeBookingPage.pageHeading} ${data.title}`);
-    await verifyContainsText(changeBookingPage.pageHeadingLocator, changeBookingPage.pageHeading);
-    await verifyContainsText(changeBookingPage.warningMessageLocator, data.warningMessage);
+    await verifyTitleContainsText(
+      `${changeBookingPage.pageHeading} ${data.title}`
+    );
+    await verifyContainsText(
+      changeBookingPage.pageHeadingLocator,
+      changeBookingPage.pageHeading
+    );
+    await verifyContainsText(
+      changeBookingPage.warningMessageLocator,
+      data.warningMessage
+    );
 
     await changeBookingPage.checkDataMatchesSession(sessionData);
-    await changeBookingPage.checkChangeActions(sessionData, Constants.ManageBookingActionTypes.NON_STANDARD_BOOKING);
+    await changeBookingPage.checkChangeActions(
+      sessionData,
+      Constants.ManageBookingActionTypes.NON_STANDARD_BOOKING
+    );
 
     if (!runningTestsLocally()) {
       const { bookingProductId } = sessionData.currentBooking;
@@ -384,7 +480,7 @@ dataSet.forEach((data) => {
   });
 });
 
-test('Verify a candidate is NOT able to reschedule their booking if CSC has overridden eligibility', async () => {
+test("Verify a candidate is NOT able to reschedule their booking if CSC has overridden eligibility", async () => {
   const sessionData = new SessionData(Target.GB);
   sessionData.currentBooking.origin = Origin.CustomerServiceCentre;
   sessionData.currentBooking.eligibilityBypass = true;
@@ -397,11 +493,22 @@ test('Verify a candidate is NOT able to reschedule their booking if CSC has over
   const drivingLicence = sessionData.candidate.licenceNumber;
   await loginPage.login(bookingRef, drivingLicence);
   await ManageBookingsPage.viewTestWithBookingReference(bookingRef);
-  await verifyTitleContainsText(`${changeBookingPage.pageHeading} ${generalTitle}`);
-  await verifyContainsText(changeBookingPage.pageHeadingLocator, changeBookingPage.pageHeading);
-  await verifyContainsText(changeBookingPage.warningMessageLocator, changeBookingPage.refundWarningMessageText);
+  await verifyTitleContainsText(
+    `${changeBookingPage.pageHeading} ${generalTitle}`
+  );
+  await verifyContainsText(
+    changeBookingPage.pageHeadingLocator,
+    changeBookingPage.pageHeading
+  );
+  await verifyContainsText(
+    changeBookingPage.warningMessageLocator,
+    changeBookingPage.refundWarningMessageText
+  );
   await changeBookingPage.checkDataMatchesSession(sessionData);
-  await changeBookingPage.checkChangeActions(sessionData, Constants.ManageBookingActionTypes.ELIGIBILITY_OVERRIDE);
+  await changeBookingPage.checkChangeActions(
+    sessionData,
+    Constants.ManageBookingActionTypes.ELIGIBILITY_OVERRIDE
+  );
 
   if (!runningTestsLocally()) {
     const { bookingProductId } = sessionData.currentBooking;

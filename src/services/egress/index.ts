@@ -1,5 +1,5 @@
-import { addressParser, Address } from '@dvsa/egress-filtering';
-import config from '../../config';
+import { addressParser, Address } from "@dvsa/egress-filtering";
+import config from "../../config";
 
 export const ALLOWED_ADDRESSES: Array<Address> = [
   addressParser.parseUri(config.crm.apiUrl),

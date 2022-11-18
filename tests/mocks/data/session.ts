@@ -1,4 +1,4 @@
-import { Locale, Target } from '../../../src/domain/enums';
+import { Locale, Target } from "../../../src/domain/enums";
 import {
   Candidate,
   Booking,
@@ -7,7 +7,7 @@ import {
   Journey,
   ManageBooking,
   ManageBookingEdits,
-} from '../../../src/services/session';
+} from "../../../src/services/session";
 
 export interface MockRequest<T> {
   body?: T;

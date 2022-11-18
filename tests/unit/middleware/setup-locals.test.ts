@@ -1,15 +1,15 @@
-import MockDate from 'mockdate';
-import config from '../../../src/config';
-import { Locale, Target } from '../../../src/domain/enums';
-import { setupLocals } from '../../../src/middleware/setup-locals';
+import MockDate from "mockdate";
+import config from "../../../src/config";
+import { Locale, Target } from "../../../src/domain/enums";
+import { setupLocals } from "../../../src/middleware/setup-locals";
 
-describe('setupLocals', () => {
+describe("setupLocals", () => {
   let req: any;
   let res: any;
   let next: any;
 
   beforeEach(() => {
-    MockDate.set('2020-11-11T14:30:00.000Z');
+    MockDate.set("2020-11-11T14:30:00.000Z");
     req = {
       session: {},
     };
@@ -19,18 +19,18 @@ describe('setupLocals', () => {
     next = jest.fn();
     config.sessionTimeoutWarningMinutes = 5; // 5 mins
     config.sessionTtlSessionDuration = 1800; // 30 mins
-    config.landing.gb.citizen.book = 'gb-booking-url';
-    config.landing.cy.citizen.book = 'cy-booking-url';
+    config.landing.gb.citizen.book = "gb-booking-url";
+    config.landing.cy.citizen.book = "cy-booking-url";
   });
 
   afterEach(() => {
     MockDate.reset();
   });
 
-  test('correctly configures response.locals when session data exists', () => {
+  test("correctly configures response.locals when session data exists", () => {
     req.session = {
       cookie: {
-        expires: '2020-11-11T15:00:45.979Z',
+        expires: "2020-11-11T15:00:45.979Z",
       },
       target: Target.NI,
       locale: Locale.GB,
@@ -47,7 +47,7 @@ describe('setupLocals', () => {
     expect(next).toHaveBeenCalled();
     expect(res.locals).toStrictEqual({
       target: Target.NI,
-      imgRoot: 'images/ni/',
+      imgRoot: "images/ni/",
       inEditMode: true,
       inSupportMode: false,
       inManageBookingMode: false,
@@ -57,12 +57,12 @@ describe('setupLocals', () => {
       notificationDelay: 1500,
       source: undefined,
       headerLink: config.landing.gb.citizen.book,
-      journeyName: 'nsa-instructor',
-      organisation: 'dva',
+      journeyName: "nsa-instructor",
+      organisation: "dva",
     });
   });
 
-  test('correctly configures the header link when locale is set to welsh', () => {
+  test("correctly configures the header link when locale is set to welsh", () => {
     req.session.locale = Locale.CY;
 
     setupLocals(req, res, next);
@@ -71,13 +71,13 @@ describe('setupLocals', () => {
     expect(res.locals.headerLink).toBe(config.landing.cy.citizen.book);
   });
 
-  test('correctly configures response.locals when session data is missing', () => {
+  test("correctly configures response.locals when session data is missing", () => {
     setupLocals(req, res, next);
 
     expect(next).toHaveBeenCalled();
     expect(res.locals).toStrictEqual({
       target: Target.GB,
-      imgRoot: 'images/',
+      imgRoot: "images/",
       inEditMode: undefined,
       inSupportMode: undefined,
       standardAccommodation: undefined,
@@ -86,7 +86,7 @@ describe('setupLocals', () => {
       source: undefined,
       headerLink: config.landing.gb.citizen.book,
       journeyName: undefined,
-      organisation: 'dvsa',
+      organisation: "dvsa",
     });
   });
 });

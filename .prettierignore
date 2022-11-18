@@ -1,0 +1,10 @@
+# Ignore artifacts:
+coverage
+migrations
+dist
+build
+node_modules
+*.js
+ftts-frontend-assets/assets/errorPages/403.html
+ftts-frontend-assets/assets/maintenance/index.html
+.eslintrc

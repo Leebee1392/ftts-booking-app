@@ -5,6 +5,5 @@ export const isEqualBookingRefs = (ref1: string, ref2: string): boolean => {
 
 export const normaliseBookingRef = (ref: string): string => {
   if (!ref) return ref;
-  return ref.toLocaleLowerCase()
-    .replace(/\s/g, ''); // Strip all spaces
+  return ref.toLocaleLowerCase().replace(/\s/g, ""); // Strip all spaces
 };

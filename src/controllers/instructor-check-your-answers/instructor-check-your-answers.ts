@@ -1,23 +1,26 @@
-import { Request, Response } from 'express';
-import { bslIsAvailable } from '../../domain/bsl';
-import { isZeroCostTest } from '../../domain/eligibility';
-import { TestLanguage } from '../../domain/test-language';
-import { Voiceover, Target, TestType } from '../../domain/enums';
-import { logger } from '../../helpers/logger';
-import { CRMGateway } from '../../services/crm-gateway/crm-gateway';
-import { SchedulingGateway, SlotUnavailableError } from '../../services/scheduling/scheduling-gateway';
-import { Booking } from '../../services/session';
-import { BookingHandler } from '../../helpers/booking-handler';
-import { translate } from '../../helpers/language';
-import { CrmCreateBookingDataError } from '../../domain/errors/crm/CrmCreateBookingDataError';
-import { getErrorPageLink } from '../../helpers/links';
-import config from '../../config';
+import { Request, Response } from "express";
+import { bslIsAvailable } from "../../domain/bsl";
+import { isZeroCostTest } from "../../domain/eligibility";
+import { TestLanguage } from "../../domain/test-language";
+import { Voiceover, Target, TestType } from "../../domain/enums";
+import { logger } from "../../helpers/logger";
+import { CRMGateway } from "../../services/crm-gateway/crm-gateway";
+import {
+  SchedulingGateway,
+  SlotUnavailableError,
+} from "../../services/scheduling/scheduling-gateway";
+import { Booking } from "../../services/session";
+import { BookingHandler } from "../../helpers/booking-handler";
+import { translate } from "../../helpers/language";
+import { CrmCreateBookingDataError } from "../../domain/errors/crm/CrmCreateBookingDataError";
+import { getErrorPageLink } from "../../helpers/links";
+import config from "../../config";
 
 export class InstructorCheckYourAnswersController {
   constructor(
     private scheduling: SchedulingGateway,
-    private crmGateway: CRMGateway,
-  ) { }
+    private crmGateway: CRMGateway
+  ) {}
 
   public get = (req: Request, res: Response): void => {
     req.session.journey = {
@@ -42,15 +45,21 @@ export class InstructorCheckYourAnswersController {
     };
 
     if (!req.session.currentBooking.testType) {
-      throw new Error('InstructorCheckYourAnswersController::post: Missing test type');
+      throw new Error(
+        "InstructorCheckYourAnswersController::post: Missing test type"
+      );
     }
 
     if (config.featureToggles.enableExistingBookingValidation) {
-      const hasExistingBooking = await this.crmGateway.doesCandidateHaveExistingBookingsByTestType(req.session.candidate?.candidateId as string, req.session.currentBooking?.testType);
+      const hasExistingBooking =
+        await this.crmGateway.doesCandidateHaveExistingBookingsByTestType(
+          req.session.candidate?.candidateId as string,
+          req.session.currentBooking?.testType
+        );
 
       if (hasExistingBooking) {
-        req.session.lastPage = '/instructor/check-your-answers';
-        return res.redirect('booking-exists');
+        req.session.lastPage = "/instructor/check-your-answers";
+        return res.redirect("booking-exists");
       }
     }
 
@@ -59,26 +68,31 @@ export class InstructorCheckYourAnswersController {
       await handler.createBooking();
     } catch (error) {
       if (error instanceof SlotUnavailableError) {
-        logger.warn('InstructorCheckYourAnswersController::post: Slot is unavailable - cannot reserve slot');
-        return res.render('error-slot-unavailable');
+        logger.warn(
+          "InstructorCheckYourAnswersController::post: Slot is unavailable - cannot reserve slot"
+        );
+        return res.render("error-slot-unavailable");
       }
       if (error instanceof CrmCreateBookingDataError) {
-        return res.redirect(getErrorPageLink('/error-technical', req));
+        return res.redirect(getErrorPageLink("/error-technical", req));
       }
 
-      logger.error(error, 'InstructorCheckYourAnswersController::post: Error creating booking entity in CRM');
+      logger.error(
+        error,
+        "InstructorCheckYourAnswersController::post: Error creating booking entity in CRM"
+      );
       throw error;
     }
 
     if (req.session.currentBooking.compensationBooking) {
-      return res.redirect('payment-confirmation');
+      return res.redirect("payment-confirmation");
     }
 
     if (isZeroCostTest(req.session.currentBooking.testType)) {
-      return res.redirect('payment-confirmation');
+      return res.redirect("payment-confirmation");
     }
 
-    return res.redirect('payment-initiation');
+    return res.redirect("payment-initiation");
   };
 
   private renderPage(req: Request, res: Response): void {
@@ -98,29 +112,37 @@ export class InstructorCheckYourAnswersController {
     req.session.editedLocationTime = undefined;
 
     const booking = req.session.currentBooking;
-    const testLanguage = TestLanguage.from(booking?.language || '').toString();
+    const testLanguage = TestLanguage.from(booking?.language || "").toString();
     const voiceover = booking?.voiceover ?? Voiceover.NONE;
     const { candidate } = req.session;
 
     const isCompensationBooking = !!booking?.compensationBooking;
 
-    return res.render('instructor/check-your-answers', {
+    return res.render("instructor/check-your-answers", {
       firstNames: candidate?.firstnames,
       surname: candidate?.surname,
       dateOfBirth: candidate?.dateOfBirth,
       licenceNumber: candidate?.licenceNumber,
       emailAddress: candidate?.email,
       testLanguage,
-      price: isCompensationBooking ? booking?.compensationBooking?.price : booking?.priceList?.price,
+      price: isCompensationBooking
+        ? booking?.compensationBooking?.price
+        : booking?.priceList?.price,
       isCompensationBooking: !!booking?.compensationBooking,
       dateTime: booking?.dateTime,
       testCentre: booking?.centre,
       testType: booking?.testType,
       supportRequested: this.getYesNoLabel(false),
       bslAvailable: bslIsAvailable(booking?.testType),
-      canChangeTestLanguage: TestLanguage.canChangeTestLanguage(req.session.target || Target.GB, booking?.testType as TestType),
+      canChangeTestLanguage: TestLanguage.canChangeTestLanguage(
+        req.session.target || Target.GB,
+        booking?.testType as TestType
+      ),
       bsl: this.getYesNoLabel(booking?.bsl || false),
-      voiceover: voiceover === Voiceover.NONE ? this.getYesNoLabel(false) : booking?.voiceover,
+      voiceover:
+        voiceover === Voiceover.NONE
+          ? this.getYesNoLabel(false)
+          : booking?.voiceover,
       bookingRequiresPayment: !isZeroCostTest(booking?.testType as TestType),
       canChooseSupport: req.session.target !== Target.NI,
       isZeroCostBooking: isZeroCostTest(booking?.testType as TestType),
@@ -129,11 +151,13 @@ export class InstructorCheckYourAnswersController {
   }
 
   private getYesNoLabel(value: boolean): string {
-    return value ? translate('generalContent.yes') : translate('generalContent.no');
+    return value
+      ? translate("generalContent.yes")
+      : translate("generalContent.no");
   }
 }
 
 export default new InstructorCheckYourAnswersController(
   SchedulingGateway.getInstance(),
-  CRMGateway.getInstance(),
+  CRMGateway.getInstance()
 );

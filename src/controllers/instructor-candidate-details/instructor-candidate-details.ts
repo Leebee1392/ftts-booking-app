@@ -1,28 +1,28 @@
-import { Request, Response } from 'express';
-import config from '../../config';
-import { DateOfBirth } from '../../domain/date-of-birth';
-import { Locale, Target, Voiceover } from '../../domain/enums';
-import { CrmCreateUpdateCandidateError } from '../../domain/errors/crm/CrmCreateUpdateCandidateError';
-import { CrmRetrieveLicenceError } from '../../domain/errors/crm/CrmRetrieveLicenceError';
-import { CrmServerError } from '../../domain/errors/crm/CrmServerError';
-import { CrmTooManyRequestsError } from '../../domain/errors/crm/CrmTooManyRequestsError';
-import { EligibilityAuthError } from '../../domain/errors/eligibility/EligibilityAuthError';
-import { EligibilityLicenceNotFoundError } from '../../domain/errors/eligibility/EligibilityLicenceNotFoundError';
-import { EligibilityNotEligibleError } from '../../domain/errors/eligibility/EligibilityNotEligibleError';
-import { EligibilityNotLatestLicenceError } from '../../domain/errors/eligibility/EligibilityNotLatestLicenceError';
-import { EligibilityRetrieveError } from '../../domain/errors/eligibility/EligibilityRetrieveError';
-import { EligibilityServerError } from '../../domain/errors/eligibility/EligibilityServerError';
-import { EligibilityTooManyRequestsError } from '../../domain/errors/eligibility/EligibilityTooManyRequestsError';
-import { MultipleCandidateMismatchError } from '../../domain/errors/MultipleCandidateMatchError';
-import { LicenceNumber } from '../../domain/licence-number';
-import { PRN } from '../../domain/prn';
-import { translate } from '../../helpers/language';
-import { logger } from '../../helpers/logger';
-import { ValidatorSchema } from '../../middleware/request-validator';
-import { CandidateService } from '../../services/candidates/candidate-service';
-import { CRMGateway } from '../../services/crm-gateway/crm-gateway';
-import { EligibilityGateway } from '../../services/eligibility/eligibility-gateway';
-import { Candidate, store } from '../../services/session';
+import { Request, Response } from "express";
+import config from "../../config";
+import { DateOfBirth } from "../../domain/date-of-birth";
+import { Locale, Target, Voiceover } from "../../domain/enums";
+import { CrmCreateUpdateCandidateError } from "../../domain/errors/crm/CrmCreateUpdateCandidateError";
+import { CrmRetrieveLicenceError } from "../../domain/errors/crm/CrmRetrieveLicenceError";
+import { CrmServerError } from "../../domain/errors/crm/CrmServerError";
+import { CrmTooManyRequestsError } from "../../domain/errors/crm/CrmTooManyRequestsError";
+import { EligibilityAuthError } from "../../domain/errors/eligibility/EligibilityAuthError";
+import { EligibilityLicenceNotFoundError } from "../../domain/errors/eligibility/EligibilityLicenceNotFoundError";
+import { EligibilityNotEligibleError } from "../../domain/errors/eligibility/EligibilityNotEligibleError";
+import { EligibilityNotLatestLicenceError } from "../../domain/errors/eligibility/EligibilityNotLatestLicenceError";
+import { EligibilityRetrieveError } from "../../domain/errors/eligibility/EligibilityRetrieveError";
+import { EligibilityServerError } from "../../domain/errors/eligibility/EligibilityServerError";
+import { EligibilityTooManyRequestsError } from "../../domain/errors/eligibility/EligibilityTooManyRequestsError";
+import { MultipleCandidateMismatchError } from "../../domain/errors/MultipleCandidateMatchError";
+import { LicenceNumber } from "../../domain/licence-number";
+import { PRN } from "../../domain/prn";
+import { translate } from "../../helpers/language";
+import { logger } from "../../helpers/logger";
+import { ValidatorSchema } from "../../middleware/request-validator";
+import { CandidateService } from "../../services/candidates/candidate-service";
+import { CRMGateway } from "../../services/crm-gateway/crm-gateway";
+import { EligibilityGateway } from "../../services/eligibility/eligibility-gateway";
+import { Candidate, store } from "../../services/session";
 
 export interface CandidateDetailsBody {
   firstnames: string;
@@ -35,28 +35,29 @@ export interface CandidateDetailsBody {
 }
 
 export class InstructorCandidateDetailsController {
-  constructor(
-    private readonly candidateService: CandidateService,
-  ) { }
+  constructor(private readonly candidateService: CandidateService) {}
 
   public get = (req: Request, res: Response): void => {
     if (req.session.currentBooking?.testType) {
       store.reset(req, res);
-      return res.redirect('/instructor');
+      return res.redirect("/instructor");
     }
     if (!req.session.journey) {
-      throw Error('InstructorCandidateDetailsController::get: No journey set');
+      throw Error("InstructorCandidateDetailsController::get: No journey set");
     }
     req.session.journey.isInstructor = true;
     let details: Partial<Candidate> = {};
-    if (typeof req.query?.licenceNum === 'string') {
-      const licenceNumber = LicenceNumber.of(req.query.licenceNum, req.session.target || Target.GB);
+    if (typeof req.query?.licenceNum === "string") {
+      const licenceNumber = LicenceNumber.of(
+        req.query.licenceNum,
+        req.session.target || Target.GB
+      );
       details = {
         licenceNumber: licenceNumber.toString(),
       };
     }
 
-    return res.render('instructor/candidate-details', {
+    return res.render("instructor/candidate-details", {
       details,
       support: req.session.journey?.support,
       backLink: this.getBackLink(req),
@@ -68,24 +69,38 @@ export class InstructorCandidateDetailsController {
       req.errors.forEach((error) => {
         const errorMessage = error.msg;
         if (errorMessage) {
-          logger.warn(`InstructorCandidateDetailsController::post: ${errorMessage}`, {
-            target: req.session.target,
-            locale: req.session.locale,
-          });
+          logger.warn(
+            `InstructorCandidateDetailsController::post: ${errorMessage}`,
+            {
+              target: req.session.target,
+              locale: req.session.locale,
+            }
+          );
         }
       });
       return this.sendIncorrectDetailsErrorResponse(req, res);
     }
     if (!req.session.journey) {
-      throw Error('InstructorCandidateDetailsController::post: No journey set');
+      throw Error("InstructorCandidateDetailsController::post: No journey set");
     }
 
     const candidateDetails: CandidateDetailsBody = req.body;
     const licenceNumber = this.getLicenceNumber(candidateDetails, req);
 
     try {
-      const candidateEligibility = await this.candidateService.getEligibility(licenceNumber, candidateDetails, req.session.target as Target, req.session.locale as Locale, false, true);
-      const crmCandidate = await this.candidateService.getLicenceNumberRecordsByCandidateId(candidateEligibility.candidateId as string, licenceNumber);
+      const candidateEligibility = await this.candidateService.getEligibility(
+        licenceNumber,
+        candidateDetails,
+        req.session.target as Target,
+        req.session.locale as Locale,
+        false,
+        true
+      );
+      const crmCandidate =
+        await this.candidateService.getLicenceNumberRecordsByCandidateId(
+          candidateEligibility.candidateId as string,
+          licenceNumber
+        );
       const personReference = crmCandidate?.personReference;
 
       req.session.candidate = {
@@ -93,8 +108,14 @@ export class InstructorCandidateDetailsController {
         ...candidateEligibility,
         licenceNumber,
         personReference,
-        personalReferenceNumber: req.session.target === Target.GB ? candidateDetails.personalReference : undefined,
-        paymentReceiptNumber: req.session.target === Target.NI ? candidateDetails.personalReference : undefined,
+        personalReferenceNumber:
+          req.session.target === Target.GB
+            ? candidateDetails.personalReference
+            : undefined,
+        paymentReceiptNumber:
+          req.session.target === Target.NI
+            ? candidateDetails.personalReference
+            : undefined,
         supportNeedName: crmCandidate?.supportNeedName,
         supportEvidenceStatus: crmCandidate?.supportEvidenceStatus,
       };
@@ -108,41 +129,60 @@ export class InstructorCandidateDetailsController {
       const { support } = req.session.journey;
 
       if (support) {
-        return res.redirect('test-type');
+        return res.redirect("test-type");
       }
 
-      return res.redirect('email-contact');
+      return res.redirect("email-contact");
     } catch (error) {
-      if (error instanceof EligibilityTooManyRequestsError || error instanceof EligibilityServerError
-        || error instanceof CrmTooManyRequestsError || error instanceof CrmServerError) {
-        return res.render('instructor/error-eligibility-retry');
+      if (
+        error instanceof EligibilityTooManyRequestsError ||
+        error instanceof EligibilityServerError ||
+        error instanceof CrmTooManyRequestsError ||
+        error instanceof CrmServerError
+      ) {
+        return res.render("instructor/error-eligibility-retry");
       }
       if (error instanceof EligibilityNotEligibleError) {
-        logger.warn(`InstructorCandidateDetailsController::post: ${error.message}`, {
-          target: req.session.target,
-          locale: req.session.locale,
-        });
-        return res.render('no-eligibility');
+        logger.warn(
+          `InstructorCandidateDetailsController::post: ${error.message}`,
+          {
+            target: req.session.target,
+            locale: req.session.locale,
+          }
+        );
+        return res.render("no-eligibility");
       }
-      if (error instanceof CrmCreateUpdateCandidateError || error instanceof CrmRetrieveLicenceError
-        || error instanceof EligibilityAuthError) {
+      if (
+        error instanceof CrmCreateUpdateCandidateError ||
+        error instanceof CrmRetrieveLicenceError ||
+        error instanceof EligibilityAuthError
+      ) {
         throw error;
       }
-      if (error instanceof EligibilityLicenceNotFoundError || error instanceof EligibilityNotLatestLicenceError
-        || error instanceof EligibilityRetrieveError) {
-        logger.warn(`InstructorCandidateDetailsController::post: ${error.message}`, {
-          target: req.session.target,
-          locale: req.session.locale,
-        });
+      if (
+        error instanceof EligibilityLicenceNotFoundError ||
+        error instanceof EligibilityNotLatestLicenceError ||
+        error instanceof EligibilityRetrieveError
+      ) {
+        logger.warn(
+          `InstructorCandidateDetailsController::post: ${error.message}`,
+          {
+            target: req.session.target,
+            locale: req.session.locale,
+          }
+        );
         return this.sendIncorrectDetailsErrorResponse(req, res);
       }
       if (error instanceof MultipleCandidateMismatchError) {
         const { errors } = error;
         errors?.forEach((fieldError) => {
-          logger.warn(`InstructorCandidateDetailsController::post: ${fieldError.message}`, {
-            target: req.session.target,
-            locale: req.session.locale,
-          });
+          logger.warn(
+            `InstructorCandidateDetailsController::post: ${fieldError.message}`,
+            {
+              target: req.session.target,
+              locale: req.session.locale,
+            }
+          );
         });
         return this.sendIncorrectDetailsErrorResponse(req, res);
       }
@@ -150,19 +190,32 @@ export class InstructorCandidateDetailsController {
     }
   };
 
-  private getLicenceNumber(candidateDetails: CandidateDetailsBody, req: Request): string {
-    return LicenceNumber.of(candidateDetails.licenceNumber, req.session.target || Target.GB)?.toString().toUpperCase();
+  private getLicenceNumber(
+    candidateDetails: CandidateDetailsBody,
+    req: Request
+  ): string {
+    return LicenceNumber.of(
+      candidateDetails.licenceNumber,
+      req.session.target || Target.GB
+    )
+      ?.toString()
+      .toUpperCase();
   }
 
-  private sendIncorrectDetailsErrorResponse = (req: Request, res: Response): void => {
+  private sendIncorrectDetailsErrorResponse = (
+    req: Request,
+    res: Response
+  ): void => {
     // Errors are overwritten to not provide a clue as to which field contains the error for security reasons
-    req.errors = [{
-      location: 'body',
-      msg: translate('details.errorMessage'),
-      param: '',
-    }];
+    req.errors = [
+      {
+        location: "body",
+        msg: translate("details.errorMessage"),
+        param: "",
+      },
+    ];
 
-    return res.render('instructor/candidate-details', {
+    return res.render("instructor/candidate-details", {
       details: req.body,
       errors: req.errors,
       support: req.session.journey?.support,
@@ -174,38 +227,38 @@ export class InstructorCandidateDetailsController {
     if (req.session.target === Target.NI) {
       return config.landing.ni.instructor.book;
     }
-    return '/instructor/choose-support';
+    return "/instructor/choose-support";
   };
 
   /* istanbul ignore next */
   public postSchemaValidation: ValidatorSchema = {
     firstnames: {
-      in: ['body'],
+      in: ["body"],
       trim: true,
     },
     surname: {
-      in: ['body'],
+      in: ["body"],
       trim: true,
       isEmpty: {
         negated: true,
       },
-      errorMessage: 'Surname is empty',
+      errorMessage: "Surname is empty",
     },
     licenceNumber: {
-      in: ['body'],
+      in: ["body"],
       trim: true,
       custom: {
         options: CandidateService.isDrivingLicenceValid,
       },
     },
     dobDay: {
-      in: ['body'],
+      in: ["body"],
       custom: {
         options: DateOfBirth.isValid,
       },
     },
     personalReference: {
-      in: ['body'],
+      in: ["body"],
       trim: true,
       custom: {
         options: PRN.isValid,
@@ -215,5 +268,8 @@ export class InstructorCandidateDetailsController {
 }
 
 export default new InstructorCandidateDetailsController(
-  new CandidateService(CRMGateway.getInstance(), EligibilityGateway.getInstance()),
+  new CandidateService(
+    CRMGateway.getInstance(),
+    EligibilityGateway.getInstance()
+  )
 );

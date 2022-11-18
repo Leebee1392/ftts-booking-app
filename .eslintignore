@@ -1,0 +1,6 @@
+coverage
+migrations
+dist
+build
+node_modules
+*.js

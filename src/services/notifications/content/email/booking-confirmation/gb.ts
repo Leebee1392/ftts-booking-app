@@ -1,17 +1,23 @@
-import dedent from 'ts-dedent';
+import dedent from "ts-dedent";
 
-import { translate } from '../../../../../helpers/language';
-import { BookingConfirmationDetails } from '../../../types';
-import { asLocalTime, asFullDateWithWeekday, asFullDateWithoutWeekday } from '../../../../../nunjucks-filters/local-date-time-filter';
-import { formatAddressLines } from '../../helpers';
-import { afterTheTest } from './helpers';
+import { translate } from "../../../../../helpers/language";
+import { BookingConfirmationDetails } from "../../../types";
+import {
+  asLocalTime,
+  asFullDateWithWeekday,
+  asFullDateWithoutWeekday,
+} from "../../../../../nunjucks-filters/local-date-time-filter";
+import { formatAddressLines } from "../../helpers";
+import { afterTheTest } from "./helpers";
 
 export default {
-  subject: 'DVSA: details of your confirmed driving theory test appointment',
+  subject: "DVSA: details of your confirmed driving theory test appointment",
   buildBody: (details: BookingConfirmationDetails): string => {
-    let cancelWarning = '';
+    let cancelWarning = "";
     if (details.lastRefundDate) {
-      cancelWarning = ` If this booking is changed or cancelled after ${asFullDateWithoutWeekday(details.lastRefundDate)} no refund will be made.`;
+      cancelWarning = ` If this booking is changed or cancelled after ${asFullDateWithoutWeekday(
+        details.lastRefundDate
+      )} no refund will be made.`;
     }
 
     return dedent`
@@ -26,7 +32,9 @@ export default {
 
     ---
     # Test time and date
-    ${asLocalTime(details.testDateTime)} on ${asFullDateWithWeekday(details.testDateTime)}
+    ${asLocalTime(details.testDateTime)} on ${asFullDateWithWeekday(
+      details.testDateTime
+    )}
 
     ---
     # Test location

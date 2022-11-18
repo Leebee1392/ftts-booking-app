@@ -5,9 +5,9 @@
 */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable @typescript-eslint/no-empty-interface */
-import 'estree';
+import "estree";
 
-declare module 'estree' {
+declare module "estree" {
   export interface ChainExpression {}
   export interface ImportExpression {}
 }

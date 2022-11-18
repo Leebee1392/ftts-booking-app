@@ -1,15 +1,16 @@
-import { BasePage } from './base-page';
-import { click, link } from '../utils/helpers';
-import { ChangeBookingPage } from './change-booking-page';
-import { ChooseSupportPage } from './choose-support-page';
-import { RequestRefundPage } from './request-refund-page';
+import { BasePage } from "./base-page";
+import { click, link } from "../utils/helpers";
+import { ChangeBookingPage } from "./change-booking-page";
+import { ChooseSupportPage } from "./choose-support-page";
+import { RequestRefundPage } from "./request-refund-page";
 
 class ManageBookingsPage extends BasePage {
-  pageHeadingLocator = '.govuk-heading-xl';
+  pageHeadingLocator = ".govuk-heading-xl";
 
-  backLink = '.govuk-back-link';
+  backLink = ".govuk-back-link";
 
-  bookingsWithErrorsBanner = 'div[data-automation-id="bookingsWithErrorsBanner"]';
+  bookingsWithErrorsBanner =
+    'div[data-automation-id="bookingsWithErrorsBanner"]';
 
   bookingsWithErrorsBannerTitle = `${this.bookingsWithErrorsBanner} h2`;
 
@@ -19,7 +20,8 @@ class ManageBookingsPage extends BasePage {
 
   bookingsWithErrorsBannerBookingRefList = `${this.bookingsWithErrorsBanner} > .govuk-list`;
 
-  compensationBanner = 'div[data-automation-id="bookingsWithCompensationEligible"]';
+  compensationBanner =
+    'div[data-automation-id="bookingsWithCompensationEligible"]';
 
   compensationBannerTitle = `${this.compensationBanner} h2`;
 
@@ -27,11 +29,11 @@ class ManageBookingsPage extends BasePage {
 
   compensationBannerBookTestLink = `${this.compensationBannerHeader} .govuk-link`;
 
-  table = '.govuk-table';
+  table = ".govuk-table";
 
-  tableHead = 'thead > tr > th';
+  tableHead = "thead > tr > th";
 
-  tableRow = 'tbody > tr';
+  tableRow = "tbody > tr";
 
   tableCell = `${this.tableRow} > td`;
 
@@ -41,40 +43,43 @@ class ManageBookingsPage extends BasePage {
 
   buttonViewLocator = `${this.tableRow} .govuk-button`;
 
-  changeBookingWithReference = 'a[href=\'<BookingReference>\']';
+  changeBookingWithReference = "a[href='<BookingReference>']";
 
   bookedLabel = 'strong[class="govuk-tag govuk-tag--green"]';
 
-  cancelledCompensationBookingLabel = 'strong[class="govuk-tag govuk-tag--blue"]';
+  cancelledCompensationBookingLabel =
+    'strong[class="govuk-tag govuk-tag--blue"]';
 
-  pathUrl = 'manage-booking/home';
+  pathUrl = "manage-booking/home";
 
   // Content
-  pageHeading = 'Your theory test bookings';
+  pageHeading = "Your theory test bookings";
 
-  infoBannerHeaderText = 'A technical problem means these test bookings cannot be found:';
+  infoBannerHeaderText =
+    "A technical problem means these test bookings cannot be found:";
 
-  compensationBannerText = 'One or more of your booked theory tests have been cancelled. You can book a replacement test using the fee already paid or request a fee refund.';
+  compensationBannerText =
+    "One or more of your booked theory tests have been cancelled. You can book a replacement test using the fee already paid or request a fee refund.";
 
-  bookAnotherTestLinkText = 'book another theory test here';
+  bookAnotherTestLinkText = "book another theory test here";
 
   bookAnotherTestText = `You can ${this.bookAnotherTestLinkText}.`;
 
-  compensationBannerBookTestLinkText = 'book a replacement test';
+  compensationBannerBookTestLinkText = "book a replacement test";
 
-  bookCompensationTestLinkText = 'Book replacement test';
+  bookCompensationTestLinkText = "Book replacement test";
 
-  requestRefundLinkText = 'request refund';
+  requestRefundLinkText = "request refund";
 
-  column1 = 'Test type';
+  column1 = "Test type";
 
-  column2 = 'Date of test';
+  column2 = "Date of test";
 
-  column3 = 'Booking reference';
+  column3 = "Booking reference";
 
-  column4 = 'Status';
+  column4 = "Status";
 
-  column5 = 'Actions';
+  column5 = "Actions";
 
   TEST_TYPE_INDEX = 0;
 
@@ -95,14 +100,24 @@ class ManageBookingsPage extends BasePage {
     return new ChooseSupportPage();
   }
 
-  async viewTestWithBookingReference(bookingReference: string): Promise<ChangeBookingPage> {
-    const changeButton = this.changeBookingWithReference.replace('<BookingReference>', bookingReference);
+  async viewTestWithBookingReference(
+    bookingReference: string
+  ): Promise<ChangeBookingPage> {
+    const changeButton = this.changeBookingWithReference.replace(
+      "<BookingReference>",
+      bookingReference
+    );
     await click(changeButton);
     return new ChangeBookingPage();
   }
 
-  async requestRefundForBookingReference(bookingReference: string): Promise<RequestRefundPage> {
-    const requestRefundLink = this.requestRefundLink.replace('<BookingReference>', bookingReference);
+  async requestRefundForBookingReference(
+    bookingReference: string
+  ): Promise<RequestRefundPage> {
+    const requestRefundLink = this.requestRefundLink.replace(
+      "<BookingReference>",
+      bookingReference
+    );
     await click(requestRefundLink);
     return new RequestRefundPage();
   }

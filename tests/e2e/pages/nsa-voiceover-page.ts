@@ -1,13 +1,13 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click, link } from '../utils/helpers';
-import { Voiceover } from '../../../src/domain/enums';
+import { BasePage } from "./base-page";
+import { click, link } from "../utils/helpers";
+import { Voiceover } from "../../../src/domain/enums";
 
 export class NsaVoiceoverPage extends BasePage {
   // locators
-  pageHeadingLocator = '.govuk-fieldset__heading';
+  pageHeadingLocator = ".govuk-fieldset__heading";
 
-  updateBanner = 'div.alert';
+  updateBanner = "div.alert";
 
   voiceoverButton = 'input[name="voiceover"][value="<>"]';
 
@@ -21,31 +21,32 @@ export class NsaVoiceoverPage extends BasePage {
 
   errorMessageRadioLocator = 'span[data-automation-id="voiceover-error"]';
 
-  errorMessageLocator = '#error-summary-title';
+  errorMessageLocator = "#error-summary-title";
 
-  errorMessageList = '.govuk-list.govuk-error-summary__list';
+  errorMessageList = ".govuk-list.govuk-error-summary__list";
 
-  pathUrl = 'nsa/change-voiceover';
+  pathUrl = "nsa/change-voiceover";
 
   // content
-  pageHeading = 'Which voiceover language do you want?';
+  pageHeading = "Which voiceover language do you want?";
 
-  errorMessageHeader = 'There is a problem';
+  errorMessageHeader = "There is a problem";
 
-  errorMessageText = 'You must select one option.';
+  errorMessageText = "You must select one option.";
 
-  continueButtonText = 'Continue';
+  continueButtonText = "Continue";
 
-  updateBannerText = 'You can change your mind here about hearing a voiceover used during the test, or';
+  updateBannerText =
+    "You can change your mind here about hearing a voiceover used during the test, or";
 
-  updateButtonText = 'Confirm change and continue';
+  updateButtonText = "Confirm change and continue";
 
-  cancelButtonText = 'Cancel and keep your existing choice';
+  cancelButtonText = "Cancel and keep your existing choice";
 
-  cancelLinkText = 'go back and keep your previous choice';
+  cancelLinkText = "go back and keep your previous choice";
 
   getRadioSelector(voiceoverOption: Voiceover): string {
-    return this.voiceoverButton.replace('<>', voiceoverOption);
+    return this.voiceoverButton.replace("<>", voiceoverOption);
   }
 
   async selectVoiceoverRequired(voiceoverOption: Voiceover): Promise<void> {
@@ -59,7 +60,7 @@ export class NsaVoiceoverPage extends BasePage {
   }
 
   async goBackAndRequestTranslator(): Promise<void> {
-    await link('return to the previous screen');
+    await link("return to the previous screen");
   }
 
   async clickErrorLink(): Promise<void> {

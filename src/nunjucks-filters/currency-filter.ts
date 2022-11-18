@@ -1,4 +1,4 @@
-import config from '../config';
+import config from "../config";
 
 export class CurrencyFilter {
   public static formatPrice(num: number): string {

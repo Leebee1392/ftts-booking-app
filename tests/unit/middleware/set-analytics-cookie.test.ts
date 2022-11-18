@@ -1,11 +1,11 @@
-import { NextFunction, Request, Response } from 'express';
-import { setCookieHeader } from '../../../src/helpers/cookie-helper';
-import { setAnalyticsCookie } from '../../../src/middleware/set-analytics-cookie';
-import { store } from '../../../src/services/session';
+import { NextFunction, Request, Response } from "express";
+import { setCookieHeader } from "../../../src/helpers/cookie-helper";
+import { setAnalyticsCookie } from "../../../src/middleware/set-analytics-cookie";
+import { store } from "../../../src/services/session";
 
-jest.mock('../../../src/helpers/cookie-helper');
+jest.mock("../../../src/helpers/cookie-helper");
 
-describe('setAnalyticsCookie', () => {
+describe("setAnalyticsCookie", () => {
   let req: Request;
   let res: Response;
   let next: NextFunction;
@@ -29,23 +29,23 @@ describe('setAnalyticsCookie', () => {
     jest.resetAllMocks();
   });
 
-  describe('query string tests', () => {
-    test('WHEN cookie query string is accept THEN a new cookie should be created with the value accept', () => {
+  describe("query string tests", () => {
+    test("WHEN cookie query string is accept THEN a new cookie should be created with the value accept", () => {
       req.query = {
-        cookies: 'accept',
+        cookies: "accept",
       };
 
       setAnalyticsCookie(req, res, next);
 
       expect(setCookieHeader).toHaveBeenCalledWith(
         res,
-        'cm-user-preferences',
-        'accept',
+        "cm-user-preferences",
+        "accept",
         {
           httpOnly: true,
           maxAge: 31536000,
           secure: true,
-        },
+        }
       );
       expect(res.locals).toStrictEqual({
         cookiesEnabled: true,
@@ -54,9 +54,9 @@ describe('setAnalyticsCookie', () => {
       expect(next).toHaveBeenCalled();
     });
 
-    test('WHEN cookie query string is reject THEN a new cookie should be created with the value reject', () => {
+    test("WHEN cookie query string is reject THEN a new cookie should be created with the value reject", () => {
       req.query = {
-        cookies: 'reject',
+        cookies: "reject",
       };
       res.locals.cookiesEnabled = true;
 
@@ -64,13 +64,13 @@ describe('setAnalyticsCookie', () => {
 
       expect(setCookieHeader).toHaveBeenCalledWith(
         res,
-        'cm-user-preferences',
-        'reject',
+        "cm-user-preferences",
+        "reject",
         {
           httpOnly: true,
           maxAge: 0,
           secure: true,
-        },
+        }
       );
       expect(res.locals).toStrictEqual({
         cookiesEnabled: false,
@@ -79,9 +79,9 @@ describe('setAnalyticsCookie', () => {
       expect(next).toHaveBeenCalled();
     });
 
-    test('WHEN cookie query string is invalid THEN we should set cookiesEnabled to false', () => {
+    test("WHEN cookie query string is invalid THEN we should set cookiesEnabled to false", () => {
       req.query = {
-        cookies: 'invalid',
+        cookies: "invalid",
       };
 
       setAnalyticsCookie(req, res, next);
@@ -93,9 +93,9 @@ describe('setAnalyticsCookie', () => {
       expect(next).toHaveBeenCalled();
     });
 
-    test('WHEN cookie query string is redirect THEN we redirect the user to the view cookies page', () => {
+    test("WHEN cookie query string is redirect THEN we redirect the user to the view cookies page", () => {
       req.query = {
-        viewCookies: 'redirect',
+        viewCookies: "redirect",
       };
 
       setAnalyticsCookie(req, res, next);
@@ -104,14 +104,14 @@ describe('setAnalyticsCookie', () => {
         cookiesEnabled: false,
         cookiePreferenceSet: false,
       });
-      expect(res.redirect).toHaveBeenCalledWith('/view-cookies');
+      expect(res.redirect).toHaveBeenCalledWith("/view-cookies");
     });
   });
 
-  describe('cookie tests', () => {
-    test('WHEN accepted cookie is present THEN we should set cookiesEnabled to true', () => {
+  describe("cookie tests", () => {
+    test("WHEN accepted cookie is present THEN we should set cookiesEnabled to true", () => {
       req.query = {};
-      req.cookies['cm-user-preferences'] = 'accept';
+      req.cookies["cm-user-preferences"] = "accept";
 
       setAnalyticsCookie(req, res, next);
 
@@ -122,9 +122,9 @@ describe('setAnalyticsCookie', () => {
       expect(next).toHaveBeenCalled();
     });
 
-    test('WHEN rejected cookie is present THEN we should set cookiesEnabled to false', () => {
+    test("WHEN rejected cookie is present THEN we should set cookiesEnabled to false", () => {
       req.query = {};
-      req.cookies['cm-user-preferences'] = 'reject';
+      req.cookies["cm-user-preferences"] = "reject";
 
       setAnalyticsCookie(req, res, next);
 
@@ -135,7 +135,7 @@ describe('setAnalyticsCookie', () => {
       expect(next).toHaveBeenCalled();
     });
 
-    test('WHEN no cookie is present THEN we should set cookiesEnabled to false', () => {
+    test("WHEN no cookie is present THEN we should set cookiesEnabled to false", () => {
       setAnalyticsCookie(req, res, next);
 
       expect(res.locals).toStrictEqual({

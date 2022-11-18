@@ -1,18 +1,23 @@
 /* eslint-disable security/detect-non-literal-regexp */
-import { CancelBookingPage } from '../pages/cancel-booking-page';
-import { CancelledBookingPage } from '../pages/cancelled-booking-page';
-import { ChangeBookingPage } from '../pages/change-booking-page';
-import { LoginPage } from '../pages/login-page';
-import ManageBookingsPage from '../pages/manage-bookings-page';
-import { SessionData } from '../data/session-data';
+import { CancelBookingPage } from "../pages/cancel-booking-page";
+import { CancelledBookingPage } from "../pages/cancelled-booking-page";
+import { ChangeBookingPage } from "../pages/change-booking-page";
+import { LoginPage } from "../pages/login-page";
+import ManageBookingsPage from "../pages/manage-bookings-page";
+import { SessionData } from "../data/session-data";
 import {
-  runningTestsLocally, setAcceptCookies, verifyExactText, verifyTitleContainsText,
-} from '../utils/helpers';
-import { Origin, Target } from '../../../src/domain/enums';
+  runningTestsLocally,
+  setAcceptCookies,
+  verifyExactText,
+  verifyTitleContainsText,
+} from "../utils/helpers";
+import { Origin, Target } from "../../../src/domain/enums";
 import {
-  generalTitle, MAX_TIMEOUT, setRequestTimeout,
-} from '../data/constants';
-import { createNewBookingInCrm } from '../utils/crm/crm-data-helper';
+  generalTitle,
+  MAX_TIMEOUT,
+  setRequestTimeout,
+} from "../data/constants";
+import { createNewBookingInCrm } from "../utils/crm/crm-data-helper";
 
 const cancelBookingPage = new CancelBookingPage();
 const cancelledBookingPage = new CancelledBookingPage();
@@ -22,19 +27,21 @@ const pageUrl = `${process.env.BOOKING_APP_URL}/${loginPage.pathUrl}`;
 
 fixture`Cancelled booking - Customer Service Centre created bookings`
   .page(pageUrl)
-  .before(async () => { await setRequestTimeout; })
+  .before(async () => {
+    await setRequestTimeout;
+  })
   .beforeEach(async () => {
     await setAcceptCookies();
   })
-  .meta('type', 'manage-booking');
+  .meta("type", "manage-booking");
 
 const dataSet = [
   {
-    testName: 'No Eligibility bypass',
+    testName: "No Eligibility bypass",
     eligibilityBypass: false,
   },
   {
-    testName: 'With Eligibility bypass',
+    testName: "With Eligibility bypass",
     eligibilityBypass: true,
   },
 ];
@@ -57,7 +64,13 @@ dataSet.forEach((data) => {
     await ManageBookingsPage.viewTestWithBookingReference(bookingRef);
     await changeBookingPage.cancelTest();
     await cancelBookingPage.confirmCancellation();
-    await verifyTitleContainsText(`${cancelledBookingPage.pageHeading} ${generalTitle}`, MAX_TIMEOUT);
-    await verifyExactText(cancelledBookingPage.pageHeadingLocator, cancelledBookingPage.pageHeading);
+    await verifyTitleContainsText(
+      `${cancelledBookingPage.pageHeading} ${generalTitle}`,
+      MAX_TIMEOUT
+    );
+    await verifyExactText(
+      cancelledBookingPage.pageHeadingLocator,
+      cancelledBookingPage.pageHeading
+    );
   });
 });

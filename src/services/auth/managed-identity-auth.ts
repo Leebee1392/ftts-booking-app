@@ -1,7 +1,10 @@
 import {
-  ChainedTokenCredential, ClientSecretCredential, ManagedIdentityCredential, TokenCredential,
-} from '@dvsa/ftts-auth-client';
-import { logger } from '../../helpers/logger';
+  ChainedTokenCredential,
+  ClientSecretCredential,
+  ManagedIdentityCredential,
+  TokenCredential,
+} from "@dvsa/ftts-auth-client";
+import { logger } from "../../helpers/logger";
 
 export type ManagedIdentityAuthConfig = {
   azureTenantId: string;
@@ -20,12 +23,22 @@ export type AuthHeader = {
 export class ManagedIdentityAuth {
   private tokenCredential: ChainedTokenCredential;
 
-  constructor(
-    private config: ManagedIdentityAuthConfig,
-  ) {
-    const sources: TokenCredential[] = [new ManagedIdentityCredential(config.userAssignedEntityClientId)];
-    if (config.azureTenantId && config.azureClientId && config.azureClientSecret) {
-      sources.push(new ClientSecretCredential(config.azureTenantId, config.azureClientId, config.azureClientSecret));
+  constructor(private config: ManagedIdentityAuthConfig) {
+    const sources: TokenCredential[] = [
+      new ManagedIdentityCredential(config.userAssignedEntityClientId),
+    ];
+    if (
+      config.azureTenantId &&
+      config.azureClientId &&
+      config.azureClientSecret
+    ) {
+      sources.push(
+        new ClientSecretCredential(
+          config.azureTenantId,
+          config.azureClientId,
+          config.azureClientSecret
+        )
+      );
     }
     this.tokenCredential = new ChainedTokenCredential(...sources);
   }
@@ -37,16 +50,18 @@ export class ManagedIdentityAuth {
 
   private async getToken(): Promise<string | undefined> {
     try {
-      const activeToken = await this.tokenCredential.getToken(this.config.scope);
+      const activeToken = await this.tokenCredential.getToken(
+        this.config.scope
+      );
       return activeToken?.token;
     } catch (error) {
       logger.error(
         error,
-        'ManagedIdentityAuth::getToken: Unable to retrieve token',
+        "ManagedIdentityAuth::getToken: Unable to retrieve token",
         {
           scope: this.config.scope,
           clientId: this.config.userAssignedEntityClientId,
-        },
+        }
       );
       throw error;
     }

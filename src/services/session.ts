@@ -1,10 +1,8 @@
-import { Request, Response } from 'express';
-import { ELIG } from '@dvsa/ftts-eligibility-api-model';
-import { v4 as uuidv4 } from 'uuid';
+import { Request, Response } from "express";
+import { ELIG } from "@dvsa/ftts-eligibility-api-model";
+import { v4 as uuidv4 } from "uuid";
 
-import {
-  Centre, Eligibility, PriceListItem,
-} from '../domain/types';
+import { Centre, Eligibility, PriceListItem } from "../domain/types";
 import {
   Language,
   PreferredDay,
@@ -14,18 +12,24 @@ import {
   TestType,
   Voiceover,
   Origin,
-} from '../domain/enums';
-import { BookingDetails, CompensatedBooking } from './crm-gateway/interfaces';
-import { Booking as BookingEntity } from '../domain/booking/booking';
-import { CRMEvidenceStatus } from './crm-gateway/enums';
+} from "../domain/enums";
+import { BookingDetails, CompensatedBooking } from "./crm-gateway/interfaces";
+import { Booking as BookingEntity } from "../domain/booking/booking";
+import { CRMEvidenceStatus } from "./crm-gateway/enums";
 
-export type ManageBookingEdits = Partial<Pick<Booking, 'centre' | 'dateTime' | 'language' | 'bsl' | 'voiceover'>>;
+export type ManageBookingEdits = Partial<
+  Pick<Booking, "centre" | "dateTime" | "language" | "bsl" | "voiceover">
+>;
 
 export interface Session {
   manageBooking: {
     getBookings: (req: Request) => BookingEntity[];
     getBooking: (req: Request, bookingRef: string) => BookingEntity | undefined;
-    updateBooking: (req: Request, bookingRef: string, items: Partial<BookingDetails>) => BookingEntity;
+    updateBooking: (
+      req: Request,
+      bookingRef: string,
+      items: Partial<BookingDetails>
+    ) => BookingEntity;
   };
   reset: (req: Request, res?: Response) => void;
   resetBooking: (req: Request) => void;
@@ -37,7 +41,8 @@ interface SubSession<T> {
   get: (req: Request) => T;
   reset: (req: Request, res?: Response) => void;
 }
-export interface EditedLocationTimeSession extends SubSession<LocationDateTime> {
+export interface EditedLocationTimeSession
+  extends SubSession<LocationDateTime> {
   reset: (req: Request, res?: Response) => void;
 }
 
@@ -137,19 +142,29 @@ export interface ManageBooking {
 const store: Session = {
   manageBooking: {
     getBookings: (req: Request): BookingEntity[] => {
-      const bookings: BookingDetails[] = req.session?.manageBooking?.bookings || [];
+      const bookings: BookingDetails[] =
+        req.session?.manageBooking?.bookings || [];
       return bookings.map((booking) => BookingEntity.from(booking));
     },
-    getBooking: (req: Request, bookingRef: string): BookingEntity | undefined => {
-      const bookings: BookingDetails[] = req.session?.manageBooking?.bookings || [];
+    getBooking: (
+      req: Request,
+      bookingRef: string
+    ): BookingEntity | undefined => {
+      const bookings: BookingDetails[] =
+        req.session?.manageBooking?.bookings || [];
       const bookingDetails = bookings.find((b) => b.reference === bookingRef);
       if (!bookingDetails) {
         return undefined;
       }
       return BookingEntity.from(bookingDetails);
     },
-    updateBooking: (req: Request, bookingRef: string, items: Partial<BookingDetails>): BookingEntity => {
-      const bookings: BookingDetails[] = req.session?.manageBooking?.bookings || [];
+    updateBooking: (
+      req: Request,
+      bookingRef: string,
+      items: Partial<BookingDetails>
+    ): BookingEntity => {
+      const bookings: BookingDetails[] =
+        req.session?.manageBooking?.bookings || [];
       const index = bookings.findIndex((b) => b.reference === bookingRef);
       // Safe here as not passing user input
       /* eslint-disable security/detect-object-injection */
@@ -166,7 +181,7 @@ const store: Session = {
       req.session.journey = {
         inEditMode: false,
         inManagedBookingEditMode: false,
-        managedBookingRescheduleChoice: '',
+        managedBookingRescheduleChoice: "",
         inManageBookingMode: false,
         standardAccommodation: true,
         support: false,
@@ -210,6 +225,4 @@ const store: Session = {
   },
 };
 
-export {
-  store,
-};
+export { store };

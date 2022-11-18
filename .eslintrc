@@ -1,0 +1,97 @@
+{
+  "extends": [
+    "@dvsa/eslint-config-ts",
+    "prettier",
+    "plugin:prettier/recommended"
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.eslint.json"
+  },
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
+  "plugins": ["prettier"],
+    "rules": {
+      "prettier/prettier": "error"
+    },
+
+  "overrides": [
+    {
+      "files": "*.*",
+      "rules": {
+        "@typescript-eslint/no-unsafe-assignment": "off",
+        "@typescript-eslint/no-unsafe-call": "off",
+        "@typescript-eslint/no-unsafe-member-access": "off",
+        "@typescript-eslint/restrict-template-expressions": "off"
+      }
+    },
+    {
+      "files": [
+        "tests/**/*.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/dot-notation": "off",
+        "@typescript-eslint/explicit-function-return-type": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-redeclare": "off",
+        "@typescript-eslint/unbound-method": "off",
+        "security/detect-object-injection": "off"
+      }
+    },
+    {
+      "files": [
+        "tests/integration/**/*.ts",
+        "tests/unit/**/*.ts"
+      ],
+      "plugins": [
+        "jest"
+      ],
+      "extends": [
+        "plugin:jest/recommended", 
+        "plugin:jest/style"
+      ],
+      "rules": {
+        "jest/require-top-level-describe": "error",
+        "jest/consistent-test-it": [
+          "error", 
+          {
+            "fn": "test",
+            "withinDescribe": "test"
+          }
+        ] // only allow test('', () => {})
+      }
+    },
+    {
+      "files": [
+        "tests/e2e/**/*.ts"
+      ],
+      "plugins": [
+        "testcafe-community"
+      ],
+      "extends": "plugin:testcafe-community/recommended"
+    },
+    {
+      "files": [
+        "ftts-frontend-assets/assets/javascripts/*.js"
+      ],
+      "rules": {
+        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/restrict-plus-operands": "off",
+        "@typescript-eslint/no-this-alias": "off",
+        "no-var": "off",
+        "func-names": "off",
+        "consistent-return": "off",
+        "object-shorthand": "off",
+        "security/detect-object-injection": "off",
+        "prefer-template": "off",
+        "prefer-arrow-callback": "off",
+        "prefer-destructuring": "off"
+      },
+      "env": {
+        "browser": true
+      }
+    }
+  ]
+}

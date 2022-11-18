@@ -1,5 +1,5 @@
 const notification = {
-  description: 'Notification Sent',
+  description: "Notification Sent",
 };
 
 export default notification;

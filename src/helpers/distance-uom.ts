@@ -1,8 +1,8 @@
-import { ParamValue, paramValueOf, TargetValue } from './query-param';
+import { ParamValue, paramValueOf, TargetValue } from "./query-param";
 
 export enum DistanceUom {
-  miles = 'miles',
-  km = 'km',
+  miles = "miles",
+  km = "km",
 }
 
 const distanceFrom: TargetValue<DistanceUom> = (v) => {
@@ -13,7 +13,7 @@ const distanceFrom: TargetValue<DistanceUom> = (v) => {
 };
 
 export const distanceUomFrom: ParamValue<DistanceUom> = paramValueOf(
-  'distanceUom',
+  "distanceUom",
   distanceFrom,
-  () => DistanceUom.miles,
+  () => DistanceUom.miles
 );

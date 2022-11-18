@@ -1,9 +1,9 @@
-import { SessionData } from '../data/session-data';
-import {
-  Language, Target, TestType,
-} from '../../../src/domain/enums';
-import { testPaymentCpms } from '../data/constants';
-import { createNewBookingForPaymentsNotifications } from '../utils/crm/crm-data-helper';
+/* eslint-disable testcafe-community/noSkip */
+
+import { SessionData } from "../data/session-data";
+import { Language, Target, TestType } from "../../../src/domain/enums";
+import { testPaymentCpms } from "../data/constants";
+import { createNewBookingForPaymentsNotifications } from "../utils/crm/crm-data-helper";
 
 fixture.skip`Payments - Cancelled payment notifications test`
   .page(process.env.BOOKING_APP_URL)
@@ -11,11 +11,11 @@ fixture.skip`Payments - Cancelled payment notifications test`
   .beforeEach(async (t) => {
     const sessionData = new SessionData(Target.GB);
     sessionData.journey.support = false;
-    sessionData.candidate.firstnames = 'Joseph';
-    sessionData.candidate.surname = 'Bloggs';
-    sessionData.candidate.dateOfBirth = '1990-02-12';
-    sessionData.candidate.licenceNumber = 'BLOGG902120J95YA';
-    sessionData.candidate.email = 'a.hussein@kainos.com';
+    sessionData.candidate.firstnames = "Joseph";
+    sessionData.candidate.surname = "Bloggs";
+    sessionData.candidate.dateOfBirth = "1990-02-12";
+    sessionData.candidate.licenceNumber = "BLOGG902120J95YA";
+    sessionData.candidate.email = "a.hussein@kainos.com";
     sessionData.currentBooking.testType = TestType.CAR;
     sessionData.currentBooking.language = Language.ENGLISH;
     sessionData.paymentDetails = testPaymentCpms;

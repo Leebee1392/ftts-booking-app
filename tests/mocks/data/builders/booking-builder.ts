@@ -1,22 +1,46 @@
-import { build } from '@jackfranklin/test-data-bot';
-import { faker } from '@faker-js/faker';
-import { Booking } from '../../../../src/services/session';
+import { build } from "@jackfranklin/test-data-bot";
+import { faker } from "@faker-js/faker";
+import { Booking } from "../../../../src/services/session";
 import {
-  Language, PreferredDay, PreferredLocation, SupportType, Target, Voiceover,
-} from '../../../../src/domain/enums';
-import { bookingDetailsCentreBuilder, centreBuilder, crmTestCentreBuilder } from './centre-builder';
+  Language,
+  PreferredDay,
+  PreferredLocation,
+  SupportType,
+  Target,
+  Voiceover,
+} from "../../../../src/domain/enums";
 import {
-  crmTestSupportNeed, eligibleTestTypes, originTypes, supportTypes,
-} from './types';
-import { eligibilityBuilder } from './eligibility-builder';
-import { pricelistBuilder } from './pricelist-builder';
-import { compensationBookingBuilder } from './compensation-builder';
-import { BookingDetails, CRMBookingDetails } from '../../../../src/services/crm-gateway/interfaces';
+  bookingDetailsCentreBuilder,
+  centreBuilder,
+  crmTestCentreBuilder,
+} from "./centre-builder";
 import {
-  CRMAdditionalSupport, CRMBookingStatus, CRMFinanceTransactionStatus, CRMGovernmentAgency, CRMNsaStatus, CRMOrigin, CRMPaymentStatus, CRMTestLanguage, CRMTransactionType, CRMVoiceOver,
-} from '../../../../src/services/crm-gateway/enums';
-import { toCRMProductNumber } from '../../../../src/services/crm-gateway/maps';
-import { nsaBookingSlotsBuilder } from './nsabookingslots-builder';
+  crmTestSupportNeed,
+  eligibleTestTypes,
+  originTypes,
+  supportTypes,
+} from "./types";
+import { eligibilityBuilder } from "./eligibility-builder";
+import { pricelistBuilder } from "./pricelist-builder";
+import { compensationBookingBuilder } from "./compensation-builder";
+import {
+  BookingDetails,
+  CRMBookingDetails,
+} from "../../../../src/services/crm-gateway/interfaces";
+import {
+  CRMAdditionalSupport,
+  CRMBookingStatus,
+  CRMFinanceTransactionStatus,
+  CRMGovernmentAgency,
+  CRMNsaStatus,
+  CRMOrigin,
+  CRMPaymentStatus,
+  CRMTestLanguage,
+  CRMTransactionType,
+  CRMVoiceOver,
+} from "../../../../src/services/crm-gateway/enums";
+import { toCRMProductNumber } from "../../../../src/services/crm-gateway/maps";
+import { nsaBookingSlotsBuilder } from "./nsabookingslots-builder";
 
 export const bookingBuilder = (isNsaBooking = false): Booking => {
   const testType = faker.helpers.arrayElement(eligibleTestTypes);
@@ -35,13 +59,13 @@ export const bookingBuilder = (isNsaBooking = false): Booking => {
     fields: {
       bookingId: faker.datatype.uuid(),
       bookingProductId: faker.datatype.uuid(),
-      bookingRef: faker.helpers.replaceSymbols('B-###-###-###'),
-      bookingProductRef: faker.helpers.replaceSymbols('B-###-###-###-01'),
+      bookingRef: faker.helpers.replaceSymbols("B-###-###-###"),
+      bookingProductRef: faker.helpers.replaceSymbols("B-###-###-###-01"),
       bsl: faker.datatype.boolean(),
       centre: centreBuilder(),
       customSupport: undefined,
-      dateTime: faker.date.future().toISOString().split('T')[0], // iso-8601 date-time
-      firstSelectedDate: faker.date.future().toISOString().split('T')[0], // iso-8601 date-time
+      dateTime: faker.date.future().toISOString().split("T")[0], // iso-8601 date-time
+      firstSelectedDate: faker.date.future().toISOString().split("T")[0], // iso-8601 date-time
       firstSelectedCentre: centreBuilder(),
       governmentAgency: Target.GB,
       language: Language.ENGLISH,
@@ -74,7 +98,10 @@ export const bookingBuilder = (isNsaBooking = false): Booking => {
   });
 };
 
-export const bookingDetailsBuilder = (isNsaBooking = false, crmBookingStatus?: CRMBookingStatus): BookingDetails => {
+export const bookingDetailsBuilder = (
+  isNsaBooking = false,
+  crmBookingStatus?: CRMBookingStatus
+): BookingDetails => {
   const testType = faker.helpers.arrayElement(eligibleTestTypes);
   const nsaBookingOverrides = {
     nonStandardAccommodation: true,
@@ -90,8 +117,14 @@ export const bookingDetailsBuilder = (isNsaBooking = false, crmBookingStatus?: C
   };
   const bookingStatusOverride = {
     bookingStatus: crmBookingStatus,
-    testDate: crmBookingStatus === CRMBookingStatus.Draft && isNsaBooking ? undefined : faker.date.future().toISOString().split('T')[0],
-    salesReference: crmBookingStatus === CRMBookingStatus.Draft && isNsaBooking ? undefined : faker.random.alpha(),
+    testDate:
+      crmBookingStatus === CRMBookingStatus.Draft && isNsaBooking
+        ? undefined
+        : faker.date.future().toISOString().split("T")[0],
+    salesReference:
+      crmBookingStatus === CRMBookingStatus.Draft && isNsaBooking
+        ? undefined
+        : faker.random.alpha(),
   };
   const overrides = {
     ...(crmBookingStatus ? bookingStatusOverride : undefined),
@@ -100,12 +133,12 @@ export const bookingDetailsBuilder = (isNsaBooking = false, crmBookingStatus?: C
   return build<BookingDetails>({
     fields: {
       bookingProductId: faker.datatype.uuid(),
-      reference: faker.helpers.replaceSymbols('B-###-###-###'),
-      bookingProductRef: faker.helpers.replaceSymbols('B-###-###-###-01'),
+      reference: faker.helpers.replaceSymbols("B-###-###-###"),
+      bookingProductRef: faker.helpers.replaceSymbols("B-###-###-###-01"),
       bookingId: faker.datatype.uuid(),
       bookingStatus: CRMBookingStatus.Confirmed,
-      testDate: faker.date.future().toISOString().split('T')[0],
-      testDateMinus3ClearWorkingDays: faker.helpers.arrayElement(['Yes', 'No']),
+      testDate: faker.date.future().toISOString().split("T")[0],
+      testDateMinus3ClearWorkingDays: faker.helpers.arrayElement(["Yes", "No"]),
       testLanguage: CRMTestLanguage.English,
       voiceoverLanguage: CRMVoiceOver.English,
       additionalSupport: CRMAdditionalSupport.None,
@@ -135,10 +168,10 @@ export const bookingDetailsBuilder = (isNsaBooking = false, crmBookingStatus?: C
         name: testType.toString().toUpperCase(),
         productnumber: toCRMProductNumber(testType),
       },
-      createdOn: faker.date.past().toISOString().split('T')[0],
+      createdOn: faker.date.past().toISOString().split("T")[0],
       enableEligibilityBypass: false,
-      compensationAssigned: '',
-      compensationRecognised: '',
+      compensationAssigned: "",
+      compensationRecognised: "",
       owedCompensationBooking: false,
       isZeroCostBooking: false,
       testSupportNeed: null,
@@ -151,7 +184,10 @@ export const bookingDetailsBuilder = (isNsaBooking = false, crmBookingStatus?: C
   });
 };
 
-export const crmBookingIdBuilder = (isNsaBooking = false, isInstructor = false): CRMBookingDetails['ftts_bookingid'] => {
+export const crmBookingIdBuilder = (
+  isNsaBooking = false,
+  isInstructor = false
+): CRMBookingDetails["ftts_bookingid"] => {
   const nsaBookingOverrides = {
     ftts_nonstandardaccommodation: true,
     ftts_nsastatus: CRMNsaStatus.AwaitingCscResponse,
@@ -169,10 +205,10 @@ export const crmBookingIdBuilder = (isNsaBooking = false, isInstructor = false):
     ...(isInstructor ? instructorOverrides : undefined),
   };
 
-  return build<CRMBookingDetails['ftts_bookingid']>({
+  return build<CRMBookingDetails["ftts_bookingid"]>({
     fields: {
       ftts_governmentagency: CRMGovernmentAgency.Dvsa,
-      ftts_reference: faker.helpers.replaceSymbols('B-###-###-###'),
+      ftts_reference: faker.helpers.replaceSymbols("B-###-###-###"),
       ftts_origin: CRMOrigin.CitizenPortal,
       ftts_testcentre: crmTestCentreBuilder(),
       ftts_enableeligibilitybypass: null,
@@ -191,7 +227,11 @@ export const crmBookingIdBuilder = (isNsaBooking = false, isInstructor = false):
   });
 };
 
-export const crmBookingDetailsBuilder = (isNsaBooking = false, isInstructor = false, crmBookingStatus?: CRMBookingStatus): CRMBookingDetails => {
+export const crmBookingDetailsBuilder = (
+  isNsaBooking = false,
+  isInstructor = false,
+  crmBookingStatus?: CRMBookingStatus
+): CRMBookingDetails => {
   const testType = faker.helpers.arrayElement(eligibleTestTypes);
 
   const nsaBookingOverrides = {
@@ -205,8 +245,14 @@ export const crmBookingDetailsBuilder = (isNsaBooking = false, isInstructor = fa
 
   const bookingStatusOverride = {
     ftts_bookingstatus: crmBookingStatus,
-    ftts_testdate: crmBookingStatus === CRMBookingStatus.Draft && isNsaBooking ? undefined : faker.date.future().toISOString().split('T')[0],
-    ftts_salesreference: crmBookingStatus === CRMBookingStatus.Draft && isNsaBooking ? undefined : faker.random.alpha(),
+    ftts_testdate:
+      crmBookingStatus === CRMBookingStatus.Draft && isNsaBooking
+        ? undefined
+        : faker.date.future().toISOString().split("T")[0],
+    ftts_salesreference:
+      crmBookingStatus === CRMBookingStatus.Draft && isNsaBooking
+        ? undefined
+        : faker.random.alpha(),
   };
 
   const overrides = {
@@ -219,11 +265,11 @@ export const crmBookingDetailsBuilder = (isNsaBooking = false, isInstructor = fa
   return build<CRMBookingDetails>({
     fields: {
       ftts_bookingproductid: faker.datatype.uuid(),
-      ftts_reference: faker.helpers.replaceSymbols('B-###-###-###'),
+      ftts_reference: faker.helpers.replaceSymbols("B-###-###-###"),
       _ftts_bookingid_value: faker.datatype.uuid(),
       ftts_price: Number(faker.random.numeric()),
       ftts_bookingstatus: CRMBookingStatus.Confirmed,
-      ftts_testdate: faker.date.future().toISOString().split('T')[0],
+      ftts_testdate: faker.date.future().toISOString().split("T")[0],
       ftts_testlanguage: CRMTestLanguage.English,
       ftts_voiceoverlanguage: CRMVoiceOver.English,
       ftts_paymentstatus: CRMPaymentStatus.Success,
@@ -237,7 +283,7 @@ export const crmBookingDetailsBuilder = (isNsaBooking = false, isInstructor = fa
         name: testType.toString().toUpperCase(),
         productnumber: toCRMProductNumber(testType),
       },
-      createdon: faker.date.past().toISOString().split('T')[0],
+      createdon: faker.date.past().toISOString().split("T")[0],
     },
   })({
     overrides,

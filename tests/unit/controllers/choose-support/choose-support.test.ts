@@ -1,16 +1,16 @@
-import { ChooseSupportController } from '@controllers/choose-support/choose-support';
-import '../../../../src/helpers/language';
-import { Locale, Target } from '../../../../src/domain/enums';
-import config from '../../../../src/config';
+import { ChooseSupportController } from "@controllers/choose-support/choose-support";
+import "../../../../src/helpers/language";
+import { Locale, Target } from "../../../../src/domain/enums";
+import config from "../../../../src/config";
 
-jest.mock('../../../../src/helpers/language', () => ({
-  translate: () => 'mocked string',
+jest.mock("../../../../src/helpers/language", () => ({
+  translate: () => "mocked string",
 }));
 
-const gbGovLink = 'https://www.gov.uk';
-const niGovLink = 'https://www.nidirect.gov.uk';
+const gbGovLink = "https://www.gov.uk";
+const niGovLink = "https://www.nidirect.gov.uk";
 
-describe('Choose Support controller', () => {
+describe("Choose Support controller", () => {
   let chooseSupportController: ChooseSupportController;
   let req;
   let res;
@@ -19,7 +19,7 @@ describe('Choose Support controller', () => {
     chooseSupportController = new ChooseSupportController();
     req = {
       body: {
-        chooseSupport: 'yes',
+        chooseSupport: "yes",
       },
       query: {
         newBooking: undefined,
@@ -79,147 +79,165 @@ describe('Choose Support controller', () => {
     jest.resetAllMocks();
   });
 
-  describe('GET', () => {
-    test('renders the view with correct data', () => {
+  describe("GET", () => {
+    test("renders the view with correct data", () => {
       chooseSupportController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/choose-support', {
-        backLink: 'https://www.gov.uk/book-theory-test',
+      expect(res.render).toHaveBeenCalledWith("common/choose-support", {
+        backLink: "https://www.gov.uk/book-theory-test",
         booking: {},
         errors: [],
       });
     });
 
-    test('renders the view with correct data when in edit mode', () => {
+    test("renders the view with correct data when in edit mode", () => {
       req.session.journey.inEditMode = true;
       req.session.journey.standardAccommodation = true;
       chooseSupportController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/choose-support', {
-        backLink: 'check-your-answers',
+      expect(res.render).toHaveBeenCalledWith("common/choose-support", {
+        backLink: "check-your-answers",
         booking: {},
         errors: [],
       });
     });
 
-    test('renders the view with correct error message', () => {
+    test("renders the view with correct error message", () => {
       req.errors.push({
-        param: 'chooseSupport',
-        msg: 'Yes or no',
+        param: "chooseSupport",
+        msg: "Yes or no",
       });
 
       chooseSupportController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/choose-support', {
-        backLink: 'https://www.gov.uk/book-theory-test',
+      expect(res.render).toHaveBeenCalledWith("common/choose-support", {
+        backLink: "https://www.gov.uk/book-theory-test",
         booking: {},
-        errors: [{
-          param: 'chooseSupport',
-          msg: 'mocked string',
-        }],
+        errors: [
+          {
+            param: "chooseSupport",
+            msg: "mocked string",
+          },
+        ],
       });
     });
 
-    test('throws error if journey is not set', () => {
+    test("throws error if journey is not set", () => {
       delete req.session.journey;
 
-      expect(() => chooseSupportController.get(req, res)).toThrow(new Error('ChooseSupportController::get: No journey set'));
+      expect(() => chooseSupportController.get(req, res)).toThrow(
+        new Error("ChooseSupportController::get: No journey set")
+      );
     });
 
-    describe('back button navigation', () => {
-      test('navigate back to gb gov book theory test start page', () => {
+    describe("back button navigation", () => {
+      test("navigate back to gb gov book theory test start page", () => {
         chooseSupportController.get(req, res);
 
-        expect(res.render).toHaveBeenCalledWith('common/choose-support', expect.objectContaining({
-          backLink: 'https://www.gov.uk/book-theory-test',
-        }));
+        expect(res.render).toHaveBeenCalledWith(
+          "common/choose-support",
+          expect.objectContaining({
+            backLink: "https://www.gov.uk/book-theory-test",
+          })
+        );
       });
 
-      test('navigate back to gb gov book theory test start page with welsh language', () => {
+      test("navigate back to gb gov book theory test start page with welsh language", () => {
         req.session.locale = Locale.CY;
 
         chooseSupportController.get(req, res);
 
-        expect(res.render).toHaveBeenCalledWith('common/choose-support', expect.objectContaining({
-          backLink: 'https://www.gov.uk/archebu-prawf-gyrru-theori',
-        }));
+        expect(res.render).toHaveBeenCalledWith(
+          "common/choose-support",
+          expect.objectContaining({
+            backLink: "https://www.gov.uk/archebu-prawf-gyrru-theori",
+          })
+        );
       });
 
-      test('navigate back to NI gov book theory test start page if target is NI', () => {
+      test("navigate back to NI gov book theory test start page if target is NI", () => {
         req.session.target = Target.NI;
 
         chooseSupportController.get(req, res);
 
-        expect(res.render).toHaveBeenCalledWith('common/choose-support', expect.objectContaining({
-          backLink: 'https://www.nidirect.gov.uk/services/book-change-or-cancel-your-theory-test-online',
-        }));
+        expect(res.render).toHaveBeenCalledWith(
+          "common/choose-support",
+          expect.objectContaining({
+            backLink:
+              "https://www.nidirect.gov.uk/services/book-change-or-cancel-your-theory-test-online",
+          })
+        );
       });
     });
   });
 
-  describe('POST', () => {
-    test('redirects to the next page when answered yes', () => {
+  describe("POST", () => {
+    test("redirects to the next page when answered yes", () => {
       chooseSupportController.post(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith('support-alert');
+      expect(res.redirect).toHaveBeenCalledWith("support-alert");
       expect(req.session.journey.support).toEqual(false);
       expect(req.session.journey.standardAccommodation).toEqual(true);
     });
 
-    test('redirects to the next page when answered no', () => {
-      req.body.chooseSupport = 'no';
+    test("redirects to the next page when answered no", () => {
+      req.body.chooseSupport = "no";
       chooseSupportController.post(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith('candidate-details');
+      expect(res.redirect).toHaveBeenCalledWith("candidate-details");
       expect(req.session.journey.support).toEqual(false);
       expect(req.session.journey.standardAccommodation).toEqual(true);
     });
 
-    test('redirects to test type if in edit mode and selected support requested', () => {
-      req.body.chooseSupport = 'yes';
+    test("redirects to test type if in edit mode and selected support requested", () => {
+      req.body.chooseSupport = "yes";
       req.session.journey.inEditMode = true;
 
       chooseSupportController.post(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith('nsa/test-type');
+      expect(res.redirect).toHaveBeenCalledWith("nsa/test-type");
       expect(req.session.journey.support).toEqual(true);
       expect(req.session.journey.standardAccommodation).toEqual(false);
     });
 
-    test('redirects to email contact if in edit mode and selected no support requested', () => {
-      req.body.chooseSupport = 'no';
+    test("redirects to email contact if in edit mode and selected no support requested", () => {
+      req.body.chooseSupport = "no";
       req.session.journey.inEditMode = true;
 
       chooseSupportController.post(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith('email-contact');
+      expect(res.redirect).toHaveBeenCalledWith("email-contact");
       expect(req.session.journey.support).toEqual(false);
       expect(req.session.journey.standardAccommodation).toEqual(true);
     });
 
-    test('errors are displayed if in session', () => {
+    test("errors are displayed if in session", () => {
       req.hasErrors = true;
       req.errors.push({
-        param: 'chooseSupport',
-        msg: 'Yes or no',
+        param: "chooseSupport",
+        msg: "Yes or no",
       });
 
       chooseSupportController.post(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/choose-support', {
-        backLink: 'https://www.gov.uk/book-theory-test',
+      expect(res.render).toHaveBeenCalledWith("common/choose-support", {
+        backLink: "https://www.gov.uk/book-theory-test",
         booking: {},
-        errors: [{
-          param: 'chooseSupport',
-          msg: 'mocked string',
-        }],
+        errors: [
+          {
+            param: "chooseSupport",
+            msg: "mocked string",
+          },
+        ],
       });
     });
 
-    test('throws error if journey is not set', () => {
+    test("throws error if journey is not set", () => {
       delete req.session.journey;
 
-      expect(() => chooseSupportController.get(req, res)).toThrow(new Error('ChooseSupportController::get: No journey set'));
+      expect(() => chooseSupportController.get(req, res)).toThrow(
+        new Error("ChooseSupportController::get: No journey set")
+      );
     });
   });
 });

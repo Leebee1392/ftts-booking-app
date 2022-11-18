@@ -1,32 +1,32 @@
-import { BasePage } from './base-page';
-import { click } from '../utils/helpers';
-import { ChooseSupportPage } from './choose-support-page';
+import { BasePage } from "./base-page";
+import { click } from "../utils/helpers";
+import { ChooseSupportPage } from "./choose-support-page";
 
 export class CancelledBookingPage extends BasePage {
-  pageHeadingLocator = '.govuk-panel__title';
+  pageHeadingLocator = ".govuk-panel__title";
 
-  refNumberLocator = '.govuk-panel__body';
+  refNumberLocator = ".govuk-panel__body";
 
-  messageLocator = '.govuk-body';
+  messageLocator = ".govuk-body";
 
-  bookANewTestButtonLocator = '#bookNewTest';
+  bookANewTestButtonLocator = "#bookNewTest";
 
-  changeAnotherBookingButtonLocator = '#changeBooking';
+  changeAnotherBookingButtonLocator = "#changeBooking";
 
-  testDetailsKey = '.govuk-summary-list__key';
+  testDetailsKey = ".govuk-summary-list__key";
 
-  testDetailsValue = '.govuk-summary-list__value';
+  testDetailsValue = ".govuk-summary-list__value";
 
   // Content
-  pageHeading = 'Theory test cancelled';
+  pageHeading = "Theory test cancelled";
 
-  refNumberText = 'Your reference number';
+  refNumberText = "Your reference number";
 
-  messageText = 'This driving theory test has been cancelled.';
+  messageText = "This driving theory test has been cancelled.";
 
-  bookANewTestButtonText = 'Book a new theory test';
+  bookANewTestButtonText = "Book a new theory test";
 
-  changeAnotherBookingButtonText = 'Change another booking';
+  changeAnotherBookingButtonText = "Change another booking";
 
   async bookANewTest(): Promise<ChooseSupportPage> {
     await click(this.bookANewTestButtonLocator);

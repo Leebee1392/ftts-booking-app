@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import { YesNo } from '../../domain/enums';
-import { translate } from '../../helpers/language';
-import { ValidatorSchema } from '../../middleware/request-validator';
+import { Request, Response } from "express";
+import { YesNo } from "../../domain/enums";
+import { translate } from "../../helpers/language";
+import { ValidatorSchema } from "../../middleware/request-validator";
 
 interface TelephoneContactBody {
   contactByTelephone: YesNo;
@@ -11,7 +11,9 @@ interface TelephoneContactBody {
 export class InstructorTelephoneContactController {
   public get = (req: Request, res: Response): void => {
     if (!req.session.candidate) {
-      throw Error('InstructorTelephoneContactController::get: No candidate set');
+      throw Error(
+        "InstructorTelephoneContactController::get: No candidate set"
+      );
     }
     this.renderPage(req, res);
   };
@@ -21,7 +23,8 @@ export class InstructorTelephoneContactController {
       return this.renderPage(req, res);
     }
 
-    const { contactByTelephone, telephoneNumber } = req.body as TelephoneContactBody;
+    const { contactByTelephone, telephoneNumber } =
+      req.body as TelephoneContactBody;
     req.session.candidate = {
       ...req.session.candidate,
       // Store as false if user says 'no' to being contacted by phone
@@ -33,7 +36,7 @@ export class InstructorTelephoneContactController {
         ...req.session.journey,
         inEditMode: false,
       };
-      return res.redirect('voicemail');
+      return res.redirect("voicemail");
     }
 
     // reset voicemail to undefined if the user selects no to telephone
@@ -41,15 +44,19 @@ export class InstructorTelephoneContactController {
       req.session.currentBooking.voicemail = undefined;
     }
 
-    return res.redirect('check-your-details');
+    return res.redirect("check-your-details");
   };
 
   private renderPage = (req: Request, res: Response): void => {
     if (!req.session.candidate) {
-      throw Error('InstructorTelephoneContactController::renderPage: No candidate set');
+      throw Error(
+        "InstructorTelephoneContactController::renderPage: No candidate set"
+      );
     }
     if (!req.session.journey) {
-      throw Error('InstructorTelephoneContactController::renderPage: No journey set');
+      throw Error(
+        "InstructorTelephoneContactController::renderPage: No journey set"
+      );
     }
     const { telephone } = req.session.candidate;
     const { inEditMode } = req.session.journey;
@@ -63,9 +70,9 @@ export class InstructorTelephoneContactController {
       }
     }
 
-    const backLink = inEditMode ? 'check-your-details' : 'email-contact';
+    const backLink = inEditMode ? "check-your-details" : "email-contact";
 
-    return res.render('instructor/telephone-contact', {
+    return res.render("instructor/telephone-contact", {
       telephoneNumber: req.body.telephoneNumber ?? telephone,
       contactByTelephone: req.body.contactByTelephone ?? contactByTelephone,
       backLink,
@@ -79,23 +86,26 @@ export class InstructorTelephoneContactController {
     if (contactByTelephone === YesNo.YES) {
       return {
         telephoneNumber: {
-          in: ['body'],
+          in: ["body"],
           notEmpty: {
-            errorMessage: (): string => translate('telephoneContact.noTelephoneError'),
+            errorMessage: (): string =>
+              translate("telephoneContact.noTelephoneError"),
           },
           isLength: {
             options: { max: 50 },
-            errorMessage: (): string => translate('telephoneContact.telephoneTooLongError'),
+            errorMessage: (): string =>
+              translate("telephoneContact.telephoneTooLongError"),
           },
         },
       };
     }
     return {
       contactByTelephone: {
-        in: ['body'],
+        in: ["body"],
         equals: {
           options: YesNo.NO,
-          errorMessage: (): string => translate('telephoneContact.noSelectionError'),
+          errorMessage: (): string =>
+            translate("telephoneContact.noSelectionError"),
         },
       },
     };

@@ -1,10 +1,66 @@
-import { CentreResponse } from '../../../../src/domain/types';
+import { CentreResponse } from "../../../../src/domain/types";
 import {
-  mockTestCentreAylesbury, mockTestCentreBala, mockTestCentreBirmingham, mockTestCentreBolton, mockTestCentreBoston, mockTestCentreBristol, mockTestCentreBullithWells, mockTestCentreCambridge, mockTestCentreCheltenham, mockTestCentreChester, mockTestCentreChesterfield, mockTestCentreCorby, mockTestCentreCoventry, mockTestCentreDerby, mockTestCentreDoncaster, mockTestCentreDudley, mockTestCentreGloucester, mockTestCentreGrantham, mockTestCentreHereford, mockTestCentreHuddersfield, mockTestCentreLeicester, mockTestCentreLincoln, mockTestCentreLiverpool, mockTestCentreLuton, mockTestCentreMansfield, mockTestCentreMerthyr, mockTestCentreMiltonKeynes, mockTestCentreNewport, mockTestCentreNorthampton, mockTestCentreOldham, mockTestCentreOxford, mockTestCentrePeterborough, mockTestCentreReading, mockTestCentreRedditch, mockTestCentreRhyl, mockTestCentreRhyl2, mockTestCentreSalford, mockTestCentreSheffield, mockTestCentreShrewsbury, mockTestCentreSlough, mockTestCentreStephenage, mockTestCentreStHelens, mockTestCentreStockport, mockTestCentreStokeOnTrent, mockTestCentreStratfordUponAvon, mockTestCentreSuttonColdfield, mockTestCentreSwindon, mockTestCentreWatford, mockTestCentreWigan, mockTestCentreWolverhampton, mockTestCentreWorcester,
-} from './gb';
+  mockTestCentreAylesbury,
+  mockTestCentreBala,
+  mockTestCentreBirmingham,
+  mockTestCentreBolton,
+  mockTestCentreBoston,
+  mockTestCentreBristol,
+  mockTestCentreBullithWells,
+  mockTestCentreCambridge,
+  mockTestCentreCheltenham,
+  mockTestCentreChester,
+  mockTestCentreChesterfield,
+  mockTestCentreCorby,
+  mockTestCentreCoventry,
+  mockTestCentreDerby,
+  mockTestCentreDoncaster,
+  mockTestCentreDudley,
+  mockTestCentreGloucester,
+  mockTestCentreGrantham,
+  mockTestCentreHereford,
+  mockTestCentreHuddersfield,
+  mockTestCentreLeicester,
+  mockTestCentreLincoln,
+  mockTestCentreLiverpool,
+  mockTestCentreLuton,
+  mockTestCentreMansfield,
+  mockTestCentreMerthyr,
+  mockTestCentreMiltonKeynes,
+  mockTestCentreNewport,
+  mockTestCentreNorthampton,
+  mockTestCentreOldham,
+  mockTestCentreOxford,
+  mockTestCentrePeterborough,
+  mockTestCentreReading,
+  mockTestCentreRedditch,
+  mockTestCentreRhyl,
+  mockTestCentreRhyl2,
+  mockTestCentreSalford,
+  mockTestCentreSheffield,
+  mockTestCentreShrewsbury,
+  mockTestCentreSlough,
+  mockTestCentreStephenage,
+  mockTestCentreStHelens,
+  mockTestCentreStockport,
+  mockTestCentreStokeOnTrent,
+  mockTestCentreStratfordUponAvon,
+  mockTestCentreSuttonColdfield,
+  mockTestCentreSwindon,
+  mockTestCentreWatford,
+  mockTestCentreWigan,
+  mockTestCentreWolverhampton,
+  mockTestCentreWorcester,
+} from "./gb";
 import {
-  mockTestCentreAldershot, mockTestCentreBallymena, mockTestCentreBelfast, mockTestCentreLondonderry, mockTestCentreNewry, mockTestCentreOmagh, mockTestCentrePortadown,
-} from './ni';
+  mockTestCentreAldershot,
+  mockTestCentreBallymena,
+  mockTestCentreBelfast,
+  mockTestCentreLondonderry,
+  mockTestCentreNewry,
+  mockTestCentreOmagh,
+  mockTestCentrePortadown,
+} from "./ni";
 
 const testCentresGb: CentreResponse = {
   status: 200,
@@ -76,7 +132,4 @@ const testCentresNi: CentreResponse = {
   ],
 };
 
-export {
-  testCentresGb,
-  testCentresNi,
-};
+export { testCentresGb, testCentresNi };

@@ -1,6 +1,6 @@
-import { AccessibilityStatementController } from '@controllers/accessibility-statement/accessibility-statement';
+import { AccessibilityStatementController } from "@controllers/accessibility-statement/accessibility-statement";
 
-describe('AccessibilityStatementController', () => {
+describe("AccessibilityStatementController", () => {
   let accessibilityStatementController: AccessibilityStatementController;
   let req;
   let res;
@@ -9,10 +9,10 @@ describe('AccessibilityStatementController', () => {
     accessibilityStatementController = new AccessibilityStatementController();
     req = {
       headers: {
-        referer: '',
+        referer: "",
       },
       session: {
-        lastPage: '',
+        lastPage: "",
       },
     };
 
@@ -21,49 +21,61 @@ describe('AccessibilityStatementController', () => {
     };
   });
 
-  describe('GET', () => {
-    test('renders the page', () => {
-      req.headers.referer = '/manage-booking/login';
+  describe("GET", () => {
+    test("renders the page", () => {
+      req.headers.referer = "/manage-booking/login";
 
       accessibilityStatementController.get(req, res);
 
       expect(req.session.lastPage).toBe(req.headers.referer);
-      expect(res.render).toHaveBeenCalledWith('common/accessibility-statement', {
-        backLink: req.headers.referer,
-      });
+      expect(res.render).toHaveBeenCalledWith(
+        "common/accessibility-statement",
+        {
+          backLink: req.headers.referer,
+        }
+      );
     });
 
-    test('back link does not change if the referer is on the accessibility statement page', () => {
-      req.headers.referer = '/accessibility-statement';
-      req.session.lastPage = '/candidate-details';
+    test("back link does not change if the referer is on the accessibility statement page", () => {
+      req.headers.referer = "/accessibility-statement";
+      req.session.lastPage = "/candidate-details";
 
       accessibilityStatementController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/accessibility-statement', {
-        backLink: req.session.lastPage,
-      });
+      expect(res.render).toHaveBeenCalledWith(
+        "common/accessibility-statement",
+        {
+          backLink: req.session.lastPage,
+        }
+      );
     });
 
-    test('back link defaults to the root if referer is undefined', () => {
+    test("back link defaults to the root if referer is undefined", () => {
       req.headers.referer = undefined;
 
       accessibilityStatementController.get(req, res);
 
-      expect(req.session.lastPage).toBe('/');
-      expect(res.render).toHaveBeenCalledWith('common/accessibility-statement', {
-        backLink: '/',
-      });
+      expect(req.session.lastPage).toBe("/");
+      expect(res.render).toHaveBeenCalledWith(
+        "common/accessibility-statement",
+        {
+          backLink: "/",
+        }
+      );
     });
 
-    test('back link doesn\'t have any query string params if referer originally contained them', () => {
-      req.headers.referer = '/candidate-details?lang=cy';
+    test("back link doesn't have any query string params if referer originally contained them", () => {
+      req.headers.referer = "/candidate-details?lang=cy";
 
       accessibilityStatementController.get(req, res);
 
-      expect(req.session.lastPage).toBe('/candidate-details');
-      expect(res.render).toHaveBeenCalledWith('common/accessibility-statement', {
-        backLink: '/candidate-details',
-      });
+      expect(req.session.lastPage).toBe("/candidate-details");
+      expect(res.render).toHaveBeenCalledWith(
+        "common/accessibility-statement",
+        {
+          backLink: "/candidate-details",
+        }
+      );
     });
   });
 });

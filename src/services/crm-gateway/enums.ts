@@ -121,22 +121,22 @@ export enum CRMTestType {
 }
 
 export enum CRMProductNumber {
-  CAR = '1001',
-  MOTORCYCLE = '2001',
-  LGVMC = '3001',
-  LGVHPT = '3002',
-  LGVCPC = '3003',
-  LGVCPCC = '3004',
-  PCVMC = '4001',
-  PCVHPT = '4002',
-  PCVCPC = '4003',
-  PCVCPCC = '4004',
-  ADIP1 = '5001',
-  ADIHPT = '5002',
-  ADIP1DVA = '5003',
-  ERS = '6001',
-  AMIP1 = '7001',
-  TAXI = '8001',
+  CAR = "1001",
+  MOTORCYCLE = "2001",
+  LGVMC = "3001",
+  LGVHPT = "3002",
+  LGVCPC = "3003",
+  LGVCPCC = "3004",
+  PCVMC = "4001",
+  PCVHPT = "4002",
+  PCVCPC = "4003",
+  PCVCPCC = "4004",
+  ADIP1 = "5001",
+  ADIHPT = "5002",
+  ADIP1DVA = "5003",
+  ERS = "6001",
+  AMIP1 = "7001",
+  TAXI = "8001",
 }
 
 export enum TestEngineTestType {
@@ -177,10 +177,10 @@ export enum CRMRemit {
 }
 
 export enum CRMCalendarName {
-  England = 'DVSA - England',
-  Wales = 'DVSA - Wales',
-  Scotland = 'DVSA - Scotland',
-  NorthernIreland = 'DVA - NI',
+  England = "DVSA - England",
+  Wales = "DVSA - Wales",
+  Scotland = "DVSA - Scotland",
+  NorthernIreland = "DVA - NI",
 }
 
 export enum CRMTransactionType {
@@ -255,21 +255,21 @@ export enum CRMStateCode {
 }
 
 export enum Collection {
-  BOOKING_PRODUCT = 'ftts_bookingproducts',
-  NSA_BOOKING_SLOTS = 'ftts_nsabookingslots',
-  LICENCES = 'ftts_licences',
+  BOOKING_PRODUCT = "ftts_bookingproducts",
+  NSA_BOOKING_SLOTS = "ftts_nsabookingslots",
+  LICENCES = "ftts_licences",
 }
 
 export enum NsaStatus {
-  AwaitingCscResponse = 'AwaitingCscResponse',
-  AwaitingCandidateResponse = 'AwaitingCandidateResponse',
-  AwaitingPartnerResponse = 'AwaitingPartnerResponse',
-  AwaitingCandidateInitialReply = 'AwaitingCandidateInitialReply',
-  AwaitingCandidateMedicalEvidence = 'AwaitingCandidateMedicalEvidence',
-  AwaitingCandidateSlotConfirmation = 'AwaitingCandidateSlotConfirmation',
-  EscalatedToNationalOperations = 'EscalatedToNationalOperations',
-  EscalatedToTestContent = 'EscalatedToTestContent',
-  DuplicationsClosed = 'DuplicationsClosed',
-  NoLongerRequired = 'NoLongerRequired',
-  StandardTestBooked = 'StandardTestBooked',
+  AwaitingCscResponse = "AwaitingCscResponse",
+  AwaitingCandidateResponse = "AwaitingCandidateResponse",
+  AwaitingPartnerResponse = "AwaitingPartnerResponse",
+  AwaitingCandidateInitialReply = "AwaitingCandidateInitialReply",
+  AwaitingCandidateMedicalEvidence = "AwaitingCandidateMedicalEvidence",
+  AwaitingCandidateSlotConfirmation = "AwaitingCandidateSlotConfirmation",
+  EscalatedToNationalOperations = "EscalatedToNationalOperations",
+  EscalatedToTestContent = "EscalatedToTestContent",
+  DuplicationsClosed = "DuplicationsClosed",
+  NoLongerRequired = "NoLongerRequired",
+  StandardTestBooked = "StandardTestBooked",
 }

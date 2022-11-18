@@ -1,6 +1,6 @@
-import { DuplicateSupportRequest } from '@controllers/duplicate-support-request/duplicate-support-request';
+import { DuplicateSupportRequest } from "@controllers/duplicate-support-request/duplicate-support-request";
 
-describe('DuplicateSupportRequest', () => {
+describe("DuplicateSupportRequest", () => {
   let duplicateSupportRequest: DuplicateSupportRequest;
   let req: any;
   let res: any;
@@ -11,30 +11,36 @@ describe('DuplicateSupportRequest', () => {
       session: {
         lastPage: undefined,
       },
-      path: '/nsa/duplicate-support-request',
+      path: "/nsa/duplicate-support-request",
     };
     res = {
       render: jest.fn(),
     };
   });
 
-  describe('get', () => {
-    test('it should render the correct page', () => {
+  describe("get", () => {
+    test("it should render the correct page", () => {
       duplicateSupportRequest.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/duplicate-support-request', {
-        backLink: 'select-support-type',
-      });
+      expect(res.render).toHaveBeenCalledWith(
+        "common/duplicate-support-request",
+        {
+          backLink: "select-support-type",
+        }
+      );
     });
 
-    test('if the user came from the leaving nsa page, the back link should go to leaving nsa', () => {
-      req.session.lastPage = 'nsa/leaving-nsa';
+    test("if the user came from the leaving nsa page, the back link should go to leaving nsa", () => {
+      req.session.lastPage = "nsa/leaving-nsa";
 
       duplicateSupportRequest.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/duplicate-support-request', {
-        backLink: 'leaving-nsa',
-      });
+      expect(res.render).toHaveBeenCalledWith(
+        "common/duplicate-support-request",
+        {
+          backLink: "leaving-nsa",
+        }
+      );
     });
   });
 });

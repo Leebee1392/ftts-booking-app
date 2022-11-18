@@ -1,7 +1,12 @@
 import {
-  Language, PreferredDay, PreferredLocation, SupportType, TestType, Voiceover,
-} from '../../domain/enums';
-import { Centre } from '../../domain/types';
+  Language,
+  PreferredDay,
+  PreferredLocation,
+  SupportType,
+  TestType,
+  Voiceover,
+} from "../../domain/enums";
+import { Centre } from "../../domain/types";
 
 export enum EmailType {
   BOOKING_CONFIRMATION,

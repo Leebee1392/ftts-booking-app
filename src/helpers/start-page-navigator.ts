@@ -1,6 +1,6 @@
-import { Request } from 'express';
-import config from '../config';
-import { Context, Locale, Target } from '../domain/enums';
+import { Request } from "express";
+import config from "../config";
+import { Context, Locale, Target } from "../domain/enums";
 
 export const getBackLinkToStartPage = (req: Request): string => {
   if (req.session.target === Target.NI) {

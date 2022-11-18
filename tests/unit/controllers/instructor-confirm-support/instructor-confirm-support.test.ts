@@ -1,21 +1,21 @@
-import { InstructorConfirmSupportController, ConfirmSupportOption } from '@controllers/instructor-confirm-support/instructor-confirm-support';
+import {
+  InstructorConfirmSupportController,
+  ConfirmSupportOption,
+} from "@controllers/instructor-confirm-support/instructor-confirm-support";
 
-describe('InstructorConfirmSupportController', () => {
+describe("InstructorConfirmSupportController", () => {
   let instructorConfirmSupportController: InstructorConfirmSupportController;
   let req: unknown;
   let res;
 
   beforeEach(() => {
-    instructorConfirmSupportController = new InstructorConfirmSupportController();
+    instructorConfirmSupportController =
+      new InstructorConfirmSupportController();
     req = {
-      path: '/nsa/confirm-support',
+      path: "/nsa/confirm-support",
       session: {
-        journey: {
-
-        },
-        currentBooking: {
-
-        },
+        journey: {},
+        currentBooking: {},
       },
     };
     res = {
@@ -24,47 +24,52 @@ describe('InstructorConfirmSupportController', () => {
     };
   });
 
-  describe('get', () => {
-    test('it should render the correct page', () => {
+  describe("get", () => {
+    test("it should render the correct page", () => {
       instructorConfirmSupportController.get(req, res);
-      expect(res.render).toHaveBeenCalledWith('instructor/confirm-support', {
-        backLink: 'select-support-type',
+      expect(res.render).toHaveBeenCalledWith("instructor/confirm-support", {
+        backLink: "select-support-type",
       });
     });
   });
 
-  describe('post', () => {
-    test('tell us what support you need', () => {
+  describe("post", () => {
+    test("tell us what support you need", () => {
       req.body = { confirmSupport: ConfirmSupportOption.TELL_US_WHAT_SUPPORT };
       instructorConfirmSupportController.post(req, res);
       const { selectSupportType } = req.session.currentBooking;
       expect(selectSupportType).toBeUndefined();
-      expect(res.redirect).toHaveBeenCalledWith('select-support-type');
+      expect(res.redirect).toHaveBeenCalledWith("select-support-type");
     });
 
-    test('book without support', () => {
+    test("book without support", () => {
       req.body = { confirmSupport: ConfirmSupportOption.BOOK_WITHOUT_SUPPORT };
       instructorConfirmSupportController.post(req, res);
-      expect(res.redirect).toHaveBeenCalledWith('leaving-nsa');
+      expect(res.redirect).toHaveBeenCalledWith("leaving-nsa");
     });
 
-    test('continue without telling us', () => {
-      req.body = { confirmSupport: ConfirmSupportOption.CONTINUE_WITHOUT_TELLING_US };
+    test("continue without telling us", () => {
+      req.body = {
+        confirmSupport: ConfirmSupportOption.CONTINUE_WITHOUT_TELLING_US,
+      };
       instructorConfirmSupportController.post(req, res);
-      expect(res.redirect).toHaveBeenCalledWith('staying-nsa');
+      expect(res.redirect).toHaveBeenCalledWith("staying-nsa");
     });
 
-    test('errors', () => {
+    test("errors", () => {
       req.hasErrors = true;
-      req.errors = ['Select one option from the list'];
+      req.errors = ["Select one option from the list"];
       req.body = {
         confirmSupport: undefined,
       };
       instructorConfirmSupportController.post(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('instructor/confirm-support', expect.objectContaining({
-        errors: req.errors,
-      }));
+      expect(res.render).toHaveBeenCalledWith(
+        "instructor/confirm-support",
+        expect.objectContaining({
+          errors: req.errors,
+        })
+      );
     });
   });
 });

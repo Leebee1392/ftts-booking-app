@@ -1,16 +1,16 @@
-import { YesNo } from '../domain/enums';
+import { YesNo } from "../domain/enums";
 
 export class YesOrNo {
   public static from(value: string): YesOrNo {
     if (!YesOrNo.isYesOrNo(value)) {
-      throw new TypeError('Please choose yes or no.');
+      throw new TypeError("Please choose yes or no.");
     }
     return new YesOrNo(value);
   }
 
   public static fromBoolean(bool: boolean): YesOrNo {
     if (bool !== true && bool !== false) {
-      throw new TypeError('The value provided is not of type boolean.');
+      throw new TypeError("The value provided is not of type boolean.");
     }
     const yesOrNo = bool ? YesNo.YES : YesNo.NO;
     return new YesOrNo(yesOrNo);
@@ -21,10 +21,10 @@ export class YesOrNo {
   }
 
   private static isYesOrNo(value: string): boolean {
-    return value !== undefined && (value === 'yes' || value === 'no');
+    return value !== undefined && (value === "yes" || value === "no");
   }
 
-  private constructor(private readonly value: string) { }
+  private constructor(private readonly value: string) {}
 
   public toString(): string {
     return this.value;

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click } from '../utils/helpers';
+import { BasePage } from "./base-page";
+import { click } from "../utils/helpers";
 
 export class BookingExistsPage extends BasePage {
   headingLocator = 'h1[data-automation-id="main-heading"]';
@@ -10,11 +10,11 @@ export class BookingExistsPage extends BasePage {
   backLink = 'a[data-automation-id="back"]';
 
   // Contents
-  pageHeading = 'A confirmed booking for this test already exists';
+  pageHeading = "A confirmed booking for this test already exists";
 
-  manageBookingLinkText = 'check your theory test appointment details';
+  manageBookingLinkText = "check your theory test appointment details";
 
-  pathUrl = 'booking-exists';
+  pathUrl = "booking-exists";
 
   async goBack(): Promise<void> {
     await click(this.backLink);

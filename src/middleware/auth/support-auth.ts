@@ -1,8 +1,12 @@
-import { NextFunction, Request, Response } from 'express';
-import { getTimeoutErrorPath } from '../../helpers/session-helper';
-import { checkCommonAuth } from './common-auth';
+import { NextFunction, Request, Response } from "express";
+import { getTimeoutErrorPath } from "../../helpers/session-helper";
+import { checkCommonAuth } from "./common-auth";
 
-export const supportAuth = (req: Request, res: Response, next: NextFunction): void => {
+export const supportAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
   if (checkCommonAuth(req) && req.session?.journey?.support) {
     return next();
   }

@@ -1,10 +1,10 @@
-import { store } from '../../../src/services/session';
+import { store } from "../../../src/services/session";
 
-jest.mock('uuid', () => ({
-  v4: () => 'mockUuid',
+jest.mock("uuid", () => ({
+  v4: () => "mockUuid",
 }));
 
-describe('Session storage', () => {
+describe("Session storage", () => {
   let req;
   let res;
 
@@ -20,24 +20,24 @@ describe('Session storage', () => {
     };
   });
 
-  test('base methods exist', () => {
+  test("base methods exist", () => {
     expect(mockStore.reset).toBeDefined();
   });
 
-  describe('reset', () => {
-    test('should reset session if one is available', () => {
+  describe("reset", () => {
+    test("should reset session if one is available", () => {
       req.session.candidate = {
-        firstName: 'mockName',
+        firstName: "mockName",
       };
       req.session.journey.inEditMode = true;
-      req.session.manageBooking = 'some manage booking object';
+      req.session.manageBooking = "some manage booking object";
 
       mockStore.reset(req, res);
 
       expect(req.session.journey.inEditMode).toBe(false);
       expect(req.session.journey.inManagedBookingEditMode).toBe(false);
       expect(req.session.journey.inManageBookingMode).toBe(false);
-      expect(req.session.journey.managedBookingRescheduleChoice).toBe('');
+      expect(req.session.journey.managedBookingRescheduleChoice).toBe("");
 
       expect(req.session.candidate).toBeUndefined();
       expect(req.session.currentBooking).toBeUndefined();
@@ -47,7 +47,7 @@ describe('Session storage', () => {
       expect(req.session.manageBooking).toBeUndefined();
       expect(req.session.manageBookingEdits).toBeUndefined();
       expect(req.session.priceLists).toBeUndefined();
-      expect(req.session.sessionId).toStrictEqual('mockUuid');
+      expect(req.session.sessionId).toStrictEqual("mockUuid");
     });
   });
 });

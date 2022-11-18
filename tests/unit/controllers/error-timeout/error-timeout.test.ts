@@ -1,15 +1,18 @@
-import { TimeoutErrorController } from '@controllers/error-timeout/error-timeout';
-import { Locale, Target } from '../../../../src/domain/enums';
-import { changeLanguageToLocale, sanitizeLocale } from '../../../../src/helpers/language';
+import { TimeoutErrorController } from "@controllers/error-timeout/error-timeout";
+import { Locale, Target } from "../../../../src/domain/enums";
+import {
+  changeLanguageToLocale,
+  sanitizeLocale,
+} from "../../../../src/helpers/language";
 
-jest.mock('../../../../src/helpers/language', () => ({
-  translate: () => 'internationalised',
+jest.mock("../../../../src/helpers/language", () => ({
+  translate: () => "internationalised",
   changeLanguageToLocale: jest.fn(),
   isLocaleAvailableForTarget: () => true,
   sanitizeLocale: jest.fn(),
 }));
 
-describe('Error timeout controller', () => {
+describe("Error timeout controller", () => {
   let req;
   let res;
   let timeoutErrorController: TimeoutErrorController;
@@ -18,7 +21,7 @@ describe('Error timeout controller', () => {
     req = {
       hasErrors: false,
       query: {
-        source: '/choose-support',
+        source: "/choose-support",
       },
       body: {},
       errors: [],
@@ -44,9 +47,12 @@ describe('Error timeout controller', () => {
 
     sanitizeLocale.mockImplementation((locale: Locale) => {
       switch (locale) {
-        case Locale.NI: return Locale.NI;
-        case Locale.CY: return Locale.CY;
-        default: return Locale.GB;
+        case Locale.NI:
+          return Locale.NI;
+        case Locale.CY:
+          return Locale.CY;
+        default:
+          return Locale.GB;
       }
     });
   });
@@ -55,62 +61,62 @@ describe('Error timeout controller', () => {
     jest.resetAllMocks();
   });
 
-  describe('GET', () => {
-    test('should render timeout error page', async () => {
+  describe("GET", () => {
+    test("should render timeout error page", async () => {
       await timeoutErrorController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/error-timeout', {
-        startAgainLink: '/choose-support?target=gb&lang=gb',
+      expect(res.render).toHaveBeenCalledWith("common/error-timeout", {
+        startAgainLink: "/choose-support?target=gb&lang=gb",
       });
     });
 
-    test('should render timeout error page with start again link from instructor service', async () => {
-      req.query.source = '/instructor/choose-appointment';
+    test("should render timeout error page with start again link from instructor service", async () => {
+      req.query.source = "/instructor/choose-appointment";
 
       await timeoutErrorController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/error-timeout', {
-        startAgainLink: '/instructor?target=gb&lang=gb',
+      expect(res.render).toHaveBeenCalledWith("common/error-timeout", {
+        startAgainLink: "/instructor?target=gb&lang=gb",
       });
     });
 
-    test('should render timeout error page with start again link from manage-booking', async () => {
-      req.query.source = '/manage-booking/home';
+    test("should render timeout error page with start again link from manage-booking", async () => {
+      req.query.source = "/manage-booking/home";
 
       await timeoutErrorController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/error-timeout', {
-        startAgainLink: '/manage-booking?target=gb&lang=gb',
+      expect(res.render).toHaveBeenCalledWith("common/error-timeout", {
+        startAgainLink: "/manage-booking?target=gb&lang=gb",
       });
     });
 
-    test('NI context is preserved', async () => {
+    test("NI context is preserved", async () => {
       req.query.target = Target.NI;
       req.query.lang = Locale.NI;
 
       await timeoutErrorController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/error-timeout', {
-        startAgainLink: '/choose-support?target=ni&lang=ni',
+      expect(res.render).toHaveBeenCalledWith("common/error-timeout", {
+        startAgainLink: "/choose-support?target=ni&lang=ni",
       });
       expect(res.locals.target).toStrictEqual(Target.NI);
       expect(changeLanguageToLocale).toHaveBeenCalledWith(req, res, Locale.NI);
     });
 
-    test('Welsh language is preserved', async () => {
+    test("Welsh language is preserved", async () => {
       req.query.target = Target.GB;
       req.query.lang = Locale.CY;
 
       await timeoutErrorController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('common/error-timeout', {
-        startAgainLink: '/choose-support?target=gb&lang=cy',
+      expect(res.render).toHaveBeenCalledWith("common/error-timeout", {
+        startAgainLink: "/choose-support?target=gb&lang=cy",
       });
       expect(res.locals.target).toStrictEqual(Target.GB);
       expect(changeLanguageToLocale).toHaveBeenCalledWith(req, res, Locale.CY);
     });
 
-    test('session is reset', async () => {
+    test("session is reset", async () => {
       await timeoutErrorController.get(req, res);
 
       expect(req.session.candidate).toBeUndefined();

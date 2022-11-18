@@ -1,11 +1,17 @@
-import { Context, Locale, Target } from './domain/enums';
-import { Centre, PriceListItem } from './domain/types';
-import { CompensatedBooking } from './services/crm-gateway/interfaces';
+import { Context, Locale, Target } from "./domain/enums";
+import { Centre, PriceListItem } from "./domain/types";
+import { CompensatedBooking } from "./services/crm-gateway/interfaces";
 import {
-  Booking, Candidate, Journey, LocationDateTime, ManageBooking, ManageBookingEdits, TestCentreSearch,
-} from './services/session';
+  Booking,
+  Candidate,
+  Journey,
+  LocationDateTime,
+  ManageBooking,
+  ManageBookingEdits,
+  TestCentreSearch,
+} from "./services/session";
 
-declare module 'express-session' {
+declare module "express-session" {
   interface SessionData {
     init: boolean;
     candidate: Candidate;

@@ -1,6 +1,6 @@
-import { instructorStandardAuth } from '../../../../src/middleware/auth/instructor-standard-auth';
+import { instructorStandardAuth } from "../../../../src/middleware/auth/instructor-standard-auth";
 
-describe('Auth middleware - Instructor standard main booking journey', () => {
+describe("Auth middleware - Instructor standard main booking journey", () => {
   let req: any;
   let res: any;
   let next: any;
@@ -9,7 +9,7 @@ describe('Auth middleware - Instructor standard main booking journey', () => {
     req = {
       session: {
         candidate: {
-          firstnames: 'First Names',
+          firstnames: "First Names",
         },
         journey: undefined,
       },
@@ -20,13 +20,15 @@ describe('Auth middleware - Instructor standard main booking journey', () => {
     next = jest.fn();
   });
 
-  test('redirects to session timeout if standard accommodation is set to false', () => {
+  test("redirects to session timeout if standard accommodation is set to false", () => {
     req.session.journey = {
       standardAccommodation: false,
     };
 
     instructorStandardAuth(req, res, next);
 
-    expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining('/timeout'));
+    expect(res.redirect).toHaveBeenCalledWith(
+      expect.stringContaining("/timeout")
+    );
   });
 });

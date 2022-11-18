@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click } from '../utils/helpers';
+import { BasePage } from "./base-page";
+import { click } from "../utils/helpers";
 
 export class ReceivedSupportRequestPage extends BasePage {
   headingLocator = 'h1[data-automation-id="main-heading"]';
@@ -10,9 +10,9 @@ export class ReceivedSupportRequestPage extends BasePage {
   backLink = 'a[data-automation-id="back"]';
 
   // Contents
-  pageHeading = 'We have received a support request';
+  pageHeading = "We have received a support request";
 
-  pathUrl = 'received-support-request';
+  pathUrl = "received-support-request";
 
   async goBack(): Promise<void> {
     await click(this.backLink);

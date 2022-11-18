@@ -1,7 +1,17 @@
-import { ELIG } from '@dvsa/ftts-eligibility-api-model';
-import { CRMContact } from './interfaces';
+import { ELIG } from "@dvsa/ftts-eligibility-api-model";
+import { CRMContact } from "./interfaces";
 
-export type CRMContactAddress = Partial<Pick<CRMContact, 'address1_line1' | 'address1_line2' | 'address1_line3' | 'ftts_address1_line4' | 'address1_city' | 'address1_postalcode'>>;
+export type CRMContactAddress = Partial<
+  Pick<
+    CRMContact,
+    | "address1_line1"
+    | "address1_line2"
+    | "address1_line3"
+    | "ftts_address1_line4"
+    | "address1_city"
+    | "address1_postalcode"
+  >
+>;
 
 /**
  * For DVSA candidates (address with 5 lines) map line 5 to the CRM city key.
@@ -10,11 +20,18 @@ export type CRMContactAddress = Partial<Pick<CRMContact, 'address1_line1' | 'add
  * @param address The elgibility address object
  * @returns a partial CRM contact entry containing only the address fields (lines 1-4), city and postcode
  */
-export function mapToCrmContactAddress(address: ELIG.Address | undefined): CRMContactAddress {
+export function mapToCrmContactAddress(
+  address: ELIG.Address | undefined
+): CRMContactAddress {
   if (address) {
-    const mandatoryKeys = ['line1', 'postcode'];
-    const populatedNonMandatoryKeys = Object.keys(address).filter((key) => !mandatoryKeys.includes(key) && Boolean(address[key as keyof ELIG.Address]));
-    const lastPopulatedKey = populatedNonMandatoryKeys[populatedNonMandatoryKeys.length - 1];
+    const mandatoryKeys = ["line1", "postcode"];
+    const populatedNonMandatoryKeys = Object.keys(address).filter(
+      (key) =>
+        !mandatoryKeys.includes(key) &&
+        Boolean(address[key as keyof ELIG.Address])
+    );
+    const lastPopulatedKey =
+      populatedNonMandatoryKeys[populatedNonMandatoryKeys.length - 1];
     if (lastPopulatedKey) {
       const newAddress = { ...address };
       delete newAddress[lastPopulatedKey as keyof ELIG.Address];

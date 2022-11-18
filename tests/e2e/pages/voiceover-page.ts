@@ -1,11 +1,11 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click } from '../utils/helpers';
-import { Voiceover } from '../../../src/domain/enums';
+import { BasePage } from "./base-page";
+import { click } from "../utils/helpers";
+import { Voiceover } from "../../../src/domain/enums";
 
 export class VoiceoverPage extends BasePage {
   // locators
-  pageHeadingLocator = '.govuk-fieldset__heading';
+  pageHeadingLocator = ".govuk-fieldset__heading";
 
   voiceoverRadio = 'input[name="voiceover"]';
 
@@ -19,37 +19,42 @@ export class VoiceoverPage extends BasePage {
 
   backLink = 'a[data-automation-id="back-link"]';
 
-  pathUrl = 'change-voiceover';
+  pathUrl = "change-voiceover";
 
   errorLink = 'a[href="#voiceover"]';
 
-  errorMessageRadioLocator = '#voiceover-error';
+  errorMessageRadioLocator = "#voiceover-error";
 
-  errorMessageLocator = '#error-summary-title';
+  errorMessageLocator = "#error-summary-title";
 
-  errorMessageList = '.govuk-list.govuk-error-summary__list';
+  errorMessageList = ".govuk-list.govuk-error-summary__list";
 
-  updateLanguageBanner = 'div.alert';
+  updateLanguageBanner = "div.alert";
 
   // content
-  pageHeading = 'Do you want a voiceover used during the test?';
+  pageHeading = "Do you want a voiceover used during the test?";
 
-  errorMessageHeader = 'There is a problem';
+  errorMessageHeader = "There is a problem";
 
-  errorMessageTextGB = 'You must select one option.';
+  errorMessageTextGB = "You must select one option.";
 
-  errorMessageTextNI = 'You must select a voiceover language. Alternatively, select \'I do not want a voiceover\'.';
+  errorMessageTextNI =
+    "You must select a voiceover language. Alternatively, select 'I do not want a voiceover'.";
 
-  updateButtonText = 'Confirm change and continue';
+  updateButtonText = "Confirm change and continue";
 
-  cancelButtonText = 'Cancel and keep your existing choice';
+  cancelButtonText = "Cancel and keep your existing choice";
 
-  cancelLinkText = 'go back and keep your previous choice';
+  cancelLinkText = "go back and keep your previous choice";
 
-  updateBannerText = 'You can change your mind here about hearing a voiceover used during the test, or';
+  updateBannerText =
+    "You can change your mind here about hearing a voiceover used during the test, or";
 
   async selectVoiceoverRequired(voiceoverOption: Voiceover): Promise<void> {
-    const voiceoverSelector = this.voiceoverButton.replace('<>', voiceoverOption);
+    const voiceoverSelector = this.voiceoverButton.replace(
+      "<>",
+      voiceoverOption
+    );
     await click(voiceoverSelector);
     await click(this.continueButton);
   }

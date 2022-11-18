@@ -1,6 +1,6 @@
-import { StartController } from '@controllers/start/start';
+import { StartController } from "@controllers/start/start";
 
-describe('StartController', () => {
+describe("StartController", () => {
   let startController: StartController;
 
   let req = {};
@@ -17,11 +17,11 @@ describe('StartController', () => {
     };
   });
 
-  describe('get', () => {
-    test('should render page correctly', () => {
+  describe("get", () => {
+    test("should render page correctly", () => {
       startController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('govuk/start');
+      expect(res.render).toHaveBeenCalledWith("govuk/start");
     });
   });
 });

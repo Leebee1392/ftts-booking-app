@@ -1,9 +1,9 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click } from '../utils/helpers';
+import { BasePage } from "./base-page";
+import { click } from "../utils/helpers";
 
 export class SupportAlertPage extends BasePage {
-  pageHeadingLocator = '.govuk-heading-xl';
+  pageHeadingLocator = ".govuk-heading-xl";
 
   headingLocator = 'button[data-automation-id="heading"]';
 
@@ -14,9 +14,9 @@ export class SupportAlertPage extends BasePage {
   backLink = 'a[data-automation-id="back"]';
 
   // Contents
-  pageHeading = 'Before you continue with your support request';
+  pageHeading = "Before you continue with your support request";
 
-  pathUrl = 'support-alert';
+  pathUrl = "support-alert";
 
   async goBack(): Promise<void> {
     await click(this.backLink);

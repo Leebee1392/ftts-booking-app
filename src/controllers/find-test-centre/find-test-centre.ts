@@ -1,7 +1,10 @@
-import { Request, Response } from 'express';
-import { isSupportedStandardJourney } from '../../helpers/journey-helper';
-import { translate } from '../../helpers/language';
-import { RequestValidationError, ValidatorSchema } from '../../middleware/request-validator';
+import { Request, Response } from "express";
+import { isSupportedStandardJourney } from "../../helpers/journey-helper";
+import { translate } from "../../helpers/language";
+import {
+  RequestValidationError,
+  ValidatorSchema,
+} from "../../middleware/request-validator";
 
 interface FindTestCentreBody {
   searchQuery: string;
@@ -9,19 +12,21 @@ interface FindTestCentreBody {
 export class FindTestCentreController {
   public get = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('FindTestCentreController::get: No journey set');
+      throw Error("FindTestCentreController::get: No journey set");
     }
     if (!req.session.currentBooking) {
-      throw Error('FindTestCentreController::get: No currentBooking set');
+      throw Error("FindTestCentreController::get: No currentBooking set");
     }
     const { testCentreSearch } = req.session;
     const { inEditMode } = req.session.journey;
 
     if (testCentreSearch?.zeroCentreResults) {
-      req.errors = [{
-        msg: translate('findTestCentre.errorNotRecognised'),
-        param: 'searchQuery',
-      } as RequestValidationError];
+      req.errors = [
+        {
+          msg: translate("findTestCentre.errorNotRecognised"),
+          param: "searchQuery",
+        } as RequestValidationError,
+      ];
 
       // Remove the flag so we don't keep showing the validation
       req.session.testCentreSearch = {
@@ -36,14 +41,14 @@ export class FindTestCentreController {
       backLink = `manage-change-location-time/${req.session.currentBooking.bookingRef}`;
     } else if (isSupportedStandardJourney(req)) {
       // Back link for coming into the SA journey from NSA
-      backLink = '/nsa/email-contact';
+      backLink = "/nsa/email-contact";
     } else if (req.session.journey.shownVoiceoverPageFlag) {
-      backLink = 'change-voiceover';
+      backLink = "change-voiceover";
     } else if (req.session.journey.shownStandardSupportPageFlag) {
-      backLink = 'select-standard-support';
+      backLink = "select-standard-support";
     }
 
-    res.render('common/find-test-centre', {
+    res.render("common/find-test-centre", {
       errors: req.errors?.length ? req.errors : undefined,
       searchQuery: !inEditMode ? testCentreSearch?.searchQuery : undefined,
       noResultsError: !req.errors?.length,
@@ -53,18 +58,20 @@ export class FindTestCentreController {
 
   public post = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('FindTestCentreController::post: No journey set');
+      throw Error("FindTestCentreController::post: No journey set");
     }
     if (!req.session.currentBooking) {
-      throw Error('FindTestCentreController::post: No currentBooking set');
+      throw Error("FindTestCentreController::post: No currentBooking set");
     }
     const { support, standardAccommodation } = req.session.journey;
     if (req.hasErrors) {
-      let backLink = !this.isManagedBookingSession(req) ? '/test-language' : `/manage-change-location-time/${req.session.currentBooking.bookingRef}`;
+      let backLink = !this.isManagedBookingSession(req)
+        ? "/test-language"
+        : `/manage-change-location-time/${req.session.currentBooking.bookingRef}`;
       if (support && standardAccommodation) {
-        backLink = '/email-contact';
+        backLink = "/email-contact";
       }
-      return res.render('common/find-test-centre', {
+      return res.render("common/find-test-centre", {
         errors: req.errors,
         backLink,
         noResultsError: !req.errors?.length,
@@ -77,7 +84,11 @@ export class FindTestCentreController {
       searchQuery,
       numberOfResults: undefined,
     };
-    return res.redirect(!this.isManagedBookingSession(req) ? '/select-test-centre' : '/manage-booking/select-test-centre');
+    return res.redirect(
+      !this.isManagedBookingSession(req)
+        ? "/select-test-centre"
+        : "/manage-booking/select-test-centre"
+    );
   };
 
   private isManagedBookingSession(req: Request): boolean {
@@ -87,9 +98,10 @@ export class FindTestCentreController {
   /* istanbul ignore next */
   public postSchemaValidation: ValidatorSchema = {
     searchQuery: {
-      in: ['body'],
+      in: ["body"],
       isLength: {
-        errorMessage: (): string => translate('findTestCentre.errorNotRecognised'),
+        errorMessage: (): string =>
+          translate("findTestCentre.errorNotRecognised"),
         options: {
           min: 3,
           max: 512,

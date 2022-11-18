@@ -1,29 +1,45 @@
-import dedent from 'ts-dedent';
+import dedent from "ts-dedent";
 
-import { translate } from '../../../../../helpers/language';
-import { BookingRescheduledDetails } from '../../../types';
-import { asLocalTime, asFullDateWithWeekday, asFullDateWithoutWeekday } from '../../../../../nunjucks-filters/local-date-time-filter';
-import { formatAddressLines } from '../../helpers';
-import { TestType } from '../../../../../domain/enums';
+import { translate } from "../../../../../helpers/language";
+import { BookingRescheduledDetails } from "../../../types";
+import {
+  asLocalTime,
+  asFullDateWithWeekday,
+  asFullDateWithoutWeekday,
+} from "../../../../../nunjucks-filters/local-date-time-filter";
+import { formatAddressLines } from "../../helpers";
+import { TestType } from "../../../../../domain/enums";
 
 export default {
-  subject: 'DVA: your driving theory test has been updated',
+  subject: "DVA: your driving theory test has been updated",
   buildBody: (details: BookingRescheduledDetails): string => {
-    let cancelWarning = '';
+    let cancelWarning = "";
     if (details.lastRefundDate) {
-      cancelWarning = ` If this booking is changed or cancelled after ${asFullDateWithoutWeekday(details.lastRefundDate)} no refund will be made.`;
+      cancelWarning = ` If this booking is changed or cancelled after ${asFullDateWithoutWeekday(
+        details.lastRefundDate
+      )} no refund will be made.`;
     }
-    let provingIdentitySecondBullet = 'your valid signed GB photocard licence showing your provisional entitlement, and a printed summary (dated within a week of your test date) of your driving licence record from [www.gov.uk/view-driving-licence](https://www.gov.uk/view-driving-licence)';
-    let additionalStatementCandidate = 'If your GB photocard licence does not show your provisional entitlement you must obtain written confirmation from the DVLA of your provisional entitlement.';
-    let prepareForTestUrl = 'https://www.nidirect.gov.uk/articles/preparing-theory-test';
-    let checkChangeCancelUrl = 'https://www.nidirect.gov.uk/services/change-or-cancel-your-theory-test-online';
+    let provingIdentitySecondBullet =
+      "your valid signed GB photocard licence showing your provisional entitlement, and a printed summary (dated within a week of your test date) of your driving licence record from [www.gov.uk/view-driving-licence](https://www.gov.uk/view-driving-licence)";
+    let additionalStatementCandidate =
+      "If your GB photocard licence does not show your provisional entitlement you must obtain written confirmation from the DVLA of your provisional entitlement.";
+    let prepareForTestUrl =
+      "https://www.nidirect.gov.uk/articles/preparing-theory-test";
+    let checkChangeCancelUrl =
+      "https://www.nidirect.gov.uk/services/change-or-cancel-your-theory-test-online";
 
-    const dvaInstructorTestTypes: TestType[] = [TestType.ADIP1DVA, TestType.AMIP1];
+    const dvaInstructorTestTypes: TestType[] = [
+      TestType.ADIP1DVA,
+      TestType.AMIP1,
+    ];
     if (dvaInstructorTestTypes.includes(details.testType)) {
-      provingIdentitySecondBullet = 'your valid signed GB photocard licence and a printed summary (dated within a week of your test date) of your driving licence record from [www.gov.uk/view-driving-licence](https://www.gov.uk/view-driving-licence)';
-      additionalStatementCandidate = '';
-      prepareForTestUrl = 'https://www.nidirect.gov.uk/information-and-services/driving-living/driving-instructors';
-      checkChangeCancelUrl = 'https://www.nidirect.gov.uk/services/change-or-cancel-your-adi-or-ami-theory-test-online';
+      provingIdentitySecondBullet =
+        "your valid signed GB photocard licence and a printed summary (dated within a week of your test date) of your driving licence record from [www.gov.uk/view-driving-licence](https://www.gov.uk/view-driving-licence)";
+      additionalStatementCandidate = "";
+      prepareForTestUrl =
+        "https://www.nidirect.gov.uk/information-and-services/driving-living/driving-instructors";
+      checkChangeCancelUrl =
+        "https://www.nidirect.gov.uk/services/change-or-cancel-your-adi-or-ami-theory-test-online";
     }
     return dedent`
     # Your driving theory test details have been updated
@@ -32,7 +48,9 @@ export default {
 
     Keep these details safe. It may be useful to print this email and put the details in your calendar.
 
-    If you did not update this test please contact us immediately. You can reply to this email or telephone ${translate('generalContent.cancelContact.phone')}.
+    If you did not update this test please contact us immediately. You can reply to this email or telephone ${translate(
+      "generalContent.cancelContact.phone"
+    )}.
 
     ---
     # Test type
@@ -42,7 +60,9 @@ export default {
     ---
     # Test Time and date
 
-    ${asLocalTime(details.testDateTime)} on ${asFullDateWithWeekday(details.testDateTime)}
+    ${asLocalTime(details.testDateTime)} on ${asFullDateWithWeekday(
+      details.testDateTime
+    )}
 
     ---
     # Test location

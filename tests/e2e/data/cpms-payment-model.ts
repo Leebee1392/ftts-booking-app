@@ -1,4 +1,4 @@
-import { PaymentModel } from './payment-model';
+import { PaymentModel } from "./payment-model";
 
 export class CpmsPaymentModel extends PaymentModel {
   name: string;
@@ -11,7 +11,17 @@ export class CpmsPaymentModel extends PaymentModel {
 
   password: string;
 
-  constructor(name: string, cardNumber: string, expiryDateMonth: string, expiryDateYear: string, securityCode: string, password: string, addressLine1: string, addressCity: string, addressPostcode: string) {
+  constructor(
+    name: string,
+    cardNumber: string,
+    expiryDateMonth: string,
+    expiryDateYear: string,
+    securityCode: string,
+    password: string,
+    addressLine1: string,
+    addressCity: string,
+    addressPostcode: string
+  ) {
     super(cardNumber, expiryDateMonth, expiryDateYear, securityCode);
     this.name = name;
     this.password = password;

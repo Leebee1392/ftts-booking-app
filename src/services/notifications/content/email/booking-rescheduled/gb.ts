@@ -1,16 +1,22 @@
-import dedent from 'ts-dedent';
+import dedent from "ts-dedent";
 
-import { translate } from '../../../../../helpers/language';
-import { BookingRescheduledDetails } from '../../../types';
-import { asLocalTime, asFullDateWithWeekday, asFullDateWithoutWeekday } from '../../../../../nunjucks-filters/local-date-time-filter';
-import { formatAddressLines } from '../../helpers';
+import { translate } from "../../../../../helpers/language";
+import { BookingRescheduledDetails } from "../../../types";
+import {
+  asLocalTime,
+  asFullDateWithWeekday,
+  asFullDateWithoutWeekday,
+} from "../../../../../nunjucks-filters/local-date-time-filter";
+import { formatAddressLines } from "../../helpers";
 
 export default {
-  subject: 'DVSA: your driving theory test has been updated',
+  subject: "DVSA: your driving theory test has been updated",
   buildBody: (details: BookingRescheduledDetails): string => {
-    let cancelWarning = '';
+    let cancelWarning = "";
     if (details.lastRefundDate) {
-      cancelWarning = ` If this booking is changed or cancelled after ${asFullDateWithoutWeekday(details.lastRefundDate)} no refund will be made.`;
+      cancelWarning = ` If this booking is changed or cancelled after ${asFullDateWithoutWeekday(
+        details.lastRefundDate
+      )} no refund will be made.`;
     }
 
     return dedent`
@@ -30,7 +36,9 @@ export default {
     ---
     # Test Time and date
 
-    ${asLocalTime(details.testDateTime)} on ${asFullDateWithWeekday(details.testDateTime)}
+    ${asLocalTime(details.testDateTime)} on ${asFullDateWithWeekday(
+      details.testDateTime
+    )}
 
     ---
     # Test location

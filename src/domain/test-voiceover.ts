@@ -1,13 +1,16 @@
-import { Target, TestType, Voiceover } from './enums';
-import { CRMVoiceOver } from '../services/crm-gateway/enums';
-import { VOICEOVER_UNAVAILABLE_TEST_TYPES } from './eligibility';
+import { Target, TestType, Voiceover } from "./enums";
+import { CRMVoiceOver } from "../services/crm-gateway/enums";
+import { VOICEOVER_UNAVAILABLE_TEST_TYPES } from "./eligibility";
 
 export class TestVoiceover {
   public static fromCRMVoiceover(crmVoiceOver: CRMVoiceOver): Voiceover {
     return this.CRM_VOICEOVER_MAP.get(crmVoiceOver) || Voiceover.NONE;
   }
 
-  public static availableOptions(target: Target, testType: TestType): Voiceover[] {
+  public static availableOptions(
+    target: Target,
+    testType: TestType
+  ): Voiceover[] {
     if (testType === TestType.ERS) {
       return [Voiceover.ENGLISH];
     }
@@ -45,15 +48,16 @@ export class TestVoiceover {
     Voiceover.WELSH,
   ];
 
-  private static readonly CRM_VOICEOVER_MAP: Map<CRMVoiceOver, Voiceover> = new Map([
-    [CRMVoiceOver.Arabic, Voiceover.ARABIC],
-    [CRMVoiceOver.Cantonese, Voiceover.CANTONESE],
-    [CRMVoiceOver.English, Voiceover.ENGLISH],
-    [CRMVoiceOver.Farsi, Voiceover.FARSI],
-    [CRMVoiceOver.Polish, Voiceover.POLISH],
-    [CRMVoiceOver.Portuguese, Voiceover.PORTUGUESE],
-    [CRMVoiceOver.Turkish, Voiceover.TURKISH],
-    [CRMVoiceOver.Welsh, Voiceover.WELSH],
-    [CRMVoiceOver.None, Voiceover.NONE],
-  ]);
+  private static readonly CRM_VOICEOVER_MAP: Map<CRMVoiceOver, Voiceover> =
+    new Map([
+      [CRMVoiceOver.Arabic, Voiceover.ARABIC],
+      [CRMVoiceOver.Cantonese, Voiceover.CANTONESE],
+      [CRMVoiceOver.English, Voiceover.ENGLISH],
+      [CRMVoiceOver.Farsi, Voiceover.FARSI],
+      [CRMVoiceOver.Polish, Voiceover.POLISH],
+      [CRMVoiceOver.Portuguese, Voiceover.PORTUGUESE],
+      [CRMVoiceOver.Turkish, Voiceover.TURKISH],
+      [CRMVoiceOver.Welsh, Voiceover.WELSH],
+      [CRMVoiceOver.None, Voiceover.NONE],
+    ]);
 }

@@ -1,11 +1,14 @@
-import { Request, Response } from 'express';
-import { translate } from '../../helpers/language';
-import { ValidatorSchema } from '../../middleware/request-validator';
-import { isCustomSupportInputEmptyOrUnmeaningful } from '../../helpers/custom-support-helper';
-import nsaNavigator from '../../helpers/nsa-navigator';
-import { isNonStandardSupportSelected, isOnlyCustomSupportSelected } from '../../helpers/support';
-import { SupportType } from '../../domain/enums';
-import config from '../../config';
+import { Request, Response } from "express";
+import { translate } from "../../helpers/language";
+import { ValidatorSchema } from "../../middleware/request-validator";
+import { isCustomSupportInputEmptyOrUnmeaningful } from "../../helpers/custom-support-helper";
+import nsaNavigator from "../../helpers/nsa-navigator";
+import {
+  isNonStandardSupportSelected,
+  isOnlyCustomSupportSelected,
+} from "../../helpers/support";
+import { SupportType } from "../../domain/enums";
+import config from "../../config";
 
 interface CustomSupportBody {
   support: string;
@@ -16,11 +19,13 @@ export class CustomSupportController {
 
   public post = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('CustomSupportController::post: No journey set');
+      throw Error("CustomSupportController::post: No journey set");
     }
     const selectedSupportTypes = req.session.currentBooking?.selectSupportType;
     if (!selectedSupportTypes) {
-      throw Error('CustomSupportController::getSkipLink: Missing support types session data');
+      throw Error(
+        "CustomSupportController::getSkipLink: Missing support types session data"
+      );
     }
 
     const { support } = req.body as CustomSupportBody;
@@ -34,21 +39,25 @@ export class CustomSupportController {
       return this.render(req, res);
     }
 
-    if (config.featureToggles.enableCustomSupportInputValidation
-      && !isNonStandardSupportSelected(selectedSupportTypes)
-      && isCustomSupportInputEmptyOrUnmeaningful(support)) {
+    if (
+      config.featureToggles.enableCustomSupportInputValidation &&
+      !isNonStandardSupportSelected(selectedSupportTypes) &&
+      isCustomSupportInputEmptyOrUnmeaningful(support)
+    ) {
       req.session.journey.inEditMode = false;
       if (isOnlyCustomSupportSelected(selectedSupportTypes)) {
-        return res.redirect('confirm-support');
+        return res.redirect("confirm-support");
       }
-      return res.redirect('leaving-nsa'); // 'Other' + standard support selected
+      return res.redirect("leaving-nsa"); // 'Other' + standard support selected
     }
 
-    return inEditMode ? res.redirect('check-your-details') : res.redirect(nsaNavigator.getNextPage(req));
+    return inEditMode
+      ? res.redirect("check-your-details")
+      : res.redirect(nsaNavigator.getNextPage(req));
   };
 
   private render = (req: Request, res: Response): void => {
-    res.render('supported/custom-support', {
+    res.render("supported/custom-support", {
       errors: req.errors,
       savedCustomSupport: req.session.currentBooking?.customSupport,
       backLink: this.getBackLink(req),
@@ -58,35 +67,40 @@ export class CustomSupportController {
 
   private getBackLink = (req: Request): string => {
     if (!req.session.journey) {
-      throw Error('CustomSupportController::getBackLink: No journey set');
+      throw Error("CustomSupportController::getBackLink: No journey set");
     }
     const { inEditMode } = req.session.journey;
-    return inEditMode ? 'check-your-details' : nsaNavigator.getPreviousPage(req);
+    return inEditMode
+      ? "check-your-details"
+      : nsaNavigator.getPreviousPage(req);
   };
 
   private getSkipLink = (req: Request): string => {
-    const selectedSupportTypes = req.session.currentBooking?.selectSupportType as SupportType[];
+    const selectedSupportTypes = req.session.currentBooking
+      ?.selectSupportType as SupportType[];
     if (!selectedSupportTypes) {
-      throw Error('CustomSupportController::getSkipLink: Missing support types session data');
+      throw Error(
+        "CustomSupportController::getSkipLink: Missing support types session data"
+      );
     }
     if (config.featureToggles.enableCustomSupportInputValidation) {
       if (isOnlyCustomSupportSelected(selectedSupportTypes)) {
-        return 'confirm-support';
+        return "confirm-support";
       }
       if (!isNonStandardSupportSelected(selectedSupportTypes)) {
-        return 'leaving-nsa';
+        return "leaving-nsa";
       }
     }
-    return 'staying-nsa';
+    return "staying-nsa";
   };
 
   /* istanbul ignore next */
   public postSchemaValidation = (): ValidatorSchema => ({
     support: {
-      in: ['body'],
+      in: ["body"],
       isLength: {
         options: { max: 4000 },
-        errorMessage: (): string => translate('customSupport.errorMessage'),
+        errorMessage: (): string => translate("customSupport.errorMessage"),
       },
     },
   });

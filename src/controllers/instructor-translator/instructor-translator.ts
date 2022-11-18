@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-import { ValidatorSchema } from '../../middleware/request-validator';
-import { translate } from '../../helpers/language';
-import nsaNavigator from '../../helpers/nsa-navigator';
+import { ValidatorSchema } from "../../middleware/request-validator";
+import { translate } from "../../helpers/language";
+import nsaNavigator from "../../helpers/nsa-navigator";
 
 export class InstructorTranslatorController {
   public get = (req: Request, res: Response): void => this.renderPage(req, res);
@@ -12,22 +12,26 @@ export class InstructorTranslatorController {
       return this.renderPage(req, res);
     }
     if (!req.session.journey) {
-      throw Error('InstructorTranslatorController::post: No journey set');
+      throw Error("InstructorTranslatorController::post: No journey set");
     }
     const { inEditMode } = req.session.journey;
     req.session.currentBooking = {
       ...req.session.currentBooking,
       translator: req.body.translator,
     };
-    return inEditMode ? res.redirect('check-your-details') : res.redirect(nsaNavigator.getNextPage(req));
+    return inEditMode
+      ? res.redirect("check-your-details")
+      : res.redirect(nsaNavigator.getNextPage(req));
   };
 
   private renderPage(req: Request, res: Response): void {
     if (!req.session.currentBooking) {
-      throw Error('InstructorTranslatorController::renderPage: No currentBooking set');
+      throw Error(
+        "InstructorTranslatorController::renderPage: No currentBooking set"
+      );
     }
     const { translator } = req.session.currentBooking;
-    return res.render('instructor/translator', {
+    return res.render("instructor/translator", {
       value: req.body?.translator || translator,
       backLink: this.getBackLink(req),
       errors: req.errors,
@@ -36,22 +40,27 @@ export class InstructorTranslatorController {
 
   private getBackLink = (req: Request): string => {
     if (!req.session.journey) {
-      throw Error('InstructorTranslatorController::getBackLink: No journey set');
+      throw Error(
+        "InstructorTranslatorController::getBackLink: No journey set"
+      );
     }
     const { inEditMode } = req.session.journey;
-    return inEditMode ? 'check-your-details' : nsaNavigator.getPreviousPage(req);
+    return inEditMode
+      ? "check-your-details"
+      : nsaNavigator.getPreviousPage(req);
   };
 
   /* istanbul ignore next */
   public postSchemaValidation: ValidatorSchema = {
     translator: {
-      in: ['body'],
+      in: ["body"],
       isEmpty: {
         negated: true,
-        errorMessage: (): string => translate('translator.errorMessages.empty'),
+        errorMessage: (): string => translate("translator.errorMessages.empty"),
       },
       isLength: {
-        errorMessage: (): string => translate('translator.errorMessages.tooLong'),
+        errorMessage: (): string =>
+          translate("translator.errorMessages.tooLong"),
         options: {
           max: 100,
         },

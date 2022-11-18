@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import { existsInEnum, PreferredLocation } from '../../domain/enums';
-import { translate } from '../../helpers/language';
-import { ValidatorSchema } from '../../middleware/request-validator';
+import { Request, Response } from "express";
+import { existsInEnum, PreferredLocation } from "../../domain/enums";
+import { translate } from "../../helpers/language";
+import { ValidatorSchema } from "../../middleware/request-validator";
 
 interface PreferredLocationBody {
   locationInput: string;
@@ -13,9 +13,10 @@ export class PreferredLocationController {
 
   public post = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('PreferredLocationBody::post: No journey set');
+      throw Error("PreferredLocationBody::post: No journey set");
     }
-    const { locationInput, preferredLocationOption } = req.body as PreferredLocationBody;
+    const { locationInput, preferredLocationOption } =
+      req.body as PreferredLocationBody;
     const { inEditMode } = req.session.journey;
 
     if (req.hasErrors) {
@@ -28,21 +29,27 @@ export class PreferredLocationController {
       preferredLocationOption,
     };
 
-    return inEditMode ? res.redirect('check-your-details') : res.redirect('email-contact');
+    return inEditMode
+      ? res.redirect("check-your-details")
+      : res.redirect("email-contact");
   };
 
   private render = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('PreferredLocationBody::render: No journey set');
+      throw Error("PreferredLocationBody::render: No journey set");
     }
-    const { locationInput, preferredLocationOption } = req.body as PreferredLocationBody;
+    const { locationInput, preferredLocationOption } =
+      req.body as PreferredLocationBody;
     const { inEditMode } = req.session.journey;
 
-    res.render('supported/preferred-location', {
+    res.render("supported/preferred-location", {
       errors: req.errors,
-      savedPreferredLocation: locationInput || req.session.currentBooking?.preferredLocation,
-      preferredLocationOption: preferredLocationOption || req.session.currentBooking?.preferredLocationOption,
-      backLink: inEditMode ? 'check-your-details' : 'preferred-day',
+      savedPreferredLocation:
+        locationInput || req.session.currentBooking?.preferredLocation,
+      preferredLocationOption:
+        preferredLocationOption ||
+        req.session.currentBooking?.preferredLocationOption,
+      backLink: inEditMode ? "check-your-details" : "preferred-day",
     });
   };
 
@@ -52,10 +59,11 @@ export class PreferredLocationController {
     if (preferredLocationOption === PreferredLocation.ParticularLocation) {
       return {
         locationInput: {
-          in: ['body'],
+          in: ["body"],
           isLength: {
             options: { max: 4000 },
-            errorMessage: (): string => translate('preferredLocation.errorMessage'),
+            errorMessage: (): string =>
+              translate("preferredLocation.errorMessage"),
           },
         },
       };
@@ -63,8 +71,9 @@ export class PreferredLocationController {
 
     return {
       preferredLocationOption: {
-        in: ['body'],
-        errorMessage: (): string => translate('preferredLocation.validationError'),
+        in: ["body"],
+        errorMessage: (): string =>
+          translate("preferredLocation.validationError"),
         custom: {
           options: existsInEnum(PreferredLocation),
         },

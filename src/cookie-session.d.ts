@@ -1,1 +1,1 @@
-declare module 'cookie-session';
+declare module "cookie-session";

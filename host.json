@@ -17,10 +17,10 @@
     "fileLoggingMode": "never",
     "logLevel": {
       "default": "Warning",
-      "Host.Results":"Information"
+      "Host.Results": "Information"
     },
     "applicationInsights": {
-      "enablePerformanceCountersCollection" : false
+      "enablePerformanceCountersCollection": false
     }
   }
 }

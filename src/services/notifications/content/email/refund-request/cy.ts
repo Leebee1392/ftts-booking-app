@@ -1,8 +1,8 @@
-import dedent from 'ts-dedent';
-import { RefundRequestDetails } from '../../../types';
+import dedent from "ts-dedent";
+import { RefundRequestDetails } from "../../../types";
 
 export default {
-  subject: 'DVSA: Derbyniwyd eich cais am ad-daliad prawf theori gyrru',
+  subject: "DVSA: Derbyniwyd eich cais am ad-daliad prawf theori gyrru",
   buildBody: (details: RefundRequestDetails): string => dedent`
   # Rydym wedi derbyn eich cais am ad-daliad prawf theori gyrru
 

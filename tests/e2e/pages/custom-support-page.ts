@@ -1,12 +1,12 @@
 /* eslint-disable import/no-cycle */
-import { BasePage } from './base-page';
-import { click, enter } from '../utils/helpers';
+import { BasePage } from "./base-page";
+import { click, enter } from "../utils/helpers";
 
 export class CustomSupportPage extends BasePage {
   // locators
   pageHeadingLocator = 'h1[data-automation-id="heading"]';
 
-  updateBanner = 'div.alert';
+  updateBanner = "div.alert";
 
   supportTextArea = 'textarea[data-automation-id="input"]';
 
@@ -18,34 +18,35 @@ export class CustomSupportPage extends BasePage {
 
   backLink = 'a[data-automation-id="back"]';
 
-  charCountHintText = '#support-info';
+  charCountHintText = "#support-info";
 
   errorLink = 'a[href="#support"]';
 
-  errorMessageLocator = '#error-summary-title';
+  errorMessageLocator = "#error-summary-title";
 
-  errorMessageList = '.govuk-list.govuk-error-summary__list';
+  errorMessageList = ".govuk-list.govuk-error-summary__list";
 
-  errorMessageTextAreaLocator = '#support-error';
+  errorMessageTextAreaLocator = "#support-error";
 
-  pathUrl = 'nsa/custom-support';
+  pathUrl = "nsa/custom-support";
 
   // content
-  pageHeading = 'Tell us what support you need';
+  pageHeading = "Tell us what support you need";
 
-  characterCountText = 'You have 4000 characters remaining';
+  characterCountText = "You have 4000 characters remaining";
 
-  errorMessageHeader = 'There is a problem';
+  errorMessageHeader = "There is a problem";
 
-  errorMessageText = 'The text you enter here must be 4000 characters or fewer';
+  errorMessageText = "The text you enter here must be 4000 characters or fewer";
 
-  updateBannerText = 'You can tell us more about the support you need here. Or you can use the information you have already provided.';
+  updateBannerText =
+    "You can tell us more about the support you need here. Or you can use the information you have already provided.";
 
-  updateButtonText = 'Continue';
+  updateButtonText = "Continue";
 
-  cancelButtonText = 'Cancel and use information already provided';
+  cancelButtonText = "Cancel and use information already provided";
 
-  cancelLinkText = 'can use the information you have already provided';
+  cancelLinkText = "can use the information you have already provided";
 
   async enterSupportInformation(supportText: string): Promise<void> {
     await enter(this.supportTextArea, supportText);

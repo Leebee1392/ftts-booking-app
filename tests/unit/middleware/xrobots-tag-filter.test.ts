@@ -1,6 +1,6 @@
-import { XRobotsTagFilter } from '../../../src/middleware/xrobots-tag-filter';
+import { XRobotsTagFilter } from "../../../src/middleware/xrobots-tag-filter";
 
-describe('xrobots tag filter', () => {
+describe("xrobots tag filter", () => {
   let req: any;
   let res: any;
   let next: any;
@@ -13,7 +13,7 @@ describe('xrobots tag filter', () => {
     next = jest.fn();
   });
 
-  test('filter sets res header', () => {
+  test("filter sets res header", () => {
     XRobotsTagFilter.filter(req, res, next);
 
     expect(res.setHeader).toHaveBeenCalled();

@@ -1,24 +1,29 @@
-import dedent from 'ts-dedent';
+import dedent from "ts-dedent";
 
-import { SupportType } from '../../../../../domain/enums';
-import { isDeafCandidate } from '../../../../../helpers/evidence-helper';
-import { translate } from '../../../../../helpers/language';
-import { SupportRequestDetails } from '../../../types';
-import { escapeNotifyMarkdown, formatSupportTypes } from '../../helpers';
+import { SupportType } from "../../../../../domain/enums";
+import { isDeafCandidate } from "../../../../../helpers/evidence-helper";
+import { translate } from "../../../../../helpers/language";
+import { SupportRequestDetails } from "../../../types";
+import { escapeNotifyMarkdown, formatSupportTypes } from "../../helpers";
 
-const optionalDeafCandidateSection = (details: SupportRequestDetails): string => {
-  if (isDeafCandidate(details.supportTypes) && details.supportTypes.includes(SupportType.EXTRA_TIME)) {
+const optionalDeafCandidateSection = (
+  details: SupportRequestDetails
+): string => {
+  if (
+    isDeafCandidate(details.supportTypes) &&
+    details.supportTypes.includes(SupportType.EXTRA_TIME)
+  ) {
     return dedent`
       # Pryd nad oes angen i chi ddarparu tystiolaeth
 
       Nid oes angen i chi ddarparu tystiolaeth os ydych yn fyddar neu os oes gennych nam ar y clyw ac yn gofyn am gymorth yn ymwneud â byddardod, yn ogystal ag amser ychwanegol. Os gwnaethoch ofyn am unrhyw fath arall o gymorth bydd angen i chi ddarparu tystiolaeth. ))
     `;
   }
-  return '';
+  return "";
 };
 
 export default {
-  subject: 'DVSA: eich cais am gymorth am eich prawf theori',
+  subject: "DVSA: eich cais am gymorth am eich prawf theori",
   buildBody: (details: SupportRequestDetails): string => dedent`
     # Diolch am eich cais am gymorth gyda'ch prawf theori gyrru
 
@@ -33,11 +38,25 @@ export default {
     # Eich manylion prawf a chymorth
 
     Math o brawf: ${translate(`generalContent.testTypes.${details.testType}`)}
-    Iaith ar sgrîn: ${translate(`generalContent.language.${details.testLanguage}`)}
-    Cymorth sydd angen: ${details.supportTypes.length > 0 ? translate('generalContent.yes') : translate('generalContent.no')}
+    Iaith ar sgrîn: ${translate(
+      `generalContent.language.${details.testLanguage}`
+    )}
+    Cymorth sydd angen: ${
+      details.supportTypes.length > 0
+        ? translate("generalContent.yes")
+        : translate("generalContent.no")
+    }
     Y mathau o gymorth a ddewiswyd: ${formatSupportTypes(details.supportTypes)}
-    Amser sy'n well gennych ar gyfer y prawf: ${details.preferredDay.text ? escapeNotifyMarkdown(details.preferredDay.text) : 'Byddaf yn gwneud y penderfyniad hwn yn hwyrach'}
-    Y lleoliadau sy'n well gennych ar gyfer y prawf: ${details.preferredLocation.text ? escapeNotifyMarkdown(details.preferredLocation.text) : 'Byddaf yn gwneud y penderfyniad hwn yn hwyrach'}
+    Amser sy'n well gennych ar gyfer y prawf: ${
+      details.preferredDay.text
+        ? escapeNotifyMarkdown(details.preferredDay.text)
+        : "Byddaf yn gwneud y penderfyniad hwn yn hwyrach"
+    }
+    Y lleoliadau sy'n well gennych ar gyfer y prawf: ${
+      details.preferredLocation.text
+        ? escapeNotifyMarkdown(details.preferredLocation.text)
+        : "Byddaf yn gwneud y penderfyniad hwn yn hwyrach"
+    }
 
     # Achosion pan nad oes angen i chi ddarparu tystiolaeth
 

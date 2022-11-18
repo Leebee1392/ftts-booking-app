@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import { SupportType, Target, Voiceover } from '../../domain/enums';
-import { translate } from '../../helpers/language';
-import { ValidatorSchema } from '../../middleware/request-validator';
-import { bslIsAvailable } from '../../domain/bsl';
+import { Request, Response } from "express";
+import { SupportType, Target, Voiceover } from "../../domain/enums";
+import { translate } from "../../helpers/language";
+import { ValidatorSchema } from "../../middleware/request-validator";
+import { bslIsAvailable } from "../../domain/bsl";
 
 type SupportOption = {
   attributes: {
-    'data-automation-id': string;
+    "data-automation-id": string;
   };
   checked: boolean;
   text: string;
@@ -16,7 +16,9 @@ class SelectStandardSupportController {
   supportOptions: Map<string, SupportOption>;
 
   supportTypes: SupportType[] = [
-    SupportType.ON_SCREEN_BSL, SupportType.VOICEOVER, SupportType.NO_SUPPORT_WANTED,
+    SupportType.ON_SCREEN_BSL,
+    SupportType.VOICEOVER,
+    SupportType.NO_SUPPORT_WANTED,
   ];
 
   constructor() {
@@ -25,10 +27,12 @@ class SelectStandardSupportController {
 
   get = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('SelectStandardSupportController::get: No journey set');
+      throw Error("SelectStandardSupportController::get: No journey set");
     }
     if (!req.session.currentBooking) {
-      throw Error('SelectStandardSupportController::get: No currentBooking set');
+      throw Error(
+        "SelectStandardSupportController::get: No currentBooking set"
+      );
     }
     // if the user comes back to select standard support page, reset shown voiceover page flag
     req.session.journey.shownVoiceoverPageFlag = false;
@@ -38,7 +42,7 @@ class SelectStandardSupportController {
 
   post = (req: Request, res: Response): void => {
     if (!req.session.journey) {
-      throw Error('SelectStandardSupportController::post: No journey set');
+      throw Error("SelectStandardSupportController::post: No journey set");
     }
     if (req.hasErrors) {
       return this.render(req, res);
@@ -53,8 +57,8 @@ class SelectStandardSupportController {
         voiceover: Voiceover.NONE,
         selectStandardSupportType,
       };
-      req.session.lastPage = 'select-standard-support';
-      return res.redirect('find-test-centre');
+      req.session.lastPage = "select-standard-support";
+      return res.redirect("find-test-centre");
     }
 
     if (selectStandardSupportType === SupportType.VOICEOVER) {
@@ -63,7 +67,7 @@ class SelectStandardSupportController {
         bsl: false,
         selectStandardSupportType,
       };
-      return res.redirect('change-voiceover');
+      return res.redirect("change-voiceover");
     }
 
     if (selectStandardSupportType === SupportType.NO_SUPPORT_WANTED) {
@@ -89,28 +93,30 @@ class SelectStandardSupportController {
         inEditMode: false,
       };
     }
-    req.session.lastPage = 'select-standard-support';
-    return res.redirect('find-test-centre');
+    req.session.lastPage = "select-standard-support";
+    return res.redirect("find-test-centre");
   };
 
   private render = (req: Request, res: Response): void => {
     if (!req.session.currentBooking) {
-      throw Error('SelectStandardSupportController::render: No currentBooking set');
+      throw Error(
+        "SelectStandardSupportController::render: No currentBooking set"
+      );
     }
     if (!req.session.journey) {
-      throw Error('SelectStandardSupportController::render: No journey set');
+      throw Error("SelectStandardSupportController::render: No journey set");
     }
 
     const { testType } = req.session.currentBooking;
     if (!bslIsAvailable(testType)) {
-      return res.redirect('change-voiceover');
+      return res.redirect("change-voiceover");
     }
     req.session.journey.shownStandardSupportPageFlag = true;
     this.supportOptions.clear();
     this.supportTypes.forEach((val) => {
       this.supportOptions.set(val, {
         attributes: {
-          'data-automation-id': `support-${val}`,
+          "data-automation-id": `support-${val}`,
         },
         checked: val === req.session.currentBooking?.selectStandardSupportType,
         value: val,
@@ -121,7 +127,7 @@ class SelectStandardSupportController {
     const options: SupportOption[] = [];
     this.supportOptions.forEach((value) => options.push(value));
 
-    return res.render('common/select-standard-support', {
+    return res.render("common/select-standard-support", {
       errors: req.errors,
       options,
       backLink: this.getBackLink(req),
@@ -153,7 +159,7 @@ class SelectStandardSupportController {
   /* istanbul ignore next */
   public postSchemaValidation = (): ValidatorSchema => ({
     selectStandardSupportType: {
-      in: ['body'],
+      in: ["body"],
       custom: {
         options: this.supportTypeValidator,
       },
@@ -162,24 +168,26 @@ class SelectStandardSupportController {
 
   public supportTypeValidator = (value: string): string => {
     if (!value) {
-      throw new Error(translate('voicemail.errorBannerNotification'));
+      throw new Error(translate("voicemail.errorBannerNotification"));
     }
     return value;
   };
 
   private getBackLink = (req: Request): string => {
     if (!req.session.journey) {
-      throw Error('SelectStandardSupportController::getBackLink: No journey set');
+      throw Error(
+        "SelectStandardSupportController::getBackLink: No journey set"
+      );
     }
     if (req.session.target === Target.GB) {
-      return 'test-language';
+      return "test-language";
     }
 
     // DVA
     if (req.session.journey.receivedSupportRequestPageFlag) {
-      return 'received-support-request';
+      return "received-support-request";
     }
-    return 'test-type';
+    return "test-type";
   };
 }
 

@@ -1,8 +1,8 @@
-import dedent from 'ts-dedent';
-import { RefundRequestDetails } from '../../../types';
+import dedent from "ts-dedent";
+import { RefundRequestDetails } from "../../../types";
 
 export default {
-  subject: 'DVSA: Your driving theory test refund request has been received',
+  subject: "DVSA: Your driving theory test refund request has been received",
   buildBody: (details: RefundRequestDetails): string => dedent`
   # We have received your driving theory test refund request
 

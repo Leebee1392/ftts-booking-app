@@ -1,8 +1,8 @@
-import connectRedis from 'connect-redis';
-import expressSession from 'express-session';
-import redis from 'redis';
+import connectRedis from "connect-redis";
+import expressSession from "express-session";
+import redis from "redis";
 
-import config from '../config';
+import config from "../config";
 
 const RedisStore = connectRedis(expressSession);
 

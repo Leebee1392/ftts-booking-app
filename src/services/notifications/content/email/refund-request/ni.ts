@@ -1,9 +1,9 @@
-import dedent from 'ts-dedent';
-import { translate } from '../../../../../helpers/language';
-import { RefundRequestDetails } from '../../../types';
+import dedent from "ts-dedent";
+import { translate } from "../../../../../helpers/language";
+import { RefundRequestDetails } from "../../../types";
 
 export default {
-  subject: 'DVA: Your driving theory test refund request has been received',
+  subject: "DVA: Your driving theory test refund request has been received",
   buildBody: (details: RefundRequestDetails): string => dedent`
   # We have received your driving theory test refund request
 
@@ -24,7 +24,7 @@ export default {
   # DVA theory test booking support
 
   dva.theorycustomerservices@dvsa.gov.uk
-  Telephone: ${translate('generalContent.cancelContact.phone')}
+  Telephone: ${translate("generalContent.cancelContact.phone")}
   Monday to Friday, 8am to 4pm (except public holidays)
   `,
 };

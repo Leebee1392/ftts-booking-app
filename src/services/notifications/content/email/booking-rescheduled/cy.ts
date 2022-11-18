@@ -1,16 +1,22 @@
-import dedent from 'ts-dedent';
+import dedent from "ts-dedent";
 
-import { translate } from '../../../../../helpers/language';
-import { BookingRescheduledDetails } from '../../../types';
-import { asLocalTime, asFullDateWithWeekday, asFullDateWithoutWeekday } from '../../../../../nunjucks-filters/local-date-time-filter';
-import { formatAddressLines } from '../../helpers';
+import { translate } from "../../../../../helpers/language";
+import { BookingRescheduledDetails } from "../../../types";
+import {
+  asLocalTime,
+  asFullDateWithWeekday,
+  asFullDateWithoutWeekday,
+} from "../../../../../nunjucks-filters/local-date-time-filter";
+import { formatAddressLines } from "../../helpers";
 
 export default {
-  subject: 'DVSA: mae\'ch prawf theori gyrru wedi\'i ddiweddaru',
+  subject: "DVSA: mae'ch prawf theori gyrru wedi'i ddiweddaru",
   buildBody: (details: BookingRescheduledDetails): string => {
-    let cancelWarning = '';
+    let cancelWarning = "";
     if (details.lastRefundDate) {
-      cancelWarning = ` Os bydd yr archeb hon yn cael ei newid neu ei chanslo ar ôl dydd ${asFullDateWithoutWeekday(details.lastRefundDate)} ni roddir ad-daliad.`;
+      cancelWarning = ` Os bydd yr archeb hon yn cael ei newid neu ei chanslo ar ôl dydd ${asFullDateWithoutWeekday(
+        details.lastRefundDate
+      )} ni roddir ad-daliad.`;
     }
 
     return dedent`
@@ -30,7 +36,9 @@ export default {
     ---
     # Amser a dyddiad y prawf
 
-    ${asLocalTime(details.testDateTime)} ${asFullDateWithWeekday(details.testDateTime)}
+    ${asLocalTime(details.testDateTime)} ${asFullDateWithWeekday(
+      details.testDateTime
+    )}
 
     ---
     # Lleoliad y prawf

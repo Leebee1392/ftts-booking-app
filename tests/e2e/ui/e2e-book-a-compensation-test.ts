@@ -1,23 +1,35 @@
-import { Selector, t } from 'testcafe';
-import dayjs from 'dayjs';
-import * as Constants from '../data/constants';
-import { SessionData } from '../data/session-data';
+import { Selector, t } from "testcafe";
+import dayjs from "dayjs";
+import * as Constants from "../data/constants";
+import { SessionData } from "../data/session-data";
 import {
-  Locale, Origin, PreferredDay, PreferredLocation, SupportType, Target, Voiceover,
-} from '../../../src/domain/enums';
-import { NavigationHelper } from '../utils/navigation-helper';
-import { NavigationHelperNSA } from '../utils/navigation-helper-nsa';
-import { NavigationHelperInstructor } from '../utils/navigation-helper-instructor';
-import { NavigationHelperInstructorNSA } from '../utils/navigation-helper-instructor-nsa';
-import ManageBookingsPage from '../pages/manage-bookings-page';
+  Locale,
+  Origin,
+  PreferredDay,
+  PreferredLocation,
+  SupportType,
+  Target,
+  Voiceover,
+} from "../../../src/domain/enums";
+import { NavigationHelper } from "../utils/navigation-helper";
+import { NavigationHelperNSA } from "../utils/navigation-helper-nsa";
+import { NavigationHelperInstructor } from "../utils/navigation-helper-instructor";
+import { NavigationHelperInstructorNSA } from "../utils/navigation-helper-instructor-nsa";
+import ManageBookingsPage from "../pages/manage-bookings-page";
 import {
-  runningTestsLocally, setAcceptCookies, verifyContainsText, verifyExactText, verifyIsNotVisible, verifyIsVisible, verifyTitleContainsText,
-} from '../utils/helpers';
-import { CRMGateway } from '../utils/crm/crm-gateway-test';
-import { dynamicsWebApiClient } from '../utils/crm/dynamics-web-api';
-import { createNewBookingInCrm } from '../utils/crm/crm-data-helper';
-import { LoginPage } from '../pages/login-page';
-import { ChangeBookingPage } from '../pages/change-booking-page';
+  runningTestsLocally,
+  setAcceptCookies,
+  verifyContainsText,
+  verifyExactText,
+  verifyIsNotVisible,
+  verifyIsVisible,
+  verifyTitleContainsText,
+} from "../utils/helpers";
+import { CRMGateway } from "../utils/crm/crm-gateway-test";
+import { dynamicsWebApiClient } from "../utils/crm/dynamics-web-api";
+import { createNewBookingInCrm } from "../utils/crm/crm-data-helper";
+import { LoginPage } from "../pages/login-page";
+import { ChangeBookingPage } from "../pages/change-booking-page";
 
 const crmGateway = new CRMGateway(dynamicsWebApiClient());
 const loginPage = new LoginPage();
@@ -26,23 +38,35 @@ const manageBookingPageUrl = `${process.env.BOOKING_APP_URL}/${loginPage.pathUrl
 
 fixture`Compensation tests - Book a compensation theory test`
   .page(process.env.BOOKING_APP_URL)
-  .before(async () => { await Constants.setRequestTimeout; })
-  .beforeEach(async () => { await setAcceptCookies(); })
+  .before(async () => {
+    await Constants.setRequestTimeout;
+  })
+  .beforeEach(async () => {
+    await setAcceptCookies();
+  })
   .afterEach(async () => {
     const { sessionData } = t.ctx;
     if (!runningTestsLocally()) {
       if (sessionData.isCompensationBooking) {
-        await crmGateway.setCompensationBookingAssigned(sessionData.currentBooking.bookingId, dayjs().toISOString());
-        await crmGateway.setCompensationBookingRecognised(sessionData.currentBooking.bookingId, dayjs().toISOString());
+        await crmGateway.setCompensationBookingAssigned(
+          sessionData.currentBooking.bookingId,
+          dayjs().toISOString()
+        );
+        await crmGateway.setCompensationBookingRecognised(
+          sessionData.currentBooking.bookingId,
+          dayjs().toISOString()
+        );
       }
-      await crmGateway.cleanUpBookingProductsByBookingRef(sessionData.currentBooking.bookingRef);
+      await crmGateway.cleanUpBookingProductsByBookingRef(
+        sessionData.currentBooking.bookingRef
+      );
     }
   })
-  .meta('type', 'bulk-compensation');
+  .meta("type", "bulk-compensation");
 
 const dataSetCompensationBookingsSA = [
   {
-    testName: 'GB candidate with a cancelled Standard accommodation booking',
+    testName: "GB candidate with a cancelled Standard accommodation booking",
     nonStandardAccommodations: false,
     instructorBooking: false,
     target: Target.GB,
@@ -51,7 +75,8 @@ const dataSetCompensationBookingsSA = [
     drivingLicenceNumber: Constants.drivingLicenceBulkCompensationGB1,
   },
   {
-    testName: 'GB candidate with a cancelled Standard accommodation CSC booking',
+    testName:
+      "GB candidate with a cancelled Standard accommodation CSC booking",
     nonStandardAccommodations: false,
     instructorBooking: false,
     target: Target.GB,
@@ -60,7 +85,7 @@ const dataSetCompensationBookingsSA = [
     drivingLicenceNumber: Constants.drivingLicenceBulkCompensationGB2,
   },
   {
-    testName: 'GB instructor with a cancelled Standard accommodation booking',
+    testName: "GB instructor with a cancelled Standard accommodation booking",
     nonStandardAccommodations: false,
     instructorBooking: true,
     target: Target.GB,
@@ -69,7 +94,7 @@ const dataSetCompensationBookingsSA = [
     drivingLicenceNumber: Constants.drivingLicenceBulkCompensationGB3,
   },
   {
-    testName: 'NI candidate with a cancelled Standard accommodation booking',
+    testName: "NI candidate with a cancelled Standard accommodation booking",
     nonStandardAccommodations: false,
     instructorBooking: false,
     target: Target.NI,
@@ -78,7 +103,8 @@ const dataSetCompensationBookingsSA = [
     drivingLicenceNumber: Constants.drivingLicenceBulkCompensationNI1,
   },
   {
-    testName: 'NI candidate with a cancelled Standard accommodation CSC booking',
+    testName:
+      "NI candidate with a cancelled Standard accommodation CSC booking",
     nonStandardAccommodations: false,
     instructorBooking: false,
     target: Target.NI,
@@ -87,7 +113,7 @@ const dataSetCompensationBookingsSA = [
     drivingLicenceNumber: Constants.drivingLicenceBulkCompensationNI2,
   },
   {
-    testName: 'NI instructor with a cancelled Standard accommodation booking',
+    testName: "NI instructor with a cancelled Standard accommodation booking",
     nonStandardAccommodations: false,
     instructorBooking: true,
     target: Target.NI,
@@ -101,7 +127,12 @@ dataSetCompensationBookingsSA.forEach((data) => {
   // eslint-disable-next-line testcafe-community/noIdenticalTitle
   test(`Verify user can book an owed compensation test - ${data.testName}`, async () => {
     // create compensation booking first
-    const sessionData = new SessionData(data.target, data.locale, false, data.instructorBooking);
+    const sessionData = new SessionData(
+      data.target,
+      data.locale,
+      false,
+      data.instructorBooking
+    );
     t.ctx.sessionData = sessionData;
     sessionData.candidate.licenceNumber = data.drivingLicenceNumber;
     sessionData.isCompensationBooking = true;
@@ -124,12 +155,22 @@ dataSetCompensationBookingsSA.forEach((data) => {
     await t.navigateTo(`${manageBookingPageUrl}?target=${data.target}`);
     await loginPage.login(newBookingRef, licenceNumber);
     await verifyTitleContainsText(ManageBookingsPage.pageHeading);
-    await verifyExactText(ManageBookingsPage.pageHeadingLocator, ManageBookingsPage.pageHeading);
-    await t.expect(Selector(ManageBookingsPage.table).innerText).notContains(oldBookingRef);
-    await t.expect(Selector(ManageBookingsPage.table).innerText).contains(newBookingRef);
+    await verifyExactText(
+      ManageBookingsPage.pageHeadingLocator,
+      ManageBookingsPage.pageHeading
+    );
+    await t
+      .expect(Selector(ManageBookingsPage.table).innerText)
+      .notContains(oldBookingRef);
+    await t
+      .expect(Selector(ManageBookingsPage.table).innerText)
+      .contains(newBookingRef);
     await ManageBookingsPage.viewTestWithBookingReference(newBookingRef);
     await verifyTitleContainsText(changeBookingPage.pageHeading);
-    await verifyContainsText(changeBookingPage.warningMessageLocator, changeBookingPage.refundWarningMessageTextBookingToday);
+    await verifyContainsText(
+      changeBookingPage.warningMessageLocator,
+      changeBookingPage.refundWarningMessageTextBookingToday
+    );
     await verifyIsNotVisible(changeBookingPage.cancelTestButton);
     await changeBookingPage.checkDataMatchesSession(sessionData);
   });
@@ -137,7 +178,8 @@ dataSetCompensationBookingsSA.forEach((data) => {
 
 const dataSetCompensationBookingsNSA = [
   {
-    testName: 'GB candidate with a cancelled Non-Standard accommodation booking',
+    testName:
+      "GB candidate with a cancelled Non-Standard accommodation booking",
     nonStandardAccommodations: true,
     instructorBooking: false,
     target: Target.GB,
@@ -146,7 +188,8 @@ const dataSetCompensationBookingsNSA = [
     drivingLicenceNumber: Constants.drivingLicenceBulkCompensationGB1,
   },
   {
-    testName: 'GB candidate with a cancelled Non-Standard accommodation CSC booking',
+    testName:
+      "GB candidate with a cancelled Non-Standard accommodation CSC booking",
     nonStandardAccommodations: true,
     instructorBooking: false,
     target: Target.GB,
@@ -155,7 +198,8 @@ const dataSetCompensationBookingsNSA = [
     drivingLicenceNumber: Constants.drivingLicenceBulkCompensationGB2,
   },
   {
-    testName: 'GB instructor with a cancelled Non-Standard accommodation booking',
+    testName:
+      "GB instructor with a cancelled Non-Standard accommodation booking",
     nonStandardAccommodations: true,
     instructorBooking: true,
     target: Target.GB,
@@ -164,7 +208,8 @@ const dataSetCompensationBookingsNSA = [
     drivingLicenceNumber: Constants.drivingLicenceBulkCompensationGB3,
   },
   {
-    testName: 'NI candidate with a cancelled Non-Standard accommodation booking',
+    testName:
+      "NI candidate with a cancelled Non-Standard accommodation booking",
     nonStandardAccommodations: true,
     instructorBooking: false,
     target: Target.NI,
@@ -178,7 +223,12 @@ dataSetCompensationBookingsNSA.forEach((data) => {
   // eslint-disable-next-line testcafe-community/noIdenticalTitle
   test(`Verify user can book an owed compensation test - ${data.testName}`, async () => {
     // create compensation booking first
-    const sessionData = new SessionData(data.target, data.locale, false, data.instructorBooking);
+    const sessionData = new SessionData(
+      data.target,
+      data.locale,
+      false,
+      data.instructorBooking
+    );
     t.ctx.sessionData = sessionData;
     sessionData.candidate.licenceNumber = data.drivingLicenceNumber;
     sessionData.isCompensationBooking = true;
@@ -186,14 +236,22 @@ dataSetCompensationBookingsNSA.forEach((data) => {
 
     sessionData.journey.support = true;
     sessionData.journey.standardAccommodation = false;
-    sessionData.currentBooking.selectSupportType = [SupportType.VOICEOVER, SupportType.EXTRA_TIME, SupportType.READING_SUPPORT, SupportType.OTHER];
+    sessionData.currentBooking.selectSupportType = [
+      SupportType.VOICEOVER,
+      SupportType.EXTRA_TIME,
+      SupportType.READING_SUPPORT,
+      SupportType.OTHER,
+    ];
     sessionData.currentBooking.voiceover = Voiceover.ENGLISH;
-    sessionData.currentBooking.customSupport = 'Please arrange for the support';
+    sessionData.currentBooking.customSupport = "Please arrange for the support";
     sessionData.currentBooking.voicemail = true;
     sessionData.currentBooking.preferredDayOption = PreferredDay.ParticularDay;
-    sessionData.currentBooking.preferredDay = 'I only want to have tests on Mondays';
-    sessionData.currentBooking.preferredLocationOption = PreferredLocation.ParticularLocation;
-    sessionData.currentBooking.preferredLocation = 'I only want to have tests in the City Centre';
+    sessionData.currentBooking.preferredDay =
+      "I only want to have tests on Mondays";
+    sessionData.currentBooking.preferredLocationOption =
+      PreferredLocation.ParticularLocation;
+    sessionData.currentBooking.preferredLocation =
+      "I only want to have tests in the City Centre";
 
     if (!runningTestsLocally()) {
       await createNewBookingInCrm(sessionData);
@@ -203,7 +261,9 @@ dataSetCompensationBookingsNSA.forEach((data) => {
 
     const oldBookingRef = bookingRef;
     if (data.instructorBooking) {
-      await new NavigationHelperInstructorNSA(sessionData).sendNsaBookingRequest();
+      await new NavigationHelperInstructorNSA(
+        sessionData
+      ).sendNsaBookingRequest();
     } else {
       await new NavigationHelperNSA(sessionData).sendNsaBookingRequest();
     }
@@ -213,9 +273,16 @@ dataSetCompensationBookingsNSA.forEach((data) => {
     await t.navigateTo(`${manageBookingPageUrl}?target=${data.target}`);
     await loginPage.login(oldBookingRef, licenceNumber);
     await verifyTitleContainsText(ManageBookingsPage.pageHeading);
-    await verifyExactText(ManageBookingsPage.pageHeadingLocator, ManageBookingsPage.pageHeading);
+    await verifyExactText(
+      ManageBookingsPage.pageHeadingLocator,
+      ManageBookingsPage.pageHeading
+    );
     await verifyIsVisible(ManageBookingsPage.compensationBanner);
-    await t.expect(Selector(ManageBookingsPage.table).innerText).notContains(newBookingRef);
-    await t.expect(Selector(ManageBookingsPage.table).innerText).contains(oldBookingRef);
+    await t
+      .expect(Selector(ManageBookingsPage.table).innerText)
+      .notContains(newBookingRef);
+    await t
+      .expect(Selector(ManageBookingsPage.table).innerText)
+      .contains(oldBookingRef);
   });
 });

@@ -1,15 +1,17 @@
-import { Request } from 'express';
+import { Request } from "express";
 
 type CreatedBookingIdentifiers = {
-  bookingId?: string,
-  bookingRef?: string,
-  bookingProductId?: string,
-  bookingProductRef?: string,
-  candidateId?: string,
-  licenceId?: string,
+  bookingId?: string;
+  bookingRef?: string;
+  bookingProductId?: string;
+  bookingProductRef?: string;
+  candidateId?: string;
+  licenceId?: string;
 };
 
-const getCreatedBookingIdentifiers = (req: Request): CreatedBookingIdentifiers => {
+const getCreatedBookingIdentifiers = (
+  req: Request
+): CreatedBookingIdentifiers => {
   if (!req?.session) {
     return {};
   }
@@ -25,6 +27,4 @@ const getCreatedBookingIdentifiers = (req: Request): CreatedBookingIdentifiers =
   };
 };
 
-export {
-  getCreatedBookingIdentifiers,
-};
+export { getCreatedBookingIdentifiers };

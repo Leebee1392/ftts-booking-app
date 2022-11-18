@@ -6,6 +6,6 @@
     "outDir": "dist",
     "strict": false,
     "esModuleInterop": true,
-    "resolveJsonModule": true,
+    "resolveJsonModule": true
   }
 }

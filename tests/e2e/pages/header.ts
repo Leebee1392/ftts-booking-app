@@ -1,5 +1,5 @@
-import { Selector } from 'testcafe';
+import { Selector } from "testcafe";
 
 export class Header {
-  headerSection: Selector = Selector('.govuk-header');
+  headerSection: Selector = Selector(".govuk-header");
 }

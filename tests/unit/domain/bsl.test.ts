@@ -1,13 +1,13 @@
-import { bslIsAvailable } from '../../../src/domain/bsl';
-import { TestType } from '../../../src/domain/enums';
+import { bslIsAvailable } from "../../../src/domain/bsl";
+import { TestType } from "../../../src/domain/enums";
 
-describe('BSL domain logic', () => {
-  describe('bslIsAvailable - checks if British Sign Language option is available for the given test type', () => {
-    test('returns true for car test type', () => {
+describe("BSL domain logic", () => {
+  describe("bslIsAvailable - checks if British Sign Language option is available for the given test type", () => {
+    test("returns true for car test type", () => {
       expect(bslIsAvailable(TestType.CAR)).toBe(true);
     });
 
-    test('returns true for motorcycle test type', () => {
+    test("returns true for motorcycle test type", () => {
       expect(bslIsAvailable(TestType.MOTORCYCLE)).toBe(true);
     });
 
@@ -21,7 +21,7 @@ describe('BSL domain logic', () => {
       TestType.PCVCPC,
       TestType.PCVCPCC,
       TestType.TAXI,
-    ])('returns false for %s test type', (testType: TestType) => {
+    ])("returns false for %s test type", (testType: TestType) => {
       expect(bslIsAvailable(testType)).toBe(false);
     });
 
@@ -31,7 +31,7 @@ describe('BSL domain logic', () => {
       TestType.ERS,
       TestType.ADIP1DVA,
       TestType.AMIP1,
-    ])('returns false for instructor %s test type', (testType: TestType) => {
+    ])("returns false for instructor %s test type", (testType: TestType) => {
       expect(bslIsAvailable(testType)).toBe(false);
     });
   });

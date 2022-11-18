@@ -1,8 +1,8 @@
-import { Request, Response } from 'express';
-import { YesNo } from '../../domain/enums';
-import { translate } from '../../helpers/language';
-import { ValidatorSchema } from '../../middleware/request-validator';
-import { YesOrNo } from '../../value-objects/yes-or-no';
+import { Request, Response } from "express";
+import { YesNo } from "../../domain/enums";
+import { translate } from "../../helpers/language";
+import { ValidatorSchema } from "../../middleware/request-validator";
+import { YesOrNo } from "../../value-objects/yes-or-no";
 
 interface VoicemailBody {
   voicemail: YesNo;
@@ -11,17 +11,17 @@ interface VoicemailBody {
 export class InstructorVoicemailController {
   public get = (req: Request, res: Response): void => {
     if (!req.session.currentBooking) {
-      throw Error('InstructorVoicemailController::get: No currentBooking set');
+      throw Error("InstructorVoicemailController::get: No currentBooking set");
     }
     if (!req.session.journey) {
-      throw Error('InstructorVoicemailController::get: No journey set');
+      throw Error("InstructorVoicemailController::get: No journey set");
     }
     const { inEditMode } = req.session.journey;
     const { voicemail } = req.session.currentBooking;
 
-    const backLink = inEditMode ? 'check-your-details' : 'telephone-contact';
+    const backLink = inEditMode ? "check-your-details" : "telephone-contact";
 
-    res.render('instructor/voicemail', {
+    res.render("instructor/voicemail", {
       backLink,
       voicemailYes: voicemail === true,
       voicemailNo: voicemail === false,
@@ -31,9 +31,9 @@ export class InstructorVoicemailController {
   public post = (req: Request, res: Response): void => {
     if (req.hasErrors) {
       req.errors.forEach((error) => {
-        error.msg = translate('voicemail.errorBannerNotification');
+        error.msg = translate("voicemail.errorBannerNotification");
       });
-      return res.render('instructor/voicemail', {
+      return res.render("instructor/voicemail", {
         errors: req.errors,
       });
     }
@@ -45,13 +45,13 @@ export class InstructorVoicemailController {
       voicemail: voicemail === YesNo.YES,
     };
 
-    return res.redirect('check-your-details');
+    return res.redirect("check-your-details");
   };
 
   /* istanbul ignore next */
   public postSchemaValidation = (): ValidatorSchema => ({
     voicemail: {
-      in: ['body'],
+      in: ["body"],
       custom: {
         options: YesOrNo.isValid,
       },

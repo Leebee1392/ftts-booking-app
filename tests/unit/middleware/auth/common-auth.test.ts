@@ -1,6 +1,6 @@
-import { commonAuth } from '../../../../src/middleware/auth/common-auth';
+import { commonAuth } from "../../../../src/middleware/auth/common-auth";
 
-describe('Auth middleware - common pages on main booking journey', () => {
+describe("Auth middleware - common pages on main booking journey", () => {
   let req: any;
   let res: any;
   let next: any;
@@ -21,17 +21,19 @@ describe('Auth middleware - common pages on main booking journey', () => {
     next = jest.fn();
   });
 
-  test('redirects to session timeout if session candidate is not set', () => {
+  test("redirects to session timeout if session candidate is not set", () => {
     req.session.candidate = undefined;
 
     commonAuth(req, res, next);
 
-    expect(res.redirect).toHaveBeenCalledWith(expect.stringContaining('/timeout'));
+    expect(res.redirect).toHaveBeenCalledWith(
+      expect.stringContaining("/timeout")
+    );
   });
 
-  test('continues if session candidate is set', () => {
+  test("continues if session candidate is set", () => {
     req.session.candidate = {
-      firstnames: 'First Names',
+      firstnames: "First Names",
     };
 
     commonAuth(req, res, next);

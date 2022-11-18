@@ -1,12 +1,12 @@
-import { Request, Response } from 'express';
-import { translate } from '../../helpers/language';
-import { ChangeLocationTimeOptions } from '../../domain/enums';
-import { ValidatorSchema } from '../../middleware/request-validator';
-import { store } from '../../services/session';
-import RadioButtonItem from '../../interfaces/radio-button-item';
-import { Booking } from '../../domain/booking/booking';
-import { setManageBookingEditMode } from '../../helpers/manage-booking-handler';
-import { toISODateString } from '../../domain/utc-date';
+import { Request, Response } from "express";
+import { translate } from "../../helpers/language";
+import { ChangeLocationTimeOptions } from "../../domain/enums";
+import { ValidatorSchema } from "../../middleware/request-validator";
+import { store } from "../../services/session";
+import RadioButtonItem from "../../interfaces/radio-button-item";
+import { Booking } from "../../domain/booking/booking";
+import { setManageBookingEditMode } from "../../helpers/manage-booking-handler";
+import { toISODateString } from "../../domain/utc-date";
 
 interface ChangeLocationTimeBody {
   changeLocationOrTime: ChangeLocationTimeOptions;
@@ -52,16 +52,17 @@ export class ChangeLocationTime {
 
   public postSchema: ValidatorSchema = {
     changeLocationOrTime: {
-      in: ['body'],
+      in: ["body"],
       isEmpty: {
-        errorMessage: (): string => translate('changeLocationTime.validationError'),
+        errorMessage: (): string =>
+          translate("changeLocationTime.validationError"),
         negated: true,
       },
     },
   };
 
   private renderPage = (req: Request, res: Response): void => {
-    res.render('change-location-time', {
+    res.render("change-location-time", {
       options: this.buildRadioButtonItems(),
       errors: req.errors,
       checkAnswersLink: this.getCheckAnswersLink(req),
@@ -69,21 +70,23 @@ export class ChangeLocationTime {
   };
 
   private buildRadioButtonItems(): RadioButtonItem[] {
-    return Object.values(ChangeLocationTimeOptions).map((option): RadioButtonItem => ({
-      value: option,
-      text: translate(`changeLocationTime.${option}.label`),
-      label: {
-        classes: 'govuk-label--s',
-      },
-      hint: {
-        text: translate(`changeLocationTime.${option}.hint`),
-      },
-      checked: false,
-    }));
+    return Object.values(ChangeLocationTimeOptions).map(
+      (option): RadioButtonItem => ({
+        value: option,
+        text: translate(`changeLocationTime.${option}.label`),
+        label: {
+          classes: "govuk-label--s",
+        },
+        hint: {
+          text: translate(`changeLocationTime.${option}.hint`),
+        },
+        checked: false,
+      })
+    );
   }
 
   private isManageBookingSession(req: Request): boolean {
-    return req.url.startsWith('/manage-change-location-time');
+    return req.url.startsWith("/manage-change-location-time");
   }
 
   private getCheckAnswersLink(req: Request): string {
@@ -91,44 +94,52 @@ export class ChangeLocationTime {
       return `/manage-booking/${req.params.ref}`;
     }
 
-    return 'check-your-answers';
+    return "check-your-answers";
   }
 
-  private gotoChooseAppointment(req: Request, res: Response, booking: Booking): void {
+  private gotoChooseAppointment(
+    req: Request,
+    res: Response,
+    booking: Booking
+  ): void {
     if (this.isManageBookingSession(req)) {
       req.session.journey = {
         ...req.session.journey,
-        managedBookingRescheduleChoice: '/choose-appointment',
+        managedBookingRescheduleChoice: "/choose-appointment",
       };
-      const isoDateTime = toISODateString(booking.details.testDate as unknown as string);
-      return res.redirect(`/manage-booking/choose-appointment?selectedDate=${isoDateTime}`);
+      const isoDateTime = toISODateString(
+        booking.details.testDate as unknown as string
+      );
+      return res.redirect(
+        `/manage-booking/choose-appointment?selectedDate=${isoDateTime}`
+      );
     }
 
-    return res.redirect('/choose-appointment');
+    return res.redirect("/choose-appointment");
   }
 
   private gotoSelectDate(req: Request, res: Response): void {
     if (this.isManageBookingSession(req)) {
       req.session.journey = {
         ...req.session.journey,
-        managedBookingRescheduleChoice: '/select-date',
+        managedBookingRescheduleChoice: "/select-date",
       };
-      return res.redirect('/manage-booking/select-date');
+      return res.redirect("/manage-booking/select-date");
     }
 
-    return res.redirect('/select-date');
+    return res.redirect("/select-date");
   }
 
   private gotoFindTestCentre(req: Request, res: Response): void {
     if (this.isManageBookingSession(req)) {
       req.session.journey = {
         ...req.session.journey,
-        managedBookingRescheduleChoice: '/find-test-centre',
+        managedBookingRescheduleChoice: "/find-test-centre",
       };
-      return res.redirect('/manage-booking/find-test-centre');
+      return res.redirect("/manage-booking/find-test-centre");
     }
 
-    return res.redirect('/find-test-centre');
+    return res.redirect("/find-test-centre");
   }
 }
 

@@ -1,11 +1,11 @@
-import dayjs, { Dayjs } from 'dayjs';
-import { logger } from '../helpers/logger';
+import dayjs, { Dayjs } from "dayjs";
+import { logger } from "../helpers/logger";
 
 export type DateFunction<T> = (v: Date) => T;
 
 export const toISODateString = (date: string | Dayjs): string => {
-  const dateDayjs = typeof date === 'string' ? dayjs(date).tz() : date;
-  return dateDayjs.format('YYYY-MM-DD');
+  const dateDayjs = typeof date === "string" ? dayjs(date).tz() : date;
+  return dateDayjs.format("YYYY-MM-DD");
 };
 
 export class UtcDate {
@@ -21,13 +21,13 @@ export class UtcDate {
     try {
       return dayjs(date).toISOString() === date;
     } catch (exception) {
-      logger.warn('UtcDate::isValidIsoTimeStamp: No valid ISO string format');
+      logger.warn("UtcDate::isValidIsoTimeStamp: No valid ISO string format");
       return false;
     }
   }
 
   public static isValidIsoDateString(date: string): boolean {
-    return dayjs(date, 'YYYY-MM-DD', true).isValid();
+    return dayjs(date, "YYYY-MM-DD", true).isValid();
   }
 
   public static today(): UtcDate {
@@ -37,15 +37,17 @@ export class UtcDate {
   private readonly value: Date;
 
   constructor(value: Date) {
-    this.value = new Date(Date.UTC(
-      value.getFullYear(),
-      value.getMonth(),
-      value.getDate(),
-      0,
-      0,
-      0,
-      0,
-    ));
+    this.value = new Date(
+      Date.UTC(
+        value.getFullYear(),
+        value.getMonth(),
+        value.getDate(),
+        0,
+        0,
+        0,
+        0
+      )
+    );
   }
 
   public toIsoTimeStamp(): string {
@@ -53,7 +55,7 @@ export class UtcDate {
   }
 
   public toIsoDate(): string {
-    return dayjs(this.value).format('YYYY-MM-DD');
+    return dayjs(this.value).format("YYYY-MM-DD");
   }
 
   public toDateString(): string {
@@ -85,7 +87,10 @@ export class UtcDate {
     const clone = new Date(this.value.valueOf());
     const numberOfFullDays = subtrahend + 1;
     const increment = numberOfFullDays / Math.abs(numberOfFullDays);
-    clone.setDate(clone.getDate() - (Math.floor(Math.abs(numberOfFullDays) / 5) * 7 * increment));
+    clone.setDate(
+      clone.getDate() -
+        Math.floor(Math.abs(numberOfFullDays) / 5) * 7 * increment
+    );
     let remaining = numberOfFullDays % 5;
     while (remaining !== 0) {
       clone.setDate(clone.getDate() - increment);

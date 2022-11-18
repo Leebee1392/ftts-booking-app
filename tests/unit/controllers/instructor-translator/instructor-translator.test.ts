@@ -1,13 +1,13 @@
-import translatorController from '@controllers/instructor-translator/instructor-translator';
+import translatorController from "@controllers/instructor-translator/instructor-translator";
 
-describe('Instructor Translator controller', () => {
+describe("Instructor Translator controller", () => {
   let req;
   let res;
 
   beforeEach(() => {
     req = {
       body: {
-        translator: 'French',
+        translator: "French",
       },
       session: {
         journey: {
@@ -16,7 +16,7 @@ describe('Instructor Translator controller', () => {
       },
       errors: [],
       hasErrors: false,
-      path: '/instructor/nsa/translator',
+      path: "/instructor/nsa/translator",
     };
 
     res = {
@@ -26,7 +26,7 @@ describe('Instructor Translator controller', () => {
 
     req.session.currentBooking = {
       ...req.session.currentBooking,
-      translator: 'French',
+      translator: "French",
     };
   });
 
@@ -34,126 +34,140 @@ describe('Instructor Translator controller', () => {
     jest.resetAllMocks();
   });
 
-  describe('GET', () => {
-    test('renders the view with correct data', () => {
+  describe("GET", () => {
+    test("renders the view with correct data", () => {
       translatorController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('instructor/translator', {
-        value: 'French',
+      expect(res.render).toHaveBeenCalledWith("instructor/translator", {
+        value: "French",
         errors: [],
-        backLink: 'select-support-type',
+        backLink: "select-support-type",
       });
     });
 
-    test('edit mode - renders the view with correct data', () => {
+    test("edit mode - renders the view with correct data", () => {
       req.session.journey.inEditMode = true;
 
       translatorController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('instructor/translator', {
-        value: 'French',
+      expect(res.render).toHaveBeenCalledWith("instructor/translator", {
+        value: "French",
         errors: [],
-        backLink: 'check-your-details',
+        backLink: "check-your-details",
       });
     });
 
-    test('renders the view with correct error message', () => {
+    test("renders the view with correct error message", () => {
       req.errors.push({
-        param: 'translator',
-        msg: 'some error',
+        param: "translator",
+        msg: "some error",
       });
 
       translatorController.get(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('instructor/translator', {
-        value: 'French',
-        errors: [{
-          param: 'translator',
-          msg: 'some error',
-        }],
-        backLink: 'select-support-type',
+      expect(res.render).toHaveBeenCalledWith("instructor/translator", {
+        value: "French",
+        errors: [
+          {
+            param: "translator",
+            msg: "some error",
+          },
+        ],
+        backLink: "select-support-type",
       });
     });
 
-    test('throws if not journey set', () => {
+    test("throws if not journey set", () => {
       delete req.session.journey;
 
-      expect(() => translatorController.get(req, res)).toThrow(Error('InstructorTranslatorController::getBackLink: No journey set'));
+      expect(() => translatorController.get(req, res)).toThrow(
+        Error("InstructorTranslatorController::getBackLink: No journey set")
+      );
     });
 
-    test('throws if not booking set', () => {
+    test("throws if not booking set", () => {
       delete req.session.currentBooking;
 
-      expect(() => translatorController.get(req, res)).toThrow(Error('InstructorTranslatorController::renderPage: No currentBooking set'));
+      expect(() => translatorController.get(req, res)).toThrow(
+        Error(
+          "InstructorTranslatorController::renderPage: No currentBooking set"
+        )
+      );
     });
   });
 
-  describe('POST', () => {
-    test('navigates to the next page', () => {
+  describe("POST", () => {
+    test("navigates to the next page", () => {
       translatorController.post(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith('leaving-nsa');
+      expect(res.redirect).toHaveBeenCalledWith("leaving-nsa");
     });
 
-    test('edit mode - navigates to check your details page', () => {
+    test("edit mode - navigates to check your details page", () => {
       req.session.journey.inEditMode = true;
 
       translatorController.post(req, res);
 
-      expect(res.redirect).toHaveBeenCalledWith('check-your-details');
+      expect(res.redirect).toHaveBeenCalledWith("check-your-details");
     });
 
-    test('adds translator to the session', () => {
-      req.body = { translator: 'French' };
+    test("adds translator to the session", () => {
+      req.body = { translator: "French" };
 
       translatorController.post(req, res);
 
-      expect(req.session.currentBooking.translator).toBe('French');
+      expect(req.session.currentBooking.translator).toBe("French");
     });
 
-    test('errors are displayed if they exist', () => {
+    test("errors are displayed if they exist", () => {
       req.hasErrors = true;
       req.errors.push({
-        param: 'translator',
-        msg: 'Which translator',
+        param: "translator",
+        msg: "Which translator",
       });
 
       translatorController.post(req, res);
 
-      expect(res.render).toHaveBeenCalledWith('instructor/translator', {
-        value: 'French',
-        errors: [{
-          param: 'translator',
-          msg: 'Which translator',
-        }],
-        backLink: 'select-support-type',
+      expect(res.render).toHaveBeenCalledWith("instructor/translator", {
+        value: "French",
+        errors: [
+          {
+            param: "translator",
+            msg: "Which translator",
+          },
+        ],
+        backLink: "select-support-type",
       });
     });
 
-    test('throws if not journey set', () => {
+    test("throws if not journey set", () => {
       delete req.session.journey;
 
-      expect(() => translatorController.post(req, res)).toThrow(Error('InstructorTranslatorController::post: No journey set'));
+      expect(() => translatorController.post(req, res)).toThrow(
+        Error("InstructorTranslatorController::post: No journey set")
+      );
     });
   });
 
-  describe('Schema validation checks', () => {
-    test('POST request', () => {
-      expect(translatorController.postSchemaValidation).toEqual(expect.objectContaining({
-        translator: {
-          in: ['body'],
-          isEmpty: {
-            negated: true,
-            errorMessage: expect.anything(),
-          },
-          isLength: {
-            errorMessage: expect.anything(),
-            options: {
-              max: 100,
+  describe("Schema validation checks", () => {
+    test("POST request", () => {
+      expect(translatorController.postSchemaValidation).toEqual(
+        expect.objectContaining({
+          translator: {
+            in: ["body"],
+            isEmpty: {
+              negated: true,
+              errorMessage: expect.anything(),
+            },
+            isLength: {
+              errorMessage: expect.anything(),
+              options: {
+                max: 100,
+              },
             },
           },
-        },
-      }));
+        })
+      );
     });
   });
 });

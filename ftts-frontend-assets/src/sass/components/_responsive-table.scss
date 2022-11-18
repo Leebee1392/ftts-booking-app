@@ -1,7 +1,7 @@
 .responsive-table {
   thead {
     border: 0;
-    clip: rect(1px,1px,1px,1px);
+    clip: rect(1px, 1px, 1px, 1px);
     height: 1px;
     overflow: hidden;
     padding: 0;
@@ -76,12 +76,13 @@
     }
   }
 
-  td, th {
+  td,
+  th {
     padding: govuk-spacing(2) govuk-spacing(3);
     text-align: left;
     border-bottom: 1px solid #bfc1c3;
     white-space: nowrap;
-    
+
     &:first-child {
       white-space: initial;
       padding-right: 1em;

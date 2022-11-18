@@ -1,20 +1,20 @@
-import { BasePage } from './base-page';
-import { click } from '../utils/helpers';
-import { RefundRequestedPage } from './refund-requested-page';
+import { BasePage } from "./base-page";
+import { click } from "../utils/helpers";
+import { RefundRequestedPage } from "./refund-requested-page";
 
 export class RequestRefundPage extends BasePage {
-  pageHeadingLocator = '.govuk-heading-xl';
+  pageHeadingLocator = ".govuk-heading-xl";
 
-  backLink = '.govuk-back-link';
+  backLink = ".govuk-back-link";
 
-  confirmRefundButtonLocator = '#confirm-refund';
+  confirmRefundButtonLocator = "#confirm-refund";
 
-  bookCompensationTestButtonLocator = '#book-compensation-test';
+  bookCompensationTestButtonLocator = "#book-compensation-test";
 
   // Content
-  pageHeading = 'Request refund for a cancelled test';
+  pageHeading = "Request refund for a cancelled test";
 
-  bookCompensationTestText = 'Use my fee to pay for a replacement test';
+  bookCompensationTestText = "Use my fee to pay for a replacement test";
 
   async confirmRefundRequest(): Promise<RefundRequestedPage> {
     await click(this.confirmRefundButtonLocator);

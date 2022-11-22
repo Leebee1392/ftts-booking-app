@@ -3,6 +3,7 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "macros/collapsed-centre-location.njk" import collapsedCentreLocation %}
 {% from "macros/loading-component.njk" import loadingComponent %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block page_title %}
   {{ t('manageBookingCancel.heading') }} {{ t('generalContent.pageTitle') }}
@@ -32,8 +33,24 @@
 
       <form method="post" class="govuk-body govuk-!-margin-top-5" id="form">
         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-        <button type="submit" id="continueButton" data-automation-id="cancel" class="govuk-button govuk-button--warning govuk-!-margin-right-3">{{ t('manageBookingCancel.buttonCancel') }}</button>
-        <a href="../{{booking.reference}}" data-automation-id="keep" class="govuk-button govuk-button--secondary">{{ t('manageBookingCancel.buttonKeep') }}</a>
+        {{ govukButton({
+            classes: 'govuk-button govuk-button--warning govuk-!-margin-right-3',
+            type: 'submit',
+            text: t('manageBookingCancel.buttonCancel'),
+            attributes: {
+              'data-automation-id': 'cancel',
+              id: 'continueButton'
+          }
+        }) }}
+
+        {{ govukButton({
+            classes: 'govuk-button govuk-button--secondary',
+            text: t('manageBookingCancel.buttonKeep'),
+            href: '../{{booking.reference}}',
+            attributes: {
+              'data-automation-id': 'keep'
+          }
+        }) }}
       </form>
 
       <hr>

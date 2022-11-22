@@ -110,10 +110,26 @@
           </fieldset>
         </div>
         {% if inEditMode %}
-          <button id="continueButton" type="submit" class="govuk-button govuk-!-margin-right-1">{{ t('generalContent.confirmChangeButton') }}</button>
-          <a href="../check-your-answers" id="cancel" class="govuk-button govuk-button--secondary">{{ t('selectDate.editMode.cancelChangeButton') }}</a>
+          {{ govukButton({
+          text: t('generalContent.confirmChangeButton'),
+          classes: 'govuk-button govuk-!-margin-right-1',
+          type: 'submit',
+          id: 'continueButton'
+          }) }}
+          {{ govukButton({
+            text: t('selectDate.editMode.cancelChangeButton'),
+            classes: 'govuk-button govuk-button--secondary',
+            type: 'submit',
+            id: 'cancel',
+            href: '../check-your-answers'
+          }) }}
         {% else %}
-          <button id="continueButton" type="submit" class="govuk-button"> {{ t('generalContent.continueButton') }}</button>
+          {{ govukButton({
+          text: t('generalContent.continueButton'),
+          classes: 'govuk-button',
+          type: 'submit',
+          id: 'continueButton'
+        }) }}
         {% endif %}
       </form>
     </div>

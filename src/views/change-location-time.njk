@@ -1,6 +1,7 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "macros/loading-component.njk" import loadingComponent %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block page_title %}
   {{ t('changeLocationTime.heading') }} {{ t('generalContent.pageTitle') }}
@@ -49,8 +50,18 @@
           items: options
         }) }}
         <br>
-        <button id="continueButton" type="submit" class="govuk-button govuk-!-margin-right-1">{{ t('changeLocationTime.confirmChangeButton') }}</button>
-        <a href="{{checkAnswersLink}}" id="cancel" class="govuk-button govuk-button--secondary">{{ t('changeLocationTime.cancelChangeButton') }}</a>
+        {{ govukButton({
+          text: t('changeLocationTime.confirmChangeButton'),
+          classes: 'govuk-button govuk-!-margin-right-1',
+          type: 'submit',
+          id: 'continueButton'
+        }) }}
+        {{ govukButton({
+          text: t('changeLocationTime.cancelChangeButton'),
+          classes: 'govuk-button govuk-button--secondary',
+          id: 'cancel',
+          href: 'check-your-answers'
+        }) }}
       </form>
     </div>
   </div>

@@ -1,6 +1,16 @@
 {% extends "layout.njk" %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set setCentreName %}
+  {{ t('selectTestCentre.selectButton') }} <span class="govuk-visually-hidden">{{centre.name}}</span>
+{% endset %}
+
+{% set setSelectTestCentre %}
+  {{ t('selectTestCentre.select') }} <span class="govuk-visually-hidden">{{ t('selectTestCentre.centre') }}</span>
+{% endset %}
+
 
 {% block page_title %}
   {{ t('selectTestCentre.heading') }} {{ t('generalContent.pageTitle') }}
@@ -144,9 +154,13 @@
                       <input type="hidden" id="testCentreName{{centre.testCentreId}}" name="inlineTestCentreName" value="{{ centre.name }}"/>
                       <input type="hidden" id="testCentreDistance{{centre.testCentreId}}" name="inlineTestCentreDistance" value="{{ centre.distance | formatDistance }}"/>
                       <input type="hidden" id="testCentrePosition{{centre.testCentreId}}" name="inlineTestCentrePosition" value="{{ loopIndex }}"/>
-                      <button type="submit" name="testCentreId" value="{{ centre.testCentreId }}" class="govuk-button govuk-button--secondary select-test-centre selectTestCentreButton">
-                        {{ t('selectTestCentre.selectButton') }} <span class="govuk-visually-hidden">{{centre.name}}</span>
-                      </button>
+                      {{ govukButton({
+                        classes: 'govuk-button govuk-button--secondary select-test-centre selectTestCentreButton',
+                        type: 'submit',
+                        name: testCentreId,
+                        value: centre.testCentreId,
+                        html: setCentreName
+                      }) }}
                     </div>
                   </div>
                 </div>
@@ -188,7 +202,13 @@
                     {{ centre.distance | formatDistance }} {{ t('selectTestCentre.miles') }}
                   {% endif %}
                 </p>
-                <button type="submit" name="testCentreId" value="{{ centre.testCentreId }}" class="govuk-button govuk-button--secondary hide-on-desktop map-select-centre">{{ t('selectTestCentre.select') }} <span class="govuk-visually-hidden">{{ t('selectTestCentre.centre') }}</span></button>
+                {{ govukButton({
+                    classes: 'govuk-button govuk-button--secondary hide-on-desktop map-select-centre',
+                    type: 'submit',
+                    name: testCentreId,
+                    value: centre.testCentreId,
+                    html: setSelectTestCentre
+                }) }}
                 <ul class="govuk-list">
                   <li><span class="govuk-!-font-weight-bold map-centre-address-line-1">{{ centre.addressLine1 }}</span></li>
                   {% if centre.addressLine2 | length %}
@@ -206,9 +226,13 @@
                     <span class="govuk-visually-hidden"> ({{ t('generalContent.linkOpensInNewTab') }})</span>
                   </a>
                 </p>
-                <button type="submit" name="testCentreId" value="{{ centre.testCentreId }}" class="govuk-button govuk-button--secondary show-on-desktop map-select-centre selectTestCentreButton">
-                  {{ t('selectTestCentre.selectButton') }} <span class="govuk-visually-hidden">{{ centre.name }}</span>
-                </button>
+                {{ govukButton({
+                  classes: 'govuk-button govuk-button--secondary show-on-desktop map-select-centre selectTestCentreButton',
+                  type: 'submit',
+                  name: testCentreId,
+                  value: centre.testCentreId,
+                  html: setCentreName
+                }) }}
               </div>
             {% endfor %}
           </form>

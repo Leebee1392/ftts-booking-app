@@ -1,0 +1,15 @@
+*.ts
+.git*
+.nyc_output
+.vscode
+bin
+coverage
+tests
+.DS_Store
+.editorconfig
+.env
+.eslintignore
+.eslintrc
+local.settings.json
+tsconfig.eslint.json
+tsconfig.json

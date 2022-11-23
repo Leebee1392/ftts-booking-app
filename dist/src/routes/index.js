@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.warmupRouter = exports.landingRouter = exports.manageBookingRouter = exports.instructorRouter = exports.candidateRouter = void 0;
+var candidate_router_1 = require("./candidate-router");
+Object.defineProperty(exports, "candidateRouter", { enumerable: true, get: function () { return candidate_router_1.candidateRouter; } });
+var instructor_router_1 = require("./instructor-router");
+Object.defineProperty(exports, "instructorRouter", { enumerable: true, get: function () { return instructor_router_1.instructorRouter; } });
+var manage_booking_router_1 = require("./manage-booking-router");
+Object.defineProperty(exports, "manageBookingRouter", { enumerable: true, get: function () { return manage_booking_router_1.manageBookingRouter; } });
+var landing_router_1 = require("./landing-router");
+Object.defineProperty(exports, "landingRouter", { enumerable: true, get: function () { return landing_router_1.landingRouter; } });
+var warmup_router_1 = require("./warmup-router");
+Object.defineProperty(exports, "warmupRouter", { enumerable: true, get: function () { return warmup_router_1.warmupRouter; } });

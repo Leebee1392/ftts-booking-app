@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.CrmTooManyRequestsError = exports.CrmServerError = exports.CrmRetrieveLicenceError = exports.CrmCreateUpdateCandidateError = void 0;
+const CrmCreateUpdateCandidateError_1 = require("./CrmCreateUpdateCandidateError");
+Object.defineProperty(exports, "CrmCreateUpdateCandidateError", { enumerable: true, get: function () { return CrmCreateUpdateCandidateError_1.CrmCreateUpdateCandidateError; } });
+const CrmRetrieveLicenceError_1 = require("./CrmRetrieveLicenceError");
+Object.defineProperty(exports, "CrmRetrieveLicenceError", { enumerable: true, get: function () { return CrmRetrieveLicenceError_1.CrmRetrieveLicenceError; } });
+const CrmServerError_1 = require("./CrmServerError");
+Object.defineProperty(exports, "CrmServerError", { enumerable: true, get: function () { return CrmServerError_1.CrmServerError; } });
+const CrmTooManyRequestsError_1 = require("./CrmTooManyRequestsError");
+Object.defineProperty(exports, "CrmTooManyRequestsError", { enumerable: true, get: function () { return CrmTooManyRequestsError_1.CrmTooManyRequestsError; } });

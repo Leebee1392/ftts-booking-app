@@ -2,6 +2,9 @@ import emailContact from '@controllers/email-contact/email-contact';
 import { Language, Target, TestType } from '../../../../src/domain/enums';
 import { translate } from '../../../../src/helpers/language';
 import { isNonStandardJourney, isStandardJourney, isSupportedStandardJourney } from '../../../../src/helpers/journey-helper';
+import  { validateRequest } from '../../../../src/middleware/request-validator'
+import { validate } from "../../utils/helpers"
+import { ConfirmSupportController } from '@controllers/confirm-support/confirm-support';
 
 jest.mock('../../../../src/helpers/language', () => ({
   translate: jest.fn(),
@@ -356,6 +359,22 @@ describe('Contact details', () => {
           emailValue: undefined,
           digitalResultsEmailInfo: false,
           errors: [],
+        });
+      });
+
+      describe('Validation Schema', () => {
+        test('error when email format is not correct', async () => {
+          req.body= {email: "atest.com", confirmEmail: "atest.com"};
+
+          // Hopefully req.errors will be set on the req object returned by the method
+          // Currently returns { req: undefined, res:undefined } :(
+          const validated = await validate(req, res, emailContact.postSchemaValidation());
+          req = validated.req;
+          res = validated.res;
+
+          emailContact.post(req, res)
+
+          expect(req.hasErrors).toBe(true);
         });
       });
     });

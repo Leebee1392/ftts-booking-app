@@ -5,6 +5,9 @@ import {
   checkSchema, Location, validationResult, Schema, ValidationChain,
 } from 'express-validator';
 
+
+import { translate } from '../../src/helpers/language';
+
 export type ValidatorSchema = Schema;
 export interface RequestValidationError {
   location: Location;

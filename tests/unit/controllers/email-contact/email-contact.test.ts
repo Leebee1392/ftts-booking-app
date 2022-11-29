@@ -2,7 +2,6 @@ import emailContact from '@controllers/email-contact/email-contact';
 import { Language, Target, TestType } from '../../../../src/domain/enums';
 import { translate } from '../../../../src/helpers/language';
 import { isNonStandardJourney, isStandardJourney, isSupportedStandardJourney } from '../../../../src/helpers/journey-helper';
-import  { validateRequest } from '../../../../src/middleware/request-validator'
 import { validate } from "../../utils/helpers"
 import { ConfirmSupportController } from '@controllers/confirm-support/confirm-support';
 
@@ -366,16 +365,35 @@ describe('Contact details', () => {
         test('error when email format is not correct', async () => {
           req.body= {email: "atest.com", confirmEmail: "atest.com"};
 
-          // Hopefully req.errors will be set on the req object returned by the method
-          // Currently returns { req: undefined, res:undefined } :(
+          console.log(emailContact.postSchemaValidation());
+
+          const validated = await validate(req, res, emailContact.postSchemaValidation());
+          req = validated.req;
+          res = validated.res;
+
+          console.log(req);
+
+          emailContact.post(req, res)
+
+          // Error message is undefined at the moment
+          expect(req.hasErrors).toBe(true);
+        });
+
+        test('error when email is too long', async () => {
+          req.body = {
+            email: "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij@mail.com",
+            confirmEmail: "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij@mail.com"
+          };
+
           const validated = await validate(req, res, emailContact.postSchemaValidation());
           req = validated.req;
           res = validated.res;
 
           emailContact.post(req, res)
 
+          // Error message is undefined at the moment
           expect(req.hasErrors).toBe(true);
-        });
+        })
       });
     });
 

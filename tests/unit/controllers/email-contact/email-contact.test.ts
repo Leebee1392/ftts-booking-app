@@ -4,6 +4,7 @@ import { translate } from '../../../../src/helpers/language';
 import { isNonStandardJourney, isStandardJourney, isSupportedStandardJourney } from '../../../../src/helpers/journey-helper';
 import { validate } from "../../utils/helpers"
 import { ConfirmSupportController } from '@controllers/confirm-support/confirm-support';
+import { initialiseExpressHttpContextProvider } from 'src/middleware/queue-it/queue-it-helper';
 
 jest.mock('../../../../src/helpers/language', () => ({
   translate: jest.fn(),
@@ -362,28 +363,66 @@ describe('Contact details', () => {
       });
 
       describe('Validation Schema', () => {
-        test('error when email format is not correct', async () => {
-          req.body= {email: "atest.com", confirmEmail: "atest.com"};
-
-          console.log(emailContact.postSchemaValidation());
+        test('error when email provided is not valid', async () => {
+          req.body.email = "atest.com";
+          req.body.confirmEmail = "atest.com";
+          const errorMessageInvalidEmail = "Enter a valid email address";
+          const errorMessageInvalidConfirmEmail = "Enter a valid confirmation email address";
+          translate.mockImplementation((errorMessageKey: string | undefined) => {
+            if(errorMessageKey === "emailContact.emailValidationError") {
+              return errorMessageInvalidEmail;
+            }
+            if(errorMessageKey === "emailContact.confirmEmailValidationError") {
+              return errorMessageInvalidConfirmEmail;
+            }
+            return undefined;
+          });
+          const expectedErrors = [
+            {
+              value:  "atest.com",
+              msg: errorMessageInvalidEmail,
+              param: 'email',
+              location: 'body'
+            },
+            {
+              value:  "atest.com",
+              msg: errorMessageInvalidConfirmEmail,
+              param: 'confirmEmail',
+              location: 'body'
+            }
+          ]
 
           const validated = await validate(req, res, emailContact.postSchemaValidation());
           req = validated.req;
           res = validated.res;
 
-          console.log(req);
-
           emailContact.post(req, res)
 
-          // Error message is undefined at the moment
           expect(req.hasErrors).toBe(true);
+          expect(req.errors).toContainEqual(expectedErrors[0]);
+          expect(req.errors).toContainEqual(expectedErrors[1]);
         });
 
         test('error when email is too long', async () => {
-          req.body = {
-            email: "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij@mail.com",
-            confirmEmail: "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij@mail.com"
-          };
+          req.body.email = "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij@mail.com";
+          req.body.confirmEmail = "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij@mail.com";
+          const errorMessage = "Email address must be 100 characters or fewer";
+          translate.mockImplementation(() => errorMessage);
+
+          const expectedErrors = [
+            {
+              value: "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij@mail.com",
+              msg: errorMessage,
+              param: 'email',
+              location: 'body'
+            },
+            {
+              value: "abcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghijabcdefghij@mail.com",
+              msg: errorMessage,
+              param: 'confirmEmail',
+              location: 'body'
+            }
+          ]
 
           const validated = await validate(req, res, emailContact.postSchemaValidation());
           req = validated.req;
@@ -391,8 +430,9 @@ describe('Contact details', () => {
 
           emailContact.post(req, res)
 
-          // Error message is undefined at the moment
           expect(req.hasErrors).toBe(true);
+          expect(req.errors).toContainEqual(expectedErrors[0]);
+          expect(req.errors).toContainEqual(expectedErrors[1]);
         })
       });
     });

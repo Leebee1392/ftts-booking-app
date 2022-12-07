@@ -54,13 +54,17 @@
           text: t('changeLocationTime.confirmChangeButton'),
           classes: 'govuk-button govuk-!-margin-right-1',
           type: 'submit',
-          id: 'continueButton'
+          attributes: {
+            id: 'continueButton'
+          }
         }) }}
         {{ govukButton({
           text: t('changeLocationTime.cancelChangeButton'),
           classes: 'govuk-button govuk-button--secondary',
-          id: 'cancel',
-          href: 'check-your-answers'
+          href: 'check-your-answers',
+          attributes: {
+            id: 'cancel'
+          }
         }) }}
       </form>
     </div>

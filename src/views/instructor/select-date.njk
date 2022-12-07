@@ -114,21 +114,26 @@
           text: t('generalContent.confirmChangeButton'),
           classes: 'govuk-button govuk-!-margin-right-1',
           type: 'submit',
-          id: 'continueButton'
+          attributes: {
+            id: 'continueButton'
+          }
           }) }}
           {{ govukButton({
             text: t('selectDate.editMode.cancelChangeButton'),
             classes: 'govuk-button govuk-button--secondary',
-            type: 'submit',
-            id: 'cancel',
-            href: '../check-your-answers'
+            href: '../check-your-answers',
+            attributes: {
+              id: 'cancel'
+            }
           }) }}
         {% else %}
           {{ govukButton({
           text: t('generalContent.continueButton'),
           classes: 'govuk-button',
           type: 'submit',
-          id: 'continueButton'
+          attributes: {
+            id: 'continueButton'
+          }
         }) }}
         {% endif %}
       </form>
